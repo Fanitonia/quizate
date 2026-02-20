@@ -36,6 +36,18 @@ public class Program
 
         app.MapControllers();
 
+        using var scope = app.Services.CreateScope();
+        var services = scope.ServiceProvider;
+
+        try
+        {
+            var context = services.GetRequiredService<QuizateDbContext>();
+            context.Database.MigrateAsync();
+        }
+        catch (Exception e)
+        {
+            Log.Error(e, "Something gone wrong while migrating or creating the database");
+        }
 
         app.Run();
     }
