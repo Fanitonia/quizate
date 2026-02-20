@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Quizate.API/Quizate.API.csproj" />
+  <Project Path="Quizate.Data/Quizate.Data.csproj" />
 </Solution>

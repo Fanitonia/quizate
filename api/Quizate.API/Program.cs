@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Quizate.API.Data;
 using Serilog;
 
 namespace Quizate.API;
@@ -19,6 +21,10 @@ public class Program
         builder.Services.AddControllers();
 
         builder.Services.AddAuthorization();
+
+        builder.Services.AddDbContext<QuizateDbContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"))
+            .UseSnakeCaseNamingConvention());
 
 
         var app = builder.Build();
