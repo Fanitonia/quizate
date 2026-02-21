@@ -6,7 +6,7 @@ namespace Quizate.API;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -42,7 +42,7 @@ public class Program
         try
         {
             var context = services.GetRequiredService<QuizateDbContext>();
-            context.Database.MigrateAsync();
+            await context.Database.MigrateAsync();
         }
         catch (Exception e)
         {
