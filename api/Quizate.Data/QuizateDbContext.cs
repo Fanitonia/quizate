@@ -1,14 +1,16 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 using Quizate.Data.Models;
+using System;
 
 namespace Quizate.API.Data;
 
 public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbContext(options)
 {
-    public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<QuizType> QuizTypes { get; set; }
+    public DbSet<Quiz> Quizzes { get; set; }
+    public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
+    public DbSet<MultipleChoiceOption> MultipleChoiceOptions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,5 +52,51 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
                 DisplayName = "Standard"
             }
         );
+
+        modelBuilder.Entity<MultipleChoiceQuestion>().HasData(
+            new MultipleChoiceQuestion
+            {
+                Id = 1,
+                QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
+                Text = "What is the capital of France?",
+                DisplayOrder = 1
+            }
+        );
+
+        modelBuilder.Entity<MultipleChoiceOption>().HasData(
+            new MultipleChoiceOption
+            {
+                Id = 1,
+                QuestionId = 1,
+                Text = "Paris",
+                IsCorrect = true,
+                DisplayOrder = 1
+            },
+            new MultipleChoiceOption
+            {
+                Id = 2,
+                QuestionId = 1,
+                Text = "London",
+                IsCorrect = false,
+                DisplayOrder = 2
+            },
+            new MultipleChoiceOption
+            {
+                Id = 3,
+                QuestionId = 1,
+                Text = "Rome",
+                IsCorrect = false,
+                DisplayOrder = 3
+            },
+            new MultipleChoiceOption
+            {
+                Id = 4,
+                QuestionId = 1,
+                Text = "Berlin",
+                IsCorrect = false,
+                DisplayOrder = 4
+            }
+        );
+
     }
 }
