@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Quizate.API.Data;
@@ -11,9 +12,11 @@ using Quizate.API.Data;
 namespace Quizate.Data.Migrations
 {
     [DbContext(typeof(QuizateDbContext))]
-    partial class QuizateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260222123029_AddTopicAndQuizAttempt")]
+    partial class AddTopicAndQuizAttempt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

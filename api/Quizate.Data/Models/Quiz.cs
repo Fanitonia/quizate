@@ -20,4 +20,6 @@ public class Quiz
     public bool IsPublic { get; set; }
 
     public ICollection<MultipleChoiceQuestion>? MultipleChoiceQuestions { get; set; } = new List<MultipleChoiceQuestion>();
+    public ICollection<Topic> Topics { get; set; } = new List<Topic>();
+    public ICollection<QuizAttempt> QuizAttempts { get; set; } = new List<QuizAttempt>();
 }

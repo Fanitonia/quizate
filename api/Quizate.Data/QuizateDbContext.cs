@@ -11,6 +11,8 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
     public DbSet<MultipleChoiceOption> MultipleChoiceOptions { get; set; }
+    public DbSet<QuizAttempt> QuizAttempts { get; set; }
+    public DbSet<Topic> Topics { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -95,6 +97,28 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
                 Text = "Berlin",
                 IsCorrect = false,
                 DisplayOrder = 4
+            }
+        );
+
+        modelBuilder.Entity<Topic>().HasData(
+            new Topic
+            {
+                Id = new Guid("abcdef12-3456-7890-abcd-ef1234567890"),
+                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
+                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
+                Name = "geography",
+                DisplayName = "Geography",
+            }
+        );
+
+        modelBuilder.Entity<QuizAttempt>().HasData(
+            new QuizAttempt
+            {
+                Id = 1,
+                QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
+                UserId = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
+                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                Score = 50
             }
         );
 

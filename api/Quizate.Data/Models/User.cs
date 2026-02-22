@@ -15,4 +15,5 @@ public class User
     public required string HashedPassword { get; set; }
 
     public ICollection<Quiz>? Quizzes { get; set; }
+    public ICollection<QuizAttempt> QuizAttempts { get; set; } = new List<QuizAttempt>();
 }
