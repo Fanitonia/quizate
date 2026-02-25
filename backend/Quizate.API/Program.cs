@@ -13,32 +13,58 @@ public class Program
             .WriteTo.Console()
             .CreateLogger();
 
+        try
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-        var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddSerilog();
 
-        builder.Services.AddSerilog();
+            builder.Services.AddControllers();
 
-        builder.Services.AddControllers();
+            builder.Services.AddAuthorization();
 
-        builder.Services.AddAuthorization();
+            builder.Services.AddDbContext<QuizateDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"))
+                .UseSnakeCaseNamingConvention());
 
-        builder.Services.AddDbContext<QuizateDbContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"))
-            .UseSnakeCaseNamingConvention());
-
-
-        var app = builder.Build();
+            builder.Services.AddProblemDetails();
 
 
-        app.UseHttpsRedirection();
+            var app = builder.Build();
 
-        app.UseAuthorization();
 
-        app.MapControllers();
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+                app.UseExceptionHandler();
 
+            app.UseHttpsRedirection();
+
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            await MigrateDatabaseAsync(app);
+
+
+            app.Run();
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Application terminated unexpectedly");
+        }
+        finally
+        {
+            await Log.CloseAndFlushAsync();
+        }
+    }
+
+    private static async Task MigrateDatabaseAsync(WebApplication app)
+    {
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
-
         try
         {
             var context = services.GetRequiredService<QuizateDbContext>();
@@ -48,7 +74,5 @@ public class Program
         {
             Log.Error(e, "Something gone wrong while migrating or creating the database");
         }
-
-        app.Run();
     }
 }
