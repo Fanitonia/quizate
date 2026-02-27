@@ -14,6 +14,9 @@ public class Quiz
     public QuizType? QuizType { get; set; }
     public Guid QuizTypeId { get; set; }
 
+    public Language? Language { get; set; }
+    public required string LanguageCode { get; set; }
+
     public required string Title { get; set; }
     public string? Description { get; set; }
     public string? ThumbnailUrl { get; set; }

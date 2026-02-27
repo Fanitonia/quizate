@@ -13,10 +13,20 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
     public DbSet<MultipleChoiceOption> MultipleChoiceOptions { get; set; }
     public DbSet<QuizAttempt> QuizAttempts { get; set; }
     public DbSet<Topic> Topics { get; set; }
+    public DbSet<Language> Languages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Language>(entity =>
+        {
+            entity.HasKey(l => l.Code);
+
+            entity.HasMany<Quiz>()
+                .WithOne(q => q.Language)
+                .HasForeignKey(q => q.LanguageCode)
+                .HasPrincipalKey(l => l.Code)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         modelBuilder.Entity<User>().HasData(
             new User
@@ -40,7 +50,8 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
                 Description = "This is a sample quiz.",
                 IsPublic = true,
                 QuizTypeId = new Guid("12345678-1234-1234-1234-123456789012"),
-                CreatorId = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906")
+                CreatorId = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
+                LanguageCode = "en"
             }
         );
 
@@ -122,5 +133,14 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
             }
         );
 
+        modelBuilder.Entity<Language>().HasData(
+            new Language
+            {
+                Code = "en",
+                Name = "English"
+            }
+        );
+
+        base.OnModelCreating(modelBuilder);
     }
 }
