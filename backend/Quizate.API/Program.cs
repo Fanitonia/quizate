@@ -29,6 +29,13 @@ public class Program
 
             builder.Services.AddProblemDetails();
 
+            builder.Services.AddOpenApi();
+
+            builder.Services.AddAutoMapper(cfg =>
+            {
+                cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
+            });
+
 
             var app = builder.Build();
 
@@ -36,6 +43,13 @@ public class Program
             if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                app.MapOpenApi();
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/openapi/v1.json", "v1");
+                    options.RoutePrefix = string.Empty;
+                });
             }
             else
                 app.UseExceptionHandler();
