@@ -13,9 +13,10 @@ public class User
     public required string Username { get; set; }
     public string? Email { get; set; }
     public DateTime? EmailVerifiedAt { get; set; }
-    public required string HashedPassword { get; set; }
+    public required string PasswordHash { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
 
     public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
     public ICollection<QuizAttempt> QuizAttempts { get; set; } = new List<QuizAttempt>();
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

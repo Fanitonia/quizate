@@ -1,6 +1,6 @@
 ﻿namespace Quizate.API.Contracts
 {
-    public class RegisterUserRequest
+    public class RegisterRequest
     {
         public required string Username { get; set; }
         public string? Email { get; set; }

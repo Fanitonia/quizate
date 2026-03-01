@@ -7,6 +7,7 @@ namespace Quizate.API.Data;
 public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbContext(options)
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<QuizType> QuizTypes { get; set; }
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
@@ -36,7 +37,7 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
                 UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
                 Username = "demo_user",
                 Email = "demo_user@example.com",
-                HashedPassword = "hashed_password_placeholder"
+                PasswordHash = "hashed_password_placeholder"
             }
         );
 

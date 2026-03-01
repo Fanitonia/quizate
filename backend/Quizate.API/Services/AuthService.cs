@@ -3,38 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Quizate.API.Contracts;
+using Quizate.API.Contracts.User;
 using Quizate.API.Data;
 using Quizate.Data.Enums;
 using Quizate.Data.Models;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Quizate.API.Services
 {
-    public class AuthService(QuizateDbContext _dbContext, IPasswordHasher<User> _hasher, IConfiguration _configuration) : IAuthService
+    public class AuthService(
+        QuizateDbContext dbContext,
+        IConfiguration configuration,
+        IPasswordHasher<User> passwordHasher,
+        RefreshTokenHasher refreshTokenHasher) : IAuthService
     {
         // TODO: Model validator ekle.
-        public async Task<string?> LoginAsync(LoginUserRequest request)
+        public async Task<User?> RegisterAsync(RegisterRequest request)
         {
-            var user = await _dbContext.Users
-                .FirstOrDefaultAsync(u => u.Username == request.UsernameOrEmail
-                || u.Email == request.UsernameOrEmail);
-
-            if (user == null)
-                return null;
-
-            var result = _hasher.VerifyHashedPassword(user, user.HashedPassword, request.Password);
-
-            if (result == PasswordVerificationResult.Failed)
-                return null;
-
-            return CreateToken(user);
-        }
-
-        // TODO: Model validator ekle.
-        public async Task<User?> RegisterAsync(RegisterUserRequest request)
-        {
-            var isUserExist = await _dbContext.Users.AnyAsync(u =>
+            var isUserExist = await dbContext.Users.AnyAsync(u =>
                 u.Username.ToLower() == request.Username.ToLower()
                 || (request.Email != null && u.Email != null && u.Email.ToLower() == request.Email.ToLower()));
 
@@ -45,19 +33,69 @@ namespace Quizate.API.Services
             {
                 Username = request.Username,
                 Email = request.Email,
-                HashedPassword = "init"
+                PasswordHash = "init"
             };
 
-            string hashedPassword = _hasher.HashPassword(user, request.Password);
-            user.HashedPassword = hashedPassword;
+            string hashedPassword = passwordHasher.HashPassword(user, request.Password);
+            user.PasswordHash = hashedPassword;
 
-            _dbContext.Users.Add(user);
-            await _dbContext.SaveChangesAsync();
+            dbContext.Users.Add(user);
+            await dbContext.SaveChangesAsync();
 
             return user;
         }
 
-        private string CreateToken(User user)
+        // TODO: Model validator ekle.
+        public async Task<LoginResponse?> LoginAsync(LoginRequest request)
+        {
+            var user = await dbContext.Users
+                .FirstOrDefaultAsync(u => u.Username == request.UsernameOrEmail
+                || u.Email == request.UsernameOrEmail);
+
+            if (user == null)
+                return null;
+
+            var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+
+            if (result == PasswordVerificationResult.Failed)
+                return null;
+
+            var (refreshToken, rawToken) = CreateRefreshToken(user.Id);
+            dbContext.RefreshTokens.Add(refreshToken);
+            await dbContext.SaveChangesAsync();
+
+            return new LoginResponse
+            {
+                AccessToken = CreateAccessToken(user),
+                RefreshToken = rawToken
+            };
+        }
+
+        public async Task<LoginResponse?> RefreshTokenAsync(RefreshTokenRequest request)
+        {
+            var refreshTokenHash = refreshTokenHasher.ComputeHash(request.RefreshToken);
+
+            var existing = await dbContext.RefreshTokens
+                .Include(rt => rt.User)
+                .FirstOrDefaultAsync(rt => rt.TokenHash == refreshTokenHash);
+
+            if (existing == null || existing.IsExpired)
+                return null;
+
+            var (newRefreshToken, rawToken) = CreateRefreshToken(existing.UserId);
+
+            dbContext.RefreshTokens.Add(newRefreshToken);
+            dbContext.RefreshTokens.Remove(existing);
+            await dbContext.SaveChangesAsync();
+
+            return new LoginResponse
+            {
+                AccessToken = CreateAccessToken(existing.User),
+                RefreshToken = rawToken
+            };
+        }
+
+        private string CreateAccessToken(User user)
         {
             var claims = new List<Claim>
             {
@@ -67,21 +105,33 @@ namespace Quizate.API.Services
             };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Key")!));
+                Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Key")!));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(1),
+                Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes")),
                 SigningCredentials = credentials,
-                Issuer = _configuration.GetValue<string>("Jwt:Issuer"),
-                Audience = _configuration.GetValue<string>("Jwt:Audience"),
+                Issuer = configuration.GetValue<string>("Jwt:Issuer"),
+                Audience = configuration.GetValue<string>("Jwt:Audience"),
             };
 
             var handler = new JsonWebTokenHandler();
 
             return handler.CreateToken(tokenDescriptor);
+        }
+
+        private (RefreshToken, string rawToken) CreateRefreshToken(Guid userId)
+        {
+            string rawToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+
+            return (new RefreshToken
+            {
+                UserId = userId,
+                TokenHash = refreshTokenHasher.ComputeHash(rawToken),
+                ExpiresAtUtc = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"))
+            }, rawToken);
         }
     }
 }

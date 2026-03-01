@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Contracts;
@@ -8,12 +9,13 @@ namespace Quizate.API.Controllers
 {
     [Route("quizzes")]
     [ApiController]
-    public class QuizController(QuizateDbContext _dbContext, IMapper _mapper) : ControllerBase
+    public class QuizController(QuizateDbContext dbContext, IMapper mapper) : ControllerBase
     {
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<QuizResponse>>> GetQuizzes()
         {
-            var quizzes = await _dbContext.Quizzes
+            var quizzes = await dbContext.Quizzes
                 .AsNoTracking()
                 .Include(q => q.Creator)
                 .Include(q => q.QuizType)
@@ -24,7 +26,7 @@ namespace Quizate.API.Controllers
             if (quizzes.Count == 0)
                 return NotFound("No quizzes found.");
 
-            var response = _mapper.Map<List<QuizResponse>>(quizzes);
+            var response = mapper.Map<List<QuizResponse>>(quizzes);
 
             return Ok(response);
 
