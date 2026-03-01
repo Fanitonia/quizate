@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Data;
+using Quizate.API.Services;
+using Quizate.Data.Models;
 using Serilog;
 
 namespace Quizate.API;
@@ -35,6 +38,10 @@ public class Program
             {
                 cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
             });
+
+            builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
 
             var app = builder.Build();

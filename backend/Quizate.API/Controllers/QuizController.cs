@@ -8,17 +8,8 @@ namespace Quizate.API.Controllers
 {
     [Route("quizzes")]
     [ApiController]
-    public class QuizController : ControllerBase
+    public class QuizController(QuizateDbContext _dbContext, IMapper _mapper) : ControllerBase
     {
-        private readonly QuizateDbContext _dbContext;
-        private readonly IMapper _mapper;
-
-        public QuizController(QuizateDbContext dbContext, IMapper mapper)
-        {
-            _dbContext = dbContext;
-            _mapper = mapper;
-        }
-
         [HttpGet]
         public async Task<ActionResult<List<QuizResponse>>> GetQuizzes()
         {
