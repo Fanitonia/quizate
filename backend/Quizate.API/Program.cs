@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Data;
 using Quizate.API.Services;
+using Quizate.API.Startup;
 using Quizate.Data.Models;
 using Serilog;
 
@@ -30,6 +31,8 @@ public class Program
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"))
                 .UseSnakeCaseNamingConvention());
 
+            builder.Services.AddJwtAuthentication(builder.Configuration);
+
             builder.Services.AddProblemDetails();
 
             builder.Services.AddOpenApi();
@@ -40,9 +43,7 @@ public class Program
             });
 
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
             builder.Services.AddScoped<IAuthService, AuthService>();
-
 
             var app = builder.Build();
 
@@ -63,11 +64,13 @@ public class Program
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.MapControllers();
 
-            await MigrateDatabaseAsync(app);
+            await app.MigrateDatabaseAsync();
 
 
             app.Run();
@@ -79,21 +82,6 @@ public class Program
         finally
         {
             await Log.CloseAndFlushAsync();
-        }
-    }
-
-    private static async Task MigrateDatabaseAsync(WebApplication app)
-    {
-        using var scope = app.Services.CreateScope();
-        var services = scope.ServiceProvider;
-        try
-        {
-            var context = services.GetRequiredService<QuizateDbContext>();
-            await context.Database.MigrateAsync();
-        }
-        catch (Exception e)
-        {
-            Log.Error(e, "Something gone wrong while migrating or creating the database");
         }
     }
 }
