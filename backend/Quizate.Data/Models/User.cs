@@ -1,3 +1,4 @@
+using Quizate.Data.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,7 +14,8 @@ public class User
     public string? Email { get; set; }
     public DateTime? EmailVerifiedAt { get; set; }
     public required string HashedPassword { get; set; }
+    public UserRole Role { get; set; } = UserRole.User;
 
-    public ICollection<Quiz>? Quizzes { get; set; }
+    public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
     public ICollection<QuizAttempt> QuizAttempts { get; set; } = new List<QuizAttempt>();
 }

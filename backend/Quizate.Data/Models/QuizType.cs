@@ -11,5 +11,5 @@ public class QuizType
     public required string Name { get; set; }
     public required string DisplayName { get; set; }
 
-    public ICollection<Quiz>? Quizzes { get; set; }
+    public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
 }
