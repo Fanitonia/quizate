@@ -7,7 +7,7 @@ namespace Quizate.API.Services
     {
         public string ComputeHash(string token)
         {
-            byte[] key = Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Key")!);
+            byte[] key = Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:SecretKey")!);
             byte[] data = Encoding.UTF8.GetBytes(token);
 
             using var hmac = new HMACSHA256(key);

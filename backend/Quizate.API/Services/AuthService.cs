@@ -105,7 +105,7 @@ namespace Quizate.API.Services
             };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Key")!));
+                Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:SecretKey")!));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var tokenDescriptor = new SecurityTokenDescriptor

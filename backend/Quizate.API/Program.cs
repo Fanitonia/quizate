@@ -35,7 +35,11 @@ public class Program
 
             builder.Services.AddProblemDetails();
 
-            builder.Services.AddOpenApi();
+            builder.Services.AddOpenApi(options =>
+            {
+                options.AddDocumentTransformer<BearerSecuritySchemaTransformer>();
+                options.AddOperationTransformer<BearerSecurityOperationTransformer>();
+            });
 
             builder.Services.AddAutoMapper(cfg =>
             {
@@ -58,6 +62,7 @@ public class Program
                 {
                     options.SwaggerEndpoint("/openapi/v1.json", "v1");
                     options.RoutePrefix = string.Empty;
+                    options.EnablePersistAuthorization();
                 });
             }
             else
