@@ -37,7 +37,7 @@ public class Program
 
             builder.Services.AddOpenApi(options =>
             {
-                options.AddDocumentTransformer<BearerSecuritySchemaTransformer>();
+                options.AddDocumentTransformer<BearerSecurityDocumentTransformer>();
                 options.AddOperationTransformer<BearerSecurityOperationTransformer>();
             });
 
