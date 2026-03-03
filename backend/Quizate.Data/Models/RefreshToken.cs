@@ -6,6 +6,7 @@ namespace Quizate.Data.Models
 {
     public class RefreshToken
     {
+        //TODO: ID'ye gerek var mı? TokenHash'i pk yapabiliriz.
         public Guid Id { get; set; } = Guid.NewGuid();
         public string TokenHash { get; set; } = default!;
         public DateTime ExpiresAtUtc { get; set; }

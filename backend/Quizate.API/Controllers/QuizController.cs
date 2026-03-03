@@ -7,6 +7,7 @@ using Quizate.API.Data;
 
 namespace Quizate.API.Controllers
 {
+    // TODO: soruları da dahil etme, pagination, filtreleme, sıralama gibi özellikler ekle.
     [Route("quizzes")]
     [ApiController]
     public class QuizController(QuizateDbContext dbContext, IMapper mapper) : ControllerBase

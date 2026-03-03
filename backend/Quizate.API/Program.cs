@@ -48,7 +48,7 @@ public class Program
 
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<RefreshTokenHasher>();
+            builder.Services.AddScoped<ITokenHasher, TokenHasher>();
 
             var app = builder.Build();
 

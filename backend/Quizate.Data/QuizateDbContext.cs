@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Quizate.Data.Models;
-using System;
 
 namespace Quizate.API.Data;
 
@@ -18,6 +17,7 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // TODO: bunun gibileri ayrı configuration classlarına taşı
         modelBuilder.Entity<Language>(entity =>
         {
             entity.HasKey(l => l.Code);

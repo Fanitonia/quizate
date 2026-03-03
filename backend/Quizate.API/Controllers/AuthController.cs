@@ -26,6 +26,8 @@ namespace Quizate.API.Controllers
             return Ok();
         }
 
+        // TODO: tokenleri client side'ta güvenli bir şekilde saklamak için dümdüz böyle göndermek yerine cookie kullan (?)
+        // Araştır -> HttpOnly, SameSite, secure cookie.
         [HttpPost("login")]
         public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
         {

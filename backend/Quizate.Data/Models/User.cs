@@ -1,6 +1,4 @@
 using Quizate.Data.Enums;
-using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Quizate.Data.Models;
 

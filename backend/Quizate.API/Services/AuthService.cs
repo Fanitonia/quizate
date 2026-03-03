@@ -17,11 +17,12 @@ namespace Quizate.API.Services
         QuizateDbContext dbContext,
         IConfiguration configuration,
         IPasswordHasher<User> passwordHasher,
-        RefreshTokenHasher refreshTokenHasher) : IAuthService
+        ITokenHasher tokenHasher) : IAuthService
     {
         // TODO: Model validator ekle.
         public async Task<User?> RegisterAsync(RegisterRequest request)
         {
+            // TODO: toLower tam olarak doğru çözüm değilmiş. daha iyi çözüm bul. 
             var isUserExist = await dbContext.Users.AnyAsync(u =>
                 u.Username.ToLower() == request.Username.ToLower()
                 || (request.Email != null && u.Email != null && u.Email.ToLower() == request.Email.ToLower()));
@@ -73,7 +74,7 @@ namespace Quizate.API.Services
 
         public async Task<LoginResponse?> RefreshTokenAsync(RefreshTokenRequest request)
         {
-            var refreshTokenHash = refreshTokenHasher.ComputeHash(request.RefreshToken);
+            var refreshTokenHash = tokenHasher.ComputeHash(request.RefreshToken);
 
             var existing = await dbContext.RefreshTokens
                 .Include(rt => rt.User)
@@ -129,7 +130,7 @@ namespace Quizate.API.Services
             return (new RefreshToken
             {
                 UserId = userId,
-                TokenHash = refreshTokenHasher.ComputeHash(rawToken),
+                TokenHash = tokenHasher.ComputeHash(rawToken),
                 ExpiresAtUtc = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"))
             }, rawToken);
         }
