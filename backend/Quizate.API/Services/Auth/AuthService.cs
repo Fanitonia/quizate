@@ -18,16 +18,18 @@ public class AuthService(
     IPasswordHasher<User> passwordHasher,
     ITokenHasher tokenHasher) : IAuthService
 {
-    public async Task<bool> RegisterAsync(RegisterRequest request)
+    public async Task<AuthResult> RegisterAsync(RegisterRequest request)
     {
         string username = request.Username.Trim();
         string? email = request.Email?.Trim();
 
+        string[] errors = [];
+
         if (!Validation.IsValidUsername(username))
-            return false;
+            return AuthResult.Fail(new[] { "Invalid username." });
 
         if (email != null && !Validation.IsValidEmail(email))
-            return false;
+            return AuthResult.Fail(new[] { "Invalid email." });
 
         string normalizedUsername = username.ToLowerInvariant();
         string? normalizedEmail = email?.ToLowerInvariant();
@@ -37,7 +39,7 @@ public class AuthService(
             || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
-            return false;
+            return AuthResult.Fail(new[] { "User already exists." });
 
         var user = new User
         {
@@ -52,17 +54,12 @@ public class AuthService(
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
-        return true;
+        return AuthResult.Ok();
     }
 
-    public async Task<AuthTokens?> LoginAsync(LoginRequest request)
+    public async Task<AuthResult<AuthTokens>> LoginAsync(LoginRequest request)
     {
-        string input = request.UsernameOrEmail.Trim();
-
-        if (!Validation.IsValidUsername(input) && !Validation.IsValidEmail(input))
-            return null;
-
-        string normalizedInput = input.ToLowerInvariant();
+        string normalizedInput = request.UsernameOrEmail.Trim().ToLowerInvariant();
 
         var user = await dbContext.Users
             .FirstOrDefaultAsync(u =>
@@ -70,28 +67,28 @@ public class AuthService(
                 || (u.Email != null && u.Email == normalizedInput));
 
         if (user == null)
-            return null;
+            return AuthResult<AuthTokens>.Fail(new[] { "User not found." });
 
         var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         if (result == PasswordVerificationResult.Failed)
-            return null;
+            return AuthResult<AuthTokens>.Fail(new[] { "Invalid username/email or password." });
 
         var (refreshToken, rawToken) = CreateRefreshToken(user.Id);
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
-        return new AuthTokens
+        return AuthResult<AuthTokens>.Ok(new AuthTokens
         {
             AccessToken = CreateAccessToken(user),
             RefreshToken = rawToken
-        };
+        });
     }
 
-    public async Task<AuthTokens?> RefreshTokenAsync(string refreshToken)
+    public async Task<AuthResult<AuthTokens>> RefreshTokenAsync(string? refreshToken)
     {
         if (string.IsNullOrEmpty(refreshToken))
-            return null;
+            return AuthResult<AuthTokens>.Fail(new[] { "Could not find a refresh token." });
 
         var refreshTokenHash = tokenHasher.ComputeHash(refreshToken);
 
@@ -100,7 +97,7 @@ public class AuthService(
             .FirstOrDefaultAsync(rt => rt.TokenHash == refreshTokenHash);
 
         if (existing == null || existing.IsExpired)
-            return null;
+            return AuthResult<AuthTokens>.Fail(new[] { "Invalid refresh token." });
 
         var (newRefreshToken, rawToken) = CreateRefreshToken(existing.UserId);
 
@@ -108,24 +105,24 @@ public class AuthService(
         dbContext.RefreshTokens.Remove(existing);
         await dbContext.SaveChangesAsync();
 
-        return new AuthTokens
+        return AuthResult<AuthTokens>.Ok(new AuthTokens
         {
             AccessToken = CreateAccessToken(existing.User),
             RefreshToken = rawToken
-        };
+        });
     }
 
-    public async Task<bool> RevokeRefreshTokensAsync(Guid userId)
+    public async Task<AuthResult> RevokeRefreshTokensAsync(Guid userId)
     {
         var userTokens = await dbContext.RefreshTokens.Where(rt => rt.UserId == userId).ToListAsync();
 
         if (!userTokens.Any())
-            return false;
+            return AuthResult.Ok();
 
         dbContext.RefreshTokens.RemoveRange(userTokens);
         await dbContext.SaveChangesAsync();
 
-        return true;
+        return AuthResult.Ok();
     }
 
     private string CreateAccessToken(User user)
