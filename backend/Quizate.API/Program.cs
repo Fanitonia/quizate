@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Data;
-using Quizate.API.Services;
+using Quizate.API.Services.Auth;
 using Quizate.API.Startup;
 using Quizate.Data.Models;
 using Serilog;

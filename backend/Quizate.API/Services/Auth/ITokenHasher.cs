@@ -1,4 +1,4 @@
-﻿namespace Quizate.API.Services;
+﻿namespace Quizate.API.Services.Auth;
 
 public interface ITokenHasher
 {

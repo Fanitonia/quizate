@@ -1,6 +1,6 @@
 ﻿using Quizate.API.Contracts;
 
-namespace Quizate.API.Services;
+namespace Quizate.API.Services.Auth;
 
 public interface IAuthService
 {

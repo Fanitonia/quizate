@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Quizate.Data.Configurations;
 using Quizate.Data.Models;
 
 namespace Quizate.API.Data;
@@ -17,17 +18,7 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // TODO: bunun gibileri ayrı configuration classlarına taşı
-        modelBuilder.Entity<Language>(entity =>
-        {
-            entity.HasKey(l => l.Code);
-
-            entity.HasMany<Quiz>()
-                .WithOne(q => q.Language)
-                .HasForeignKey(q => q.LanguageCode)
-                .HasPrincipalKey(l => l.Code)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(QuizateDbContext).Assembly);
 
         modelBuilder.Entity<User>().HasData(
             new User

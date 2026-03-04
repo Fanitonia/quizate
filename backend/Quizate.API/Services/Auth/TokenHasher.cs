@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Quizate.API.Services;
+namespace Quizate.API.Services.Auth;
 
 public class TokenHasher : ITokenHasher
 {

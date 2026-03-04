@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Contracts;
-using Quizate.API.Data;
-using Quizate.API.Services;
-using Quizate.Data.Models;
+using Quizate.API.Services.Auth;
 
 namespace Quizate.API.Controllers;
 
@@ -21,7 +16,7 @@ public class AuthController(IAuthService authService, IConfiguration configurati
         var user = await authService.RegisterAsync(request);
 
         if (!user)
-            return BadRequest("Username or email already exists.");
+            return BadRequest("Could not register user.");
 
         return Ok();
     }

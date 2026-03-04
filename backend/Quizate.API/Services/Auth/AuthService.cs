@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Quizate.API.Auth;
 using Quizate.API.Contracts;
 using Quizate.API.Data;
 using Quizate.Data.Models;
@@ -9,7 +10,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Quizate.API.Services;
+namespace Quizate.API.Services.Auth;
 
 public class AuthService(
     QuizateDbContext dbContext,
@@ -17,21 +18,31 @@ public class AuthService(
     IPasswordHasher<User> passwordHasher,
     ITokenHasher tokenHasher) : IAuthService
 {
-    // TODO: Model validator ekle.
     public async Task<bool> RegisterAsync(RegisterRequest request)
     {
-        // TODO: toLower tam olarak doğru çözüm değilmiş. daha iyi çözüm bul. 
+        string username = request.Username.Trim();
+        string? email = request.Email?.Trim();
+
+        if (!Validation.IsValidUsername(username))
+            return false;
+
+        if (email != null && !Validation.IsValidEmail(email))
+            return false;
+
+        string normalizedUsername = username.ToLowerInvariant();
+        string? normalizedEmail = email?.ToLowerInvariant();
+
         var isUserExist = await dbContext.Users.AnyAsync(u =>
-            u.Username.ToLower() == request.Username.ToLower()
-            || (request.Email != null && u.Email != null && u.Email.ToLower() == request.Email.ToLower()));
+            u.NormalizedUsername == normalizedUsername
+            || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
             return false;
 
         var user = new User
         {
-            Username = request.Username,
-            Email = request.Email,
+            Username = username,
+            Email = normalizedEmail,
             PasswordHash = "init"
         };
 
@@ -44,12 +55,19 @@ public class AuthService(
         return true;
     }
 
-    // TODO: Model validator ekle.
     public async Task<AuthTokens?> LoginAsync(LoginRequest request)
     {
+        string input = request.UsernameOrEmail.Trim();
+
+        if (!Validation.IsValidUsername(input) && !Validation.IsValidEmail(input))
+            return null;
+
+        string normalizedInput = input.ToLowerInvariant();
+
         var user = await dbContext.Users
-            .FirstOrDefaultAsync(u => u.Username == request.UsernameOrEmail
-            || u.Email == request.UsernameOrEmail);
+            .FirstOrDefaultAsync(u =>
+                u.NormalizedUsername == normalizedInput
+                || (u.Email != null && u.Email == normalizedInput));
 
         if (user == null)
             return null;

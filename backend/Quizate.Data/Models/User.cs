@@ -9,6 +9,7 @@ public class User
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public required string Username { get; set; }
+    public string NormalizedUsername { get; private set; } = null!;
     public string? Email { get; set; }
     public DateTime? EmailVerifiedAt { get; set; }
     public required string PasswordHash { get; set; }
