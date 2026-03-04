@@ -4,7 +4,7 @@ using Serilog;
 
 namespace Quizate.API.Startup;
 
-public static class WebApplicationExtensions
+public static class DatabaseMigrationExtension
 {
     public static async Task<WebApplication> MigrateDatabaseAsync(this WebApplication app)
     {

@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Data;
 using Quizate.API.Services.Auth;
 using Quizate.API.Startup;
-using Quizate.Data.Models;
 using Serilog;
 
 namespace Quizate.API;
@@ -30,8 +28,6 @@ public class Program
             builder.Services.AddDbContext<QuizateDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DatabaseConnection"))
                 .UseSnakeCaseNamingConvention());
-
-            builder.Services.AddJwtAuthentication(builder.Configuration);
 
             builder.Services.AddProblemDetails();
 
