@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using Quizate.API.Auth;
-using Quizate.API.Contracts;
 using Quizate.API.Data;
 using Quizate.Data.Models;
 using System.Security.Claims;
@@ -12,85 +9,16 @@ using System.Text;
 
 namespace Quizate.API.Services.Auth;
 
-public class AuthService(
+public class TokenManager(
     QuizateDbContext dbContext,
-    IConfiguration configuration,
-    IPasswordHasher<User> passwordHasher,
-    ITokenHasher tokenHasher) : IAuthService
+    IConfiguration configuration) : ITokenManager
 {
-    public async Task<AuthResult> RegisterAsync(RegisterRequest request)
-    {
-        string username = request.Username.Trim();
-        string? email = request.Email?.Trim();
-
-        string[] errors = [];
-
-        if (!Validation.IsValidUsername(username))
-            return AuthResult.Fail(new[] { "Invalid username." });
-
-        if (email != null && !Validation.IsValidEmail(email))
-            return AuthResult.Fail(new[] { "Invalid email." });
-
-        string normalizedUsername = username.ToLowerInvariant();
-        string? normalizedEmail = email?.ToLowerInvariant();
-
-        var isUserExist = await dbContext.Users.AnyAsync(u =>
-            u.NormalizedUsername == normalizedUsername
-            || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
-
-        if (isUserExist)
-            return AuthResult.Fail(new[] { "User already exists." });
-
-        var user = new User
-        {
-            Username = username,
-            Email = normalizedEmail,
-            PasswordHash = "init"
-        };
-
-        string hashedPassword = passwordHasher.HashPassword(user, request.Password);
-        user.PasswordHash = hashedPassword;
-
-        dbContext.Users.Add(user);
-        await dbContext.SaveChangesAsync();
-
-        return AuthResult.Ok();
-    }
-
-    public async Task<AuthResult<AuthTokens>> LoginAsync(LoginRequest request)
-    {
-        string normalizedInput = request.UsernameOrEmail.Trim().ToLowerInvariant();
-
-        var user = await dbContext.Users
-            .FirstOrDefaultAsync(u =>
-                u.NormalizedUsername == normalizedInput
-                || (u.Email != null && u.Email == normalizedInput));
-
-        if (user == null)
-            return AuthResult<AuthTokens>.Fail(new[] { "User not found." });
-
-        var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
-
-        if (result == PasswordVerificationResult.Failed)
-            return AuthResult<AuthTokens>.Fail(new[] { "Invalid username/email or password." });
-
-        var (refreshToken, rawToken) = CreateRefreshToken(user.Id);
-        dbContext.RefreshTokens.Add(refreshToken);
-        await dbContext.SaveChangesAsync();
-
-        return AuthResult<AuthTokens>.Ok(new AuthTokens
-        {
-            AccessToken = CreateAccessToken(user),
-            RefreshToken = rawToken
-        });
-    }
-
     public async Task<AuthResult<AuthTokens>> RefreshTokenAsync(string? refreshToken)
     {
         if (string.IsNullOrEmpty(refreshToken))
             return AuthResult<AuthTokens>.Fail(new[] { "Could not find a refresh token." });
 
-        var refreshTokenHash = tokenHasher.ComputeHash(refreshToken);
+        var refreshTokenHash = Hasher.ComputeHash(refreshToken);
 
         var existing = await dbContext.RefreshTokens
             .Include(rt => rt.User)
@@ -125,7 +53,7 @@ public class AuthService(
         return AuthResult.Ok();
     }
 
-    private string CreateAccessToken(User user)
+    public string CreateAccessToken(User user)
     {
         var claims = new List<Claim>
             {
@@ -152,15 +80,16 @@ public class AuthService(
         return handler.CreateToken(tokenDescriptor);
     }
 
-    private (RefreshToken, string rawToken) CreateRefreshToken(Guid userId)
+    public (RefreshToken, string rawToken) CreateRefreshToken(Guid userId)
     {
         string rawToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
 
         return (new RefreshToken
         {
             UserId = userId,
-            TokenHash = tokenHasher.ComputeHash(rawToken),
+            TokenHash = Hasher.ComputeHash(rawToken),
             ExpiresAtUtc = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"))
         }, rawToken);
     }
 }
+

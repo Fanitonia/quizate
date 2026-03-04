@@ -7,8 +7,9 @@ namespace Quizate.API.Controllers;
 [Route("auth")]
 [ApiController]
 public class AuthController(
-    IAuthService authService,
+    IUserManager authService,
     ICookieManager cookieManager,
+    ITokenManager tokenManager,
     IConfiguration configuration) : ControllerBase
 {
     //TODO: password resetleme, email doğrulama, account silme, account güncelleme...
@@ -50,7 +51,7 @@ public class AuthController(
     {
         Request.Cookies.TryGetValue("REFRESH_TOKEN", out var refreshToken);
 
-        var result = await authService.RefreshTokenAsync(refreshToken);
+        var result = await tokenManager.RefreshTokenAsync(refreshToken);
 
         if (!result.Success)
             return BadRequest(result.Errors);
@@ -71,7 +72,7 @@ public class AuthController(
     [HttpDelete("refreshToken/{userId}")]
     public async Task<ActionResult> RevokeRefreshTokens(Guid userId)
     {
-        var result = await authService.RevokeRefreshTokensAsync(userId);
+        var result = await tokenManager.RevokeRefreshTokensAsync(userId);
 
         if (!result.Success)
             return NotFound(result.Errors);

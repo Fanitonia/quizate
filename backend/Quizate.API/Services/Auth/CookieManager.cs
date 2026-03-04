@@ -20,7 +20,8 @@ public class CookieManager : ICookieManager
             HttpOnly = true,
             SameSite = SameSiteMode.Strict,
             Secure = true,
-            Expires = DateTime.UtcNow.AddDays(expirationDays)
+            Expires = DateTime.UtcNow.AddDays(expirationDays),
+            Path = "/auth/refreshToken"
         });
     }
 

@@ -3,9 +3,9 @@ using System.Text;
 
 namespace Quizate.API.Services.Auth;
 
-public class TokenHasher : ITokenHasher
+public static class Hasher
 {
-    public string ComputeHash(string value)
+    public static string ComputeHash(string value)
     {
         ArgumentNullException.ThrowIfNull(value);
 
