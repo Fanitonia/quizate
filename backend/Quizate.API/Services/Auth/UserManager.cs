@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
-using Quizate.API.Auth;
 using Quizate.API.Contracts;
 using Quizate.API.Data;
 using Quizate.Data.Models;
@@ -14,30 +14,21 @@ public class UserManager(
 {
     public async Task<AuthResult> RegisterAsync(RegisterRequest request)
     {
-        string username = request.Username.Trim();
-        string? email = request.Email?.Trim();
-
         string[] errors = [];
 
-        if (!Validation.IsValidUsername(username))
-            return AuthResult.Fail(new[] { "Invalid username." });
-
-        if (email != null && !Validation.IsValidEmail(email))
-            return AuthResult.Fail(new[] { "Invalid email." });
-
-        string normalizedUsername = username.ToLowerInvariant();
-        string? normalizedEmail = email?.ToLowerInvariant();
+        string normalizedUsername = request.Username.ToLowerInvariant();
+        string? normalizedEmail = request.Email?.ToLowerInvariant();
 
         var isUserExist = await dbContext.Users.AnyAsync(u =>
             u.NormalizedUsername == normalizedUsername
             || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
-            return AuthResult.Fail(new[] { "User already exists." });
+            return AuthResult.Fail(["User already exist."]);
 
         var user = new User
         {
-            Username = username,
+            Username = request.Username,
             Email = normalizedEmail,
             PasswordHash = "init"
         };
@@ -61,12 +52,12 @@ public class UserManager(
                 || (u.Email != null && u.Email == normalizedInput));
 
         if (user == null)
-            return AuthResult<AuthTokens>.Fail(new[] { "User not found." });
+            return AuthResult<AuthTokens>.Fail(["Invalid username/email or password."]);
 
         var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         if (result == PasswordVerificationResult.Failed)
-            return AuthResult<AuthTokens>.Fail(new[] { "Invalid username/email or password." });
+            return AuthResult<AuthTokens>.Fail(["Invalid username/email or password."]);
 
         var (refreshToken, rawToken) = tokenManager.CreateRefreshToken(user.Id);
         dbContext.RefreshTokens.Add(refreshToken);

@@ -16,7 +16,7 @@ public class TokenManager(
     public async Task<AuthResult<AuthTokens>> RefreshTokenAsync(string? refreshToken)
     {
         if (string.IsNullOrEmpty(refreshToken))
-            return AuthResult<AuthTokens>.Fail(new[] { "Could not find a refresh token." });
+            return AuthResult<AuthTokens>.Fail(["Could not find a refresh token."]);
 
         var refreshTokenHash = Hasher.ComputeHash(refreshToken);
 
@@ -25,7 +25,7 @@ public class TokenManager(
             .FirstOrDefaultAsync(rt => rt.TokenHash == refreshTokenHash);
 
         if (existing == null || existing.IsExpired)
-            return AuthResult<AuthTokens>.Fail(new[] { "Invalid refresh token." });
+            return AuthResult<AuthTokens>.Fail(["Invalid refresh token."]);
 
         var (newRefreshToken, rawToken) = CreateRefreshToken(existing.UserId);
 
@@ -44,7 +44,7 @@ public class TokenManager(
     {
         var userTokens = await dbContext.RefreshTokens.Where(rt => rt.UserId == userId).ToListAsync();
 
-        if (!userTokens.Any())
+        if (userTokens.Count == 0)
             return AuthResult.Ok();
 
         dbContext.RefreshTokens.RemoveRange(userTokens);

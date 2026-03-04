@@ -1,26 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Contracts;
 using Quizate.API.Services.Auth;
+using Quizate.API.Validators;
 
 namespace Quizate.API.Controllers;
 
 [Route("auth")]
 [ApiController]
 public class AuthController(
-    IUserManager authService,
+    IUserManager userManager,
     ICookieManager cookieManager,
     ITokenManager tokenManager,
-    IConfiguration configuration) : ControllerBase
+    IConfiguration configuration,
+    IValidator<LoginRequest> loginValidator,
+    IValidator<RegisterRequest> registerValidator) : ControllerBase
 {
     //TODO: password resetleme, email doğrulama, account silme, account güncelleme...
 
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
-        var result = await authService.RegisterAsync(request);
+        var validation = registerValidator.Validate(request);
+
+        if (!validation.IsValid)
+        {
+            validation.AddToModelState(ModelState);
+            return ValidationProblem();
+        }
+
+        var result = await userManager.RegisterAsync(request);
+        result.AddErrorsToModelState(ModelState, "registerErrors");
 
         if (!result.Success)
-            return BadRequest(result.Errors);
+            return ValidationProblem();
 
         return Ok();
     }
@@ -28,10 +41,19 @@ public class AuthController(
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
-        var result = await authService.LoginAsync(request);
+        var validation = loginValidator.Validate(request);
+
+        if (!validation.IsValid)
+        {
+            validation.AddToModelState(ModelState);
+            return ValidationProblem();
+        }
+
+        var result = await userManager.LoginAsync(request);
+        result.AddErrorsToModelState(ModelState, "loginErrors");
 
         if (!result.Success)
-            return BadRequest(result.Errors);
+            return ValidationProblem();
 
         cookieManager.SetRefreshTokenCookie(
             result.Data!.RefreshToken,
@@ -52,9 +74,10 @@ public class AuthController(
         Request.Cookies.TryGetValue("REFRESH_TOKEN", out var refreshToken);
 
         var result = await tokenManager.RefreshTokenAsync(refreshToken);
+        result.AddErrorsToModelState(ModelState, "tokenErrors");
 
         if (!result.Success)
-            return BadRequest(result.Errors);
+            return ValidationProblem();
 
         cookieManager.SetRefreshTokenCookie(
             result.Data!.RefreshToken,
@@ -73,9 +96,10 @@ public class AuthController(
     public async Task<ActionResult> RevokeRefreshTokens(Guid userId)
     {
         var result = await tokenManager.RevokeRefreshTokensAsync(userId);
+        result.AddErrorsToModelState(ModelState, "tokenErrors");
 
         if (!result.Success)
-            return NotFound(result.Errors);
+            return ValidationProblem();
 
         return NoContent();
     }

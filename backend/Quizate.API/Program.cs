@@ -1,7 +1,9 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Data;
 using Quizate.API.Services.Auth;
 using Quizate.API.Startup;
+using Quizate.API.Validators;
 using Serilog;
 
 namespace Quizate.API;
@@ -43,6 +45,8 @@ public class Program
             });
 
             builder.Services.AddAuthServices();
+
+            builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
 
 
             var app = builder.Build();
