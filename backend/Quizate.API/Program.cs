@@ -37,8 +37,8 @@ public class Program
 
             builder.Services.AddOpenApi(options =>
             {
-                options.AddDocumentTransformer<BearerSecurityDocumentTransformer>();
-                options.AddOperationTransformer<BearerSecurityOperationTransformer>();
+                options.AddDocumentTransformer<CookieSecurityDocumentTransformer>();
+                options.AddOperationTransformer<CookieSecurityOperationTransformer>();
             });
 
             builder.Services.AddAutoMapper(cfg =>
@@ -49,6 +49,7 @@ public class Program
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenHasher, TokenHasher>();
+
 
             var app = builder.Build();
 

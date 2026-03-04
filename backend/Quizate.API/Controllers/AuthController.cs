@@ -1,53 +1,97 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Contracts;
-using Quizate.API.Contracts.User;
 using Quizate.API.Data;
 using Quizate.API.Services;
 using Quizate.Data.Models;
 
-namespace Quizate.API.Controllers
+namespace Quizate.API.Controllers;
+
+[Route("auth")]
+[ApiController]
+public class AuthController(IAuthService authService, IConfiguration configuration) : ControllerBase
 {
-    [Route("auth")]
-    [ApiController]
-    public class AuthController(IAuthService authService) : ControllerBase
+    //TODO: password resetleme, email doğrulama, account silme, account güncelleme...
+
+    [HttpPost("register")]
+    public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
-        //TODO: password resetleme, email doğrulama, account silme, account güncelleme, refresh tokenleri temizleme...
+        var user = await authService.RegisterAsync(request);
 
-        [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] RegisterRequest request)
+        if (!user)
+            return BadRequest("Username or email already exists.");
+
+        return Ok();
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult> Login([FromBody] LoginRequest request)
+    {
+        var response = await authService.LoginAsync(request);
+
+        if (response == null)
+            return BadRequest("Invalid username/email or password.");
+
+        Response.Cookies.Append("REFRESH_TOKEN", response.RefreshToken, new CookieOptions
         {
-            var user = await authService.RegisterAsync(request);
+            HttpOnly = true,
+            SameSite = SameSiteMode.Strict,
+            Secure = true,
+            Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays")),
+            Path = "/auth/refreshToken"
+        });
 
-            if (user == null)
-                return BadRequest("Username or email already exists.");
-
-            return Ok();
-        }
-
-        // TODO: tokenleri client side'ta güvenli bir şekilde saklamak için dümdüz böyle göndermek yerine cookie kullan (?)
-        // Araştır -> HttpOnly, SameSite, secure cookie.
-        [HttpPost("login")]
-        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
+        Response.Cookies.Append("ACCESS_TOKEN", response.AccessToken, new CookieOptions
         {
-            var response = await authService.LoginAsync(request);
+            HttpOnly = true,
+            SameSite = SameSiteMode.Strict,
+            Secure = true,
+            Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"))
+        });
 
-            if (response == null)
-                return BadRequest("Invalid username/email or password.");
+        return Ok();
+    }
 
-            return Ok(response);
-        }
+    [HttpPost("refreshToken")]
+    public async Task<ActionResult> RefreshToken()
+    {
+        Request.Cookies.TryGetValue("REFRESH_TOKEN", out var refreshToken);
 
-        [HttpPost("refreshToken")]
-        public async Task<ActionResult<LoginResponse>> RefreshToken([FromBody] RefreshTokenRequest request)
+        var response = await authService.RefreshTokenAsync(refreshToken);
+
+        if (response == null)
+            return BadRequest("Invalid refresh token.");
+
+        Response.Cookies.Append("REFRESH_TOKEN", response.RefreshToken, new CookieOptions
         {
-            var response = await authService.RefreshTokenAsync(request);
+            HttpOnly = true,
+            SameSite = SameSiteMode.Strict,
+            Secure = true,
+            Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays")),
+            Path = "/auth/refreshToken"
+        });
 
-            if (response == null)
-                return BadRequest("Invalid refresh token.");
+        Response.Cookies.Append("ACCESS_TOKEN", response.AccessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            SameSite = SameSiteMode.Strict,
+            Secure = true,
+            Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"))
+        });
 
-            return Ok(response);
-        }
+        return Ok();
+    }
+
+    [HttpDelete("refreshToken/{userId}")]
+    public async Task<ActionResult> RevokeRefreshTokens(Guid userId)
+    {
+        var success = await authService.RevokeRefreshTokensAsync(userId);
+
+        if (!success)
+            return NotFound("Could not found refresh tokens for the specified user.");
+
+        return NoContent();
     }
 }

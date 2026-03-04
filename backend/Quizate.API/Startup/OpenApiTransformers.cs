@@ -1,42 +1,39 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
 namespace Quizate.API.Startup;
 
-internal class BearerSecurityDocumentTransformer(IAuthenticationSchemeProvider authenticationSchemeProvider) : IOpenApiDocumentTransformer
+internal class CookieSecurityDocumentTransformer : IOpenApiDocumentTransformer
 {
-    public async Task TransformAsync(
+    public Task TransformAsync(
         OpenApiDocument document,
         OpenApiDocumentTransformerContext context,
         CancellationToken cancellationToken)
     {
-        var authenticationSchemes = await authenticationSchemeProvider.GetAllSchemesAsync();
-        if (authenticationSchemes.Any(authScheme => authScheme.Name == "Bearer"))
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes = new Dictionary<string, IOpenApiSecurityScheme>
         {
-            var securitySchemes = new Dictionary<string, IOpenApiSecurityScheme>
+            ["CookieAuth"] = new OpenApiSecurityScheme
             {
-                ["Bearer"] = new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    In = ParameterLocation.Header,
-                    BearerFormat = "JWT"
-                }
-            };
-            document.Components ??= new OpenApiComponents();
-            document.Components.SecuritySchemes = securitySchemes;
-        }
+                Type = SecuritySchemeType.Http,
+                Scheme = "cookie",
+                In = ParameterLocation.Cookie,
+                Name = "ACCESS_TOKEN",
+                Description = "JWT is stored in HttpOnly cookie set by /auth/login and /auth/refreshToken."
+            }
+        };
+
+        return Task.CompletedTask;
     }
 }
 
-internal class BearerSecurityOperationTransformer : IOpenApiOperationTransformer
+internal class CookieSecurityOperationTransformer : IOpenApiOperationTransformer
 {
-    public async Task TransformAsync(
-            OpenApiOperation operation,
-            OpenApiOperationTransformerContext context,
-            CancellationToken cancellationToken)
+    public Task TransformAsync(
+        OpenApiOperation operation,
+        OpenApiOperationTransformerContext context,
+        CancellationToken cancellationToken)
     {
         var metadata = context.Description.ActionDescriptor.EndpointMetadata;
 
@@ -44,14 +41,14 @@ internal class BearerSecurityOperationTransformer : IOpenApiOperationTransformer
         var hasAuthorize = metadata.OfType<IAuthorizeData>().Any();
 
         if (hasAllowAnonymous || !hasAuthorize)
-            return;
+            return Task.CompletedTask;
 
         operation.Security ??= [];
         operation.Security.Add(new OpenApiSecurityRequirement
         {
-            [new OpenApiSecuritySchemeReference("Bearer", context.Document)] = []
+            [new OpenApiSecuritySchemeReference("CookieAuth", context.Document)] = []
         });
 
-        return;
+        return Task.CompletedTask;
     }
 }
