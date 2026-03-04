@@ -6,7 +6,10 @@ namespace Quizate.API.Controllers;
 
 [Route("auth")]
 [ApiController]
-public class AuthController(IAuthService authService, IConfiguration configuration) : ControllerBase
+public class AuthController(
+    IAuthService authService,
+    ICookieManager cookieManager,
+    IConfiguration configuration) : ControllerBase
 {
     //TODO: password resetleme, email doğrulama, account silme, account güncelleme...
 
@@ -29,22 +32,15 @@ public class AuthController(IAuthService authService, IConfiguration configurati
         if (!result.Success)
             return BadRequest(result.Errors);
 
-        Response.Cookies.Append("REFRESH_TOKEN", result.Data!.RefreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
-            Secure = true,
-            Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays")),
-            Path = "/auth/refreshToken"
-        });
+        cookieManager.SetRefreshTokenCookie(
+            result.Data!.RefreshToken,
+            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
+            Response);
 
-        Response.Cookies.Append("ACCESS_TOKEN", result.Data!.AccessToken, new CookieOptions
-        {
-            HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
-            Secure = true,
-            Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"))
-        });
+        cookieManager.SetAccessTokenCookie(
+            result.Data.AccessToken,
+            configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
+            Response);
 
         return Ok();
     }
@@ -59,22 +55,15 @@ public class AuthController(IAuthService authService, IConfiguration configurati
         if (!result.Success)
             return BadRequest(result.Errors);
 
-        Response.Cookies.Append("REFRESH_TOKEN", result.Data!.RefreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
-            Secure = true,
-            Expires = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays")),
-            Path = "/auth/refreshToken"
-        });
+        cookieManager.SetRefreshTokenCookie(
+            result.Data!.RefreshToken,
+            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
+            Response);
 
-        Response.Cookies.Append("ACCESS_TOKEN", result.Data!.AccessToken, new CookieOptions
-        {
-            HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
-            Secure = true,
-            Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"))
-        });
+        cookieManager.SetAccessTokenCookie(
+            result.Data.AccessToken,
+            configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
+            Response);
 
         return Ok();
     }
