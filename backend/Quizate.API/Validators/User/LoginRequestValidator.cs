@@ -29,11 +29,7 @@ public class LoginRequestValidator : AbstractValidator<LoginRequest>
         RuleFor(x => x.Password)
             .NotEmpty()
                 .WithMessage("Password is required")
-            .MinimumLength(8)
-                .WithMessage("Password must be at least 8 characters long")
             .MaximumLength(256)
-                .WithMessage("Password must not exceed 256 characters.")
-            .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{1,}$")
-                .WithMessage("Password must contain at least one uppercase letter, one lowercase letter and one number.");
+                .WithMessage("Password must not exceed 256 characters.");
     }
 }

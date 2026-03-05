@@ -1,8 +1,11 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Contracts;
 using Quizate.API.Services.Auth;
 using Quizate.API.Validators;
+using Quizate.Data.Enums;
+using System.Security.Claims;
 
 namespace Quizate.API.Controllers;
 
@@ -30,10 +33,12 @@ public class AuthController(
         }
 
         var result = await userManager.RegisterAsync(request);
-        result.AddErrorsToModelState(ModelState, "registerErrors");
 
         if (!result.Success)
+        {
+            result.AddErrorsToModelState(ModelState, "registerErrors");
             return ValidationProblem();
+        }
 
         return Ok();
     }
@@ -50,10 +55,12 @@ public class AuthController(
         }
 
         var result = await userManager.LoginAsync(request);
-        result.AddErrorsToModelState(ModelState, "loginErrors");
 
         if (!result.Success)
+        {
+            result.AddErrorsToModelState(ModelState, "loginErrors");
             return ValidationProblem();
+        }
 
         cookieManager.SetRefreshTokenCookie(
             result.Data!.RefreshToken,
@@ -74,10 +81,12 @@ public class AuthController(
         Request.Cookies.TryGetValue("REFRESH_TOKEN", out var refreshToken);
 
         var result = await tokenManager.RefreshTokenAsync(refreshToken);
-        result.AddErrorsToModelState(ModelState, "tokenErrors");
 
         if (!result.Success)
+        {
+            result.AddErrorsToModelState(ModelState, "tokenErrors");
             return ValidationProblem();
+        }
 
         cookieManager.SetRefreshTokenCookie(
             result.Data!.RefreshToken,
@@ -92,14 +101,28 @@ public class AuthController(
         return Ok();
     }
 
-    [HttpDelete("refreshToken/{userId}")]
-    public async Task<ActionResult> RevokeRefreshTokens(Guid userId)
+    [Authorize]
+    [HttpDelete("refreshToken/{userId:guid}")]
+    public async Task<ActionResult> RevokeRefreshTokens([FromRoute] Guid userId)
     {
+        string? currentUserIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (!Guid.TryParse(currentUserIdClaim, out Guid currentUserId))
+            return Unauthorized();
+
+        bool isAdmin = User.IsInRole(UserRole.Admin.ToString());
+        bool isSelf = currentUserId == userId;
+
+        if (!isAdmin || !isSelf)
+            return Forbid();
+
         var result = await tokenManager.RevokeRefreshTokensAsync(userId);
-        result.AddErrorsToModelState(ModelState, "tokenErrors");
 
         if (!result.Success)
+        {
+            result.AddErrorsToModelState(ModelState, "tokenErrors");
             return ValidationProblem();
+        }
 
         return NoContent();
     }
