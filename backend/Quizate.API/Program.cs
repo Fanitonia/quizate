@@ -5,6 +5,7 @@ using Quizate.API.Contracts.Validators;
 using Quizate.API.Data;
 using Quizate.API.Extensions.Setup;
 using Quizate.API.Services.Auth;
+using Quizate.API.Services.Quizzes;
 using Serilog;
 
 namespace Quizate.API;
@@ -45,9 +46,11 @@ public class Program
                 cfg.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
             });
 
+            builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
+
             builder.Services.AddAuthServices();
 
-            builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
+            builder.Services.AddScoped<IQuizService, QuizService>();
 
 
             var app = builder.Build();

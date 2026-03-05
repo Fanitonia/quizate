@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Quizate.API.Services.Auth;
 
-public static class AddAuthExtension
+public static class AuthServiceExtensions
 {
     public static IServiceCollection AddAuthServices(this IServiceCollection services)
     {
