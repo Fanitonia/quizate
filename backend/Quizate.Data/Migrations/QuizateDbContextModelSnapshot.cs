@@ -106,6 +106,8 @@ namespace Quizate.Data.Migrations
 
                     b.ToTable("multiple_choice_options", null, t =>
                         {
+                            t.HasCheckConstraint("ck_multiple_choice_options_display_order_non_negative", "display_order >= 0");
+
                             t.HasCheckConstraint("ck_multiple_choice_options_text_not_empty", "char_length(trim(text)) > 0");
                         });
 
@@ -158,7 +160,8 @@ namespace Quizate.Data.Migrations
                         .HasColumnName("display_order");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("text")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
                         .HasColumnName("image_url");
 
                     b.Property<Guid>("QuizId")
@@ -179,6 +182,8 @@ namespace Quizate.Data.Migrations
 
                     b.ToTable("multiple_choice_questions", null, t =>
                         {
+                            t.HasCheckConstraint("ck_multiple_choice_questions_display_order_non_negative", "display_order >= 0");
+
                             t.HasCheckConstraint("ck_multiple_choice_questions_text_not_empty", "char_length(trim(text)) > 0");
                         });
 
@@ -208,7 +213,8 @@ namespace Quizate.Data.Migrations
                         .HasColumnName("creator_id");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text")
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)")
                         .HasColumnName("description");
 
                     b.Property<bool>("IsPublic")
@@ -225,13 +231,14 @@ namespace Quizate.Data.Migrations
                         .HasColumnName("quiz_type_id");
 
                     b.Property<string>("ThumbnailUrl")
-                        .HasColumnType("text")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
                         .HasColumnName("thumbnail_url");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("title");
 
                     b.Property<DateTime>("UpdatedAt")

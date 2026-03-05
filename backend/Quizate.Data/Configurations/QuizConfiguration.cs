@@ -9,7 +9,13 @@ internal class QuizConfiguration : IEntityTypeConfiguration<Quiz>
     public void Configure(EntityTypeBuilder<Quiz> entity)
     {
         entity.Property(q => q.Title)
-            .HasMaxLength(200);
+            .HasMaxLength(100);
+
+        entity.Property(q => q.Description)
+            .HasMaxLength(400);
+
+        entity.Property(q => q.ThumbnailUrl)
+            .HasMaxLength(1024);
 
         entity.ToTable(t =>
         {

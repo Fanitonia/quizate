@@ -50,11 +50,21 @@ namespace Quizate.Data.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "title",
                 table: "quizzes",
-                type: "character varying(200)",
-                maxLength: 200,
+                type: "character varying(100)",
+                maxLength: 100,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "thumbnail_url",
+                table: "quizzes",
+                type: "character varying(1024)",
+                maxLength: 1024,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "language_code",
@@ -63,6 +73,16 @@ namespace Quizate.Data.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "description",
+                table: "quizzes",
+                type: "character varying(400)",
+                maxLength: 400,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "name",
@@ -90,6 +110,16 @@ namespace Quizate.Data.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "text");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "image_url",
+                table: "multiple_choice_questions",
+                type: "character varying(1024)",
+                maxLength: 1024,
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "text",
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "text",
@@ -214,9 +244,19 @@ namespace Quizate.Data.Migrations
                 sql: "score >= 0");
 
             migrationBuilder.AddCheckConstraint(
+                name: "ck_multiple_choice_questions_display_order_non_negative",
+                table: "multiple_choice_questions",
+                sql: "display_order >= 0");
+
+            migrationBuilder.AddCheckConstraint(
                 name: "ck_multiple_choice_questions_text_not_empty",
                 table: "multiple_choice_questions",
                 sql: "char_length(trim(text)) > 0");
+
+            migrationBuilder.AddCheckConstraint(
+                name: "ck_multiple_choice_options_display_order_non_negative",
+                table: "multiple_choice_options",
+                sql: "display_order >= 0");
 
             migrationBuilder.AddCheckConstraint(
                 name: "ck_multiple_choice_options_text_not_empty",
@@ -298,8 +338,16 @@ namespace Quizate.Data.Migrations
                 table: "quiz_attempts");
 
             migrationBuilder.DropCheckConstraint(
+                name: "ck_multiple_choice_questions_display_order_non_negative",
+                table: "multiple_choice_questions");
+
+            migrationBuilder.DropCheckConstraint(
                 name: "ck_multiple_choice_questions_text_not_empty",
                 table: "multiple_choice_questions");
+
+            migrationBuilder.DropCheckConstraint(
+                name: "ck_multiple_choice_options_display_order_non_negative",
+                table: "multiple_choice_options");
 
             migrationBuilder.DropCheckConstraint(
                 name: "ck_multiple_choice_options_text_not_empty",
@@ -356,8 +404,18 @@ namespace Quizate.Data.Migrations
                 type: "text",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character varying(200)",
-                oldMaxLength: 200);
+                oldType: "character varying(100)",
+                oldMaxLength: 100);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "thumbnail_url",
+                table: "quizzes",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "character varying(1024)",
+                oldMaxLength: 1024,
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "language_code",
@@ -366,6 +424,16 @@ namespace Quizate.Data.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character varying(10)");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "description",
+                table: "quizzes",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "character varying(400)",
+                oldMaxLength: 400,
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "name",
@@ -393,6 +461,16 @@ namespace Quizate.Data.Migrations
                 oldClrType: typeof(string),
                 oldType: "character varying(1000)",
                 oldMaxLength: 1000);
+
+            migrationBuilder.AlterColumn<string>(
+                name: "image_url",
+                table: "multiple_choice_questions",
+                type: "text",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "character varying(1024)",
+                oldMaxLength: 1024,
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "text",
