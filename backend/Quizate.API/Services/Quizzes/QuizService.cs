@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Contracts;
 using Quizate.API.Data;
@@ -9,35 +10,39 @@ public class QuizService(
     QuizateDbContext context,
     IMapper mapper) : IQuizService
 {
-    public async Task<(IEnumerable<QuizResponse>, PaginationMetadata?)> GetQuizzesAsync(
+    public async Task<(IEnumerable<QuizResponse>, PaginationMetadata)> GetQuizzesAsync(
         PaginationParameters pagination,
         CancellationToken ct)
     {
         var result = await context.Quizzes
-        .AsNoTracking()
-        .Include(q => q.Creator)
-        .Include(q => q.QuizType)
-        .Include(q => q.MultipleChoiceQuestions)
-        .Include(q => q.QuizAttempts)
-        .Skip((pagination.PageNumber - 1) * pagination.PageSize)
-        .Take(pagination.PageSize)
-        .ToListAsync(ct);
+            .AsNoTracking()
+            .OrderByDescending(q => q.CreatedAt)
+            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .ProjectTo<QuizResponse>(mapper.ConfigurationProvider)
+            .ToListAsync(ct);
 
-        if (result.Count == 0)
-            return ([], null);
-
-        var totalCount = await context.Quizzes.CountAsync(ct);
+        var totalCount = await context.Quizzes
+            .AsNoTracking()
+            .CountAsync(ct);
 
         var paginationMetaData = new PaginationMetadata
         {
             PageSize = pagination.PageSize,
             CurrentPage = pagination.PageNumber,
             TotalCount = totalCount,
-            TotalPages = (int)Math.Ceiling(totalCount / (double)pagination.PageSize)
+            TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pagination.PageSize)
         };
 
-        var quizzes = mapper.Map<List<QuizResponse>>(result);
+        return (result, paginationMetaData);
+    }
 
-        return (quizzes, paginationMetaData);
+    public async Task<QuizResponse?> GetQuiz(Guid quizId, CancellationToken ct)
+    {
+        return await context.Quizzes
+            .AsNoTracking()
+            .Where(q => q.Id == quizId)
+            .ProjectTo<QuizResponse>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(ct);
     }
 }

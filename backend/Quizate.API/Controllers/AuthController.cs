@@ -16,15 +16,15 @@ public class AuthController(
     ICookieManager cookieManager,
     ITokenManager tokenManager,
     IConfiguration configuration,
-    IValidator<LoginRequest> loginValidator,
-    IValidator<RegisterRequest> registerValidator) : ControllerBase
+    IValidator<LoginRequest> loginRequestValidator,
+    IValidator<RegisterRequest> registerRequestValidator) : ControllerBase
 {
     //TODO: password resetleme, email doğrulama, account silme, account güncelleme...
 
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
-        var validation = registerValidator.Validate(request);
+        var validation = registerRequestValidator.Validate(request);
 
         if (!validation.IsValid)
         {
@@ -46,7 +46,7 @@ public class AuthController(
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
-        var validation = loginValidator.Validate(request);
+        var validation = loginRequestValidator.Validate(request);
 
         if (!validation.IsValid)
         {

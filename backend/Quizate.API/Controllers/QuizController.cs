@@ -5,7 +5,6 @@ using Quizate.API.Services.Quizzes;
 
 namespace Quizate.API.Controllers;
 
-// TODO: soruları da dahil etme, filtreleme, sıralama gibi özellikler ekle.
 [Route("quizzes")]
 [ApiController]
 public class QuizController(IQuizService quizService) : ControllerBase
@@ -17,11 +16,19 @@ public class QuizController(IQuizService quizService) : ControllerBase
     {
         var (quizzes, paginationMetaData) = await quizService.GetQuizzesAsync(pagination, ct);
 
-        if (!quizzes.Any())
-            return NotFound();
-
-        Response.Headers.Append("X-Pagination", paginationMetaData!.SerializeWithCamelCasing());
+        Response.Headers.Append("X-Pagination", paginationMetaData.SerializeWithCamelCasing());
 
         return Ok(quizzes);
+    }
+
+    [HttpGet("{quizId:guid}")]
+    public async Task<ActionResult<QuizResponse>> GetQuiz(Guid quizId, CancellationToken ct)
+    {
+        var result = await quizService.GetQuiz(quizId, ct);
+
+        if (result == null)
+            return NotFound();
+
+        return Ok(result);
     }
 }

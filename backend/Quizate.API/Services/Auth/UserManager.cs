@@ -14,7 +14,6 @@ public class UserManager(
 {
     public async Task<AuthResult> RegisterAsync(RegisterRequest request)
     {
-        string[] errors = [];
 
         string normalizedUsername = request.Username.ToLowerInvariant();
         string? normalizedEmail = request.Email?.ToLowerInvariant();
