@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
-namespace Quizate.API.Startup;
+namespace Quizate.API.Configurations;
 
 internal class CookieSecurityDocumentTransformer : IOpenApiDocumentTransformer
 {

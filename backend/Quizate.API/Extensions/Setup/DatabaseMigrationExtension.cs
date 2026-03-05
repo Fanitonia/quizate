@@ -2,7 +2,7 @@
 using Quizate.API.Data;
 using Serilog;
 
-namespace Quizate.API.Startup;
+namespace Quizate.API.Extensions.Setup;
 
 public static class DatabaseMigrationExtension
 {

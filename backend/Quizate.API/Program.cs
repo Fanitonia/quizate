@@ -1,9 +1,10 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Quizate.API.Configurations;
+using Quizate.API.Contracts.Validators;
 using Quizate.API.Data;
+using Quizate.API.Extensions.Setup;
 using Quizate.API.Services.Auth;
-using Quizate.API.Startup;
-using Quizate.API.Validators;
 using Serilog;
 
 namespace Quizate.API;

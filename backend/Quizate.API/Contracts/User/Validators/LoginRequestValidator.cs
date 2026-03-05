@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using Quizate.API.Contracts;
 
-namespace Quizate.API.Validators;
+namespace Quizate.API.Contracts.Validators;
 
 public class LoginRequestValidator : AbstractValidator<LoginRequest>
 {
