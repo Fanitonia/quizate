@@ -108,12 +108,12 @@ public class AuthController(
         string? currentUserIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (!Guid.TryParse(currentUserIdClaim, out Guid currentUserId))
-            return Unauthorized();
+            return BadRequest();
 
         bool isAdmin = User.IsInRole(UserRole.Admin.ToString());
         bool isSelf = currentUserId == userId;
 
-        if (!isAdmin || !isSelf)
+        if (!isAdmin && !isSelf)
             return Forbid();
 
         var result = await tokenManager.RevokeRefreshTokensAsync(userId);
@@ -123,6 +123,9 @@ public class AuthController(
             result.AddErrorsToModelState(ModelState, "tokenErrors");
             return ValidationProblem();
         }
+
+        if (isSelf)
+            cookieManager.RemoveRefreshTokenCookie(Response);
 
         return NoContent();
     }
