@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Quizate.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class DatabaseRedesingAndMigrationReset : Migration
+    public partial class DatabaseRedesignAndMigrationReset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

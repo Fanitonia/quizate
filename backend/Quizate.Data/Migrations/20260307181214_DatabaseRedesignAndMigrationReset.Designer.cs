@@ -12,8 +12,8 @@ using Quizate.API.Data;
 namespace Quizate.Data.Migrations
 {
     [DbContext(typeof(QuizateDbContext))]
-    [Migration("20260307125032_DatabaseRedesingAndMigrationReset")]
-    partial class DatabaseRedesingAndMigrationReset
+    [Migration("20260307181214_DatabaseRedesignAndMigrationReset")]
+    partial class DatabaseRedesignAndMigrationReset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
