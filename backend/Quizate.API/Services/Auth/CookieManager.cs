@@ -32,6 +32,9 @@ public class CookieManager : ICookieManager
 
     public void RemoveRefreshTokenCookie(HttpResponse response)
     {
-        response.Cookies.Delete("REFRESH_TOKEN");
+        response.Cookies.Delete("REFRESH_TOKEN", new CookieOptions
+        {
+            Path = "/auth/refreshToken"
+        });
     }
 }
