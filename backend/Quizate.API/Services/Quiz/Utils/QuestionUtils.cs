@@ -5,7 +5,7 @@ namespace Quizate.API.Services.Quiz.Utils;
 
 public static class QuestionUtils
 {
-    public static QuestionObject? MapToQuestionResponse(string questionTypeName, string payload)
+    public static QuestionObject? SerializeToQuestionObject(string questionTypeName, string payload)
     {
         return questionTypeName switch
         {
