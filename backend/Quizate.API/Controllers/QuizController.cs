@@ -1,9 +1,10 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Contracts;
+using Quizate.API.Contracts.Question;
 using Quizate.API.Extensions.Utils;
 using Quizate.API.Extensions.Validation;
-using Quizate.API.Services.Quizzes;
+using Quizate.API.Services.Quiz;
 
 namespace Quizate.API.Controllers;
 
@@ -36,11 +37,22 @@ public class QuizController(
     [HttpGet("{quizId:guid}")]
     public async Task<ActionResult<QuizResponse>> GetQuiz(Guid quizId, CancellationToken ct)
     {
-        var result = await quizService.GetQuiz(quizId, ct);
+        var quiz = await quizService.GetQuizAsync(quizId, ct);
 
-        if (result == null)
+        if (quiz == null)
             return NotFound();
 
-        return Ok(result);
+        return Ok(quiz);
+    }
+
+    [HttpGet("{quizId:guid}/questions")]
+    public async Task<ActionResult<QuizQuestionsResponse>> GetQuestions(Guid quizId, CancellationToken ct)
+    {
+        var questions = await quizService.GetQuestionsAsync(quizId, ct);
+
+        if (questions == null)
+            return NotFound();
+
+        return Ok(questions);
     }
 }

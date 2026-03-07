@@ -5,7 +5,7 @@ using Quizate.API.Contracts.Validators;
 using Quizate.API.Data;
 using Quizate.API.Extensions.Setup;
 using Quizate.API.Services.Auth;
-using Quizate.API.Services.Quizzes;
+using Quizate.API.Services.Quiz;
 using Serilog;
 
 namespace Quizate.API;

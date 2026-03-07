@@ -1,5 +1,6 @@
 ﻿namespace Quizate.API.Services.Auth
 {
+    // IDEA: bunu sadece auth için değilde genel result classı yapabiliriz.
     public class AuthResult
     {
         public bool Success { get; private set; }

@@ -2,9 +2,11 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Contracts;
+using Quizate.API.Contracts.Question;
 using Quizate.API.Data;
+using Quizate.API.Services.Quiz.Utils;
 
-namespace Quizate.API.Services.Quizzes;
+namespace Quizate.API.Services.Quiz;
 
 public class QuizService(
     QuizateDbContext context,
@@ -26,23 +28,43 @@ public class QuizService(
             .AsNoTracking()
             .CountAsync(ct);
 
-        var paginationMetaData = new PaginationMetadata
-        {
-            PageSize = pagination.PageSize,
-            CurrentPage = pagination.PageNumber,
-            TotalCount = totalCount,
-            TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pagination.PageSize)
-        };
+        var paginationMetaData = new PaginationMetadata(
+            pagination.PageSize, pagination.PageNumber, totalCount);
 
         return (result, paginationMetaData);
     }
 
-    public async Task<QuizResponse?> GetQuiz(Guid quizId, CancellationToken ct)
+    public async Task<QuizResponse?> GetQuizAsync(Guid quizId, CancellationToken ct)
     {
         return await context.Quizzes
             .AsNoTracking()
             .Where(q => q.Id == quizId)
             .ProjectTo<QuizResponse>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(ct);
+    }
+
+    public async Task<QuizQuestionsResponse?> GetQuestionsAsync(Guid quizId, CancellationToken ct)
+    {
+        var questionRows = await context.Questions
+             .AsNoTracking()
+             .Where(q => q.QuizId == quizId)
+             .Select(q => new { q.QuestionTypeName, q.Payload })
+             .ToListAsync(ct);
+
+        if (questionRows.Count == 0)
+            return null;
+
+        var questions = questionRows
+            .Select(q => QuestionUtils.MapToQuestionResponse(q.QuestionTypeName, q.Payload))
+            .OfType<QuestionResponse>()
+            .ToList();
+
+        var response = new QuizQuestionsResponse
+        {
+            QuizId = quizId,
+            Questions = questions
+        };
+
+        return response;
     }
 }
