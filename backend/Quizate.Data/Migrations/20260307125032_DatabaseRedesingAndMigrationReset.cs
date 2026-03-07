@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Quizate.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class DatabaseRedesignAndMigrationReset : Migration
+    public partial class DatabaseRedesingAndMigrationReset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -130,7 +130,7 @@ namespace Quizate.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "question",
+                name: "questions",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -141,15 +141,15 @@ namespace Quizate.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_question", x => x.id);
+                    table.PrimaryKey("pk_questions", x => x.id);
                     table.ForeignKey(
-                        name: "fk_question_question_types_question_type_name",
+                        name: "fk_questions_question_types_question_type_name",
                         column: x => x.question_type_name,
                         principalTable: "question_types",
                         principalColumn: "name",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "fk_question_quizzes_quiz_id",
+                        name: "fk_questions_quizzes_quiz_id",
                         column: x => x.quiz_id,
                         principalTable: "quizzes",
                         principalColumn: "id",
@@ -234,7 +234,7 @@ namespace Quizate.Data.Migrations
                 values: new object[] { new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"), new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc), new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"), "This is a sample quiz.", true, "en", null, "Sample Quiz", new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc) });
 
             migrationBuilder.InsertData(
-                table: "question",
+                table: "questions",
                 columns: new[] { "id", "payload", "question_type_name", "quiz_id" },
                 values: new object[] { 1, "{\"Title\":\"What's the capital of Turkey?\",\"Options\":[{\"Text\":\"Istanbul\",\"IsCorrect\":false},{\"Text\":\"Ankara\",\"IsCorrect\":true},{\"Text\":\"Izmir\",\"IsCorrect\":false},{\"Text\":\"Bursa\",\"IsCorrect\":false}]}", "multiple_choice", new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890") });
 
@@ -244,13 +244,13 @@ namespace Quizate.Data.Migrations
                 values: new object[] { 1, new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc), new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"), 50, new Guid("655a37fa-b9e1-4cad-a684-383ac587e906") });
 
             migrationBuilder.CreateIndex(
-                name: "ix_question_question_type_name",
-                table: "question",
+                name: "ix_questions_question_type_name",
+                table: "questions",
                 column: "question_type_name");
 
             migrationBuilder.CreateIndex(
-                name: "ix_question_quiz_id",
-                table: "question",
+                name: "ix_questions_quiz_id",
+                table: "questions",
                 column: "quiz_id");
 
             migrationBuilder.CreateIndex(
@@ -306,7 +306,7 @@ namespace Quizate.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "question");
+                name: "questions");
 
             migrationBuilder.DropTable(
                 name: "quiz_attempts");

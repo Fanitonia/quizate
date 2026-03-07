@@ -11,6 +11,7 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
     public DbSet<QuizAttempt> QuizAttempts { get; set; }
     public DbSet<QuizTopic> QuizTopics { get; set; }
     public DbSet<QuizLanguage> QuizLanguages { get; set; }
+    public DbSet<Question> Questions { get; set; }
     public DbSet<QuestionType> QuestionTypes { get; set; }
 
     private readonly string MutlipleChoiceQuestionPayload = @"{""Title"":""What's the capital of Turkey?"",""Options"":[{""Text"":""Istanbul"",""IsCorrect"":false},{""Text"":""Ankara"",""IsCorrect"":true},{""Text"":""Izmir"",""IsCorrect"":false},{""Text"":""Bursa"",""IsCorrect"":false}]}";

@@ -12,8 +12,8 @@ using Quizate.API.Data;
 namespace Quizate.Data.Migrations
 {
     [DbContext(typeof(QuizateDbContext))]
-    [Migration("20260307084348_DatabaseRedesignAndMigrationReset")]
-    partial class DatabaseRedesignAndMigrationReset
+    [Migration("20260307125032_DatabaseRedesingAndMigrationReset")]
+    partial class DatabaseRedesingAndMigrationReset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,15 +68,15 @@ namespace Quizate.Data.Migrations
                         .HasColumnName("quiz_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_question");
+                        .HasName("pk_questions");
 
                     b.HasIndex("QuestionTypeName")
-                        .HasDatabaseName("ix_question_question_type_name");
+                        .HasDatabaseName("ix_questions_question_type_name");
 
                     b.HasIndex("QuizId")
-                        .HasDatabaseName("ix_question_quiz_id");
+                        .HasDatabaseName("ix_questions_quiz_id");
 
-                    b.ToTable("question", (string)null);
+                    b.ToTable("questions", (string)null);
 
                     b.HasData(
                         new
@@ -449,14 +449,14 @@ namespace Quizate.Data.Migrations
                         .HasForeignKey("QuestionTypeName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_question_question_types_question_type_name");
+                        .HasConstraintName("fk_questions_question_types_question_type_name");
 
                     b.HasOne("Quizate.Data.Models.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_question_quizzes_quiz_id");
+                        .HasConstraintName("fk_questions_quizzes_quiz_id");
 
                     b.Navigation("QuestionType");
 
