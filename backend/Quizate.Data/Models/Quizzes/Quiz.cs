@@ -11,18 +11,15 @@ public class Quiz
     public User? Creator { get; set; }
     public Guid? CreatorId { get; set; }
 
-    public QuizType? QuizType { get; set; }
-    public Guid QuizTypeId { get; set; }
-
-    public Language? Language { get; set; }
     public required string LanguageCode { get; set; }
+    public QuizLanguage Language { get; set; } = null!;
 
     public required string Title { get; set; }
     public string? Description { get; set; }
     public string? ThumbnailUrl { get; set; }
     public bool IsPublic { get; set; }
 
-    public ICollection<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; } = new List<MultipleChoiceQuestion>();
-    public ICollection<Topic> Topics { get; set; } = new List<Topic>();
-    public ICollection<QuizAttempt> QuizAttempts { get; set; } = new List<QuizAttempt>();
+    public ICollection<Question> Questions { get; set; } = [];
+    public ICollection<QuizTopic> Topics { get; set; } = [];
+    public ICollection<QuizAttempt> Attempts { get; set; } = [];
 }

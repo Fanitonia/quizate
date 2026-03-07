@@ -8,8 +8,7 @@ internal class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken
 {
     public void Configure(EntityTypeBuilder<RefreshToken> entity)
     {
-        entity.HasIndex(rt => rt.TokenHash)
-            .IsUnique();
+        entity.HasKey(rt => rt.TokenHash);
 
         entity.ToTable(t =>
         {

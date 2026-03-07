@@ -4,25 +4,18 @@ using Quizate.Data.Models;
 
 namespace Quizate.Data.Configurations;
 
-internal class LanguageConfiguration : IEntityTypeConfiguration<Language>
+internal class QuizLanguageConfiguration : IEntityTypeConfiguration<QuizLanguage>
 {
-    public void Configure(EntityTypeBuilder<Language> entity)
+    public void Configure(EntityTypeBuilder<QuizLanguage> entity)
     {
         entity.HasKey(l => l.Code);
 
-        entity.HasMany<Quiz>()
+        entity.HasMany(l => l.Quizzes)
             .WithOne(q => q.Language)
             .HasForeignKey(q => q.LanguageCode)
-            .HasPrincipalKey(l => l.Code)
             .OnDelete(DeleteBehavior.Restrict);
 
         entity.Property(l => l.Code)
             .HasMaxLength(10);
-
-        entity.HasIndex(l => l.Code)
-            .IsUnique();
-
-        entity.Property(l => l.Name)
-            .HasMaxLength(20);
     }
 }

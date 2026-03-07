@@ -12,8 +12,8 @@ using Quizate.API.Data;
 namespace Quizate.Data.Migrations
 {
     [DbContext(typeof(QuizateDbContext))]
-    [Migration("20260301183923_AddRefreshToken")]
-    partial class AddRefreshToken
+    [Migration("20260307084348_DatabaseRedesignAndMigrationReset")]
+    partial class DatabaseRedesignAndMigrationReset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,50 +25,26 @@ namespace Quizate.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("QuizTopic", b =>
+            modelBuilder.Entity("QuizQuizTopic", b =>
                 {
                     b.Property<Guid>("QuizzesId")
                         .HasColumnType("uuid")
                         .HasColumnName("quizzes_id");
 
-                    b.Property<Guid>("TopicsId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("topics_id");
+                    b.Property<string>("TopicsName")
+                        .HasColumnType("character varying(25)")
+                        .HasColumnName("topics_name");
 
-                    b.HasKey("QuizzesId", "TopicsId")
-                        .HasName("pk_quiz_topic");
+                    b.HasKey("QuizzesId", "TopicsName")
+                        .HasName("pk_quiz_quiz_topic");
 
-                    b.HasIndex("TopicsId")
-                        .HasDatabaseName("ix_quiz_topic_topics_id");
+                    b.HasIndex("TopicsName")
+                        .HasDatabaseName("ix_quiz_quiz_topic_topics_name");
 
-                    b.ToTable("quiz_topic", (string)null);
+                    b.ToTable("quiz_quiz_topic", (string)null);
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.Language", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasColumnType("text")
-                        .HasColumnName("code");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Code")
-                        .HasName("pk_languages");
-
-                    b.ToTable("languages", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Code = "en",
-                            Name = "English"
-                        });
-                });
-
-            modelBuilder.Entity("Quizate.Data.Models.MultipleChoiceOption", b =>
+            modelBuilder.Entity("Quizate.Data.Models.Question", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,107 +53,70 @@ namespace Quizate.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer")
-                        .HasColumnName("display_order");
-
-                    b.Property<bool>("IsCorrect")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_correct");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("integer")
-                        .HasColumnName("question_id");
-
-                    b.Property<string>("Text")
+                    b.Property<string>("Payload")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("text");
+                        .HasColumnType("jsonb")
+                        .HasColumnName("payload");
 
-                    b.HasKey("Id")
-                        .HasName("pk_multiple_choice_options");
-
-                    b.HasIndex("QuestionId")
-                        .HasDatabaseName("ix_multiple_choice_options_question_id");
-
-                    b.ToTable("multiple_choice_options", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DisplayOrder = 1,
-                            IsCorrect = true,
-                            QuestionId = 1,
-                            Text = "Paris"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DisplayOrder = 2,
-                            IsCorrect = false,
-                            QuestionId = 1,
-                            Text = "London"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DisplayOrder = 3,
-                            IsCorrect = false,
-                            QuestionId = 1,
-                            Text = "Rome"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DisplayOrder = 4,
-                            IsCorrect = false,
-                            QuestionId = 1,
-                            Text = "Berlin"
-                        });
-                });
-
-            modelBuilder.Entity("Quizate.Data.Models.MultipleChoiceQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer")
-                        .HasColumnName("display_order");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
+                    b.Property<string>("QuestionTypeName")
+                        .IsRequired()
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("question_type_name");
 
                     b.Property<Guid>("QuizId")
                         .HasColumnType("uuid")
                         .HasColumnName("quiz_id");
 
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("text");
-
                     b.HasKey("Id")
-                        .HasName("pk_multiple_choice_questions");
+                        .HasName("pk_question");
+
+                    b.HasIndex("QuestionTypeName")
+                        .HasDatabaseName("ix_question_question_type_name");
 
                     b.HasIndex("QuizId")
-                        .HasDatabaseName("ix_multiple_choice_questions_quiz_id");
+                        .HasDatabaseName("ix_question_quiz_id");
 
-                    b.ToTable("multiple_choice_questions", (string)null);
+                    b.ToTable("question", (string)null);
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            DisplayOrder = 1,
-                            QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
-                            Text = "What is the capital of France?"
+                            Payload = "{\"Title\":\"What's the capital of Turkey?\",\"Options\":[{\"Text\":\"Istanbul\",\"IsCorrect\":false},{\"Text\":\"Ankara\",\"IsCorrect\":true},{\"Text\":\"Izmir\",\"IsCorrect\":false},{\"Text\":\"Bursa\",\"IsCorrect\":false}]}",
+                            QuestionTypeName = "multiple_choice",
+                            QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890")
+                        });
+                });
+
+            modelBuilder.Entity("Quizate.Data.Models.QuestionType", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Name")
+                        .HasName("pk_question_types");
+
+                    b.ToTable("question_types", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_quiz_types_name_not_empty", "char_length(trim(name)) > 0");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "multiple_choice",
+                            CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                            UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc)
                         });
                 });
 
@@ -197,7 +136,8 @@ namespace Quizate.Data.Migrations
                         .HasColumnName("creator_id");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text")
+                        .HasMaxLength(400)
+                        .HasColumnType("character varying(400)")
                         .HasColumnName("description");
 
                     b.Property<bool>("IsPublic")
@@ -206,20 +146,18 @@ namespace Quizate.Data.Migrations
 
                     b.Property<string>("LanguageCode")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("character varying(10)")
                         .HasColumnName("language_code");
 
-                    b.Property<Guid>("QuizTypeId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("quiz_type_id");
-
                     b.Property<string>("ThumbnailUrl")
-                        .HasColumnType("text")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
                         .HasColumnName("thumbnail_url");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("title");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -235,23 +173,22 @@ namespace Quizate.Data.Migrations
                     b.HasIndex("LanguageCode")
                         .HasDatabaseName("ix_quizzes_language_code");
 
-                    b.HasIndex("QuizTypeId")
-                        .HasDatabaseName("ix_quizzes_quiz_type_id");
-
-                    b.ToTable("quizzes", (string)null);
+                    b.ToTable("quizzes", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_quizzes_title_not_empty", "char_length(trim(title)) > 0");
+                        });
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
-                            CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
+                            CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
                             CreatorId = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
                             Description = "This is a sample quiz.",
                             IsPublic = true,
                             LanguageCode = "en",
-                            QuizTypeId = new Guid("12345678-1234-1234-1234-123456789012"),
                             Title = "Sample Quiz",
-                            UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654)
+                            UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc)
                         });
                 });
 
@@ -276,7 +213,7 @@ namespace Quizate.Data.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("score");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
@@ -289,7 +226,10 @@ namespace Quizate.Data.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_quiz_attempts_user_id");
 
-                    b.ToTable("quiz_attempts", (string)null);
+                    b.ToTable("quiz_attempts", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_quiz_attempts_score_non_negative", "score >= 0");
+                        });
 
                     b.HasData(
                         new
@@ -302,86 +242,31 @@ namespace Quizate.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuizType", b =>
+            modelBuilder.Entity("Quizate.Data.Models.QuizLanguage", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                    b.Property<string>("Code")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("code");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
+                    b.HasKey("Code")
+                        .HasName("pk_quiz_languages");
 
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("display_name");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("Id")
-                        .HasName("pk_quiz_types");
-
-                    b.ToTable("quiz_types", (string)null);
+                    b.ToTable("quiz_languages", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("12345678-1234-1234-1234-123456789012"),
-                            CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
-                            DisplayName = "Standard",
-                            Name = "standard",
-                            UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654)
+                            Code = "en"
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.RefreshToken", b =>
+            modelBuilder.Entity("Quizate.Data.Models.QuizTopic", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at_utc");
-
-                    b.Property<DateTime>("ExpiresAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("expires_at_utc");
-
-                    b.Property<string>("TokenHash")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("token_hash");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_refresh_tokens");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_refresh_tokens_user_id");
-
-                    b.ToTable("refresh_tokens", (string)null);
-                });
-
-            modelBuilder.Entity("Quizate.Data.Models.Topic", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
+                    b.Property<string>("Name")
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
+                        .HasColumnName("name");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -393,31 +278,61 @@ namespace Quizate.Data.Migrations
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
                         .HasColumnName("display_name");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id")
-                        .HasName("pk_topics");
+                    b.HasKey("Name")
+                        .HasName("pk_quiz_topics");
 
-                    b.ToTable("topics", (string)null);
+                    b.ToTable("quiz_topics", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_topics_display_name_not_empty", "char_length(trim(display_name)) > 0");
+
+                            t.HasCheckConstraint("ck_topics_name_not_empty", "char_length(trim(name)) > 0");
+                        });
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("abcdef12-3456-7890-abcd-ef1234567890"),
-                            CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
-                            DisplayName = "Geography",
                             Name = "geography",
-                            UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654)
+                            CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                            DisplayName = "Geography",
+                            UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc)
+                        });
+                });
+
+            modelBuilder.Entity("Quizate.Data.Models.RefreshToken", b =>
+                {
+                    b.Property<string>("TokenHash")
+                        .HasColumnType("text")
+                        .HasColumnName("token_hash");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at_utc");
+
+                    b.Property<DateTime>("ExpiresAtUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_at_utc");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("TokenHash")
+                        .HasName("pk_refresh_tokens");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_refresh_tokens_user_id");
+
+                    b.ToTable("refresh_tokens", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_refresh_tokens_token_hash_not_empty", "char_length(trim(token_hash)) > 0");
                         });
                 });
 
@@ -433,12 +348,25 @@ namespace Quizate.Data.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Email")
-                        .HasColumnType("text")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
                         .HasColumnName("email");
 
                     b.Property<DateTime?>("EmailVerifiedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("email_verified_at");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
+                    b.Property<string>("NormalizedUsername")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
+                        .HasColumnName("normalized_username")
+                        .HasComputedColumnSql("lower(username)", true);
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -455,64 +383,82 @@ namespace Quizate.Data.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)")
                         .HasColumnName("username");
 
                     b.HasKey("Id")
                         .HasName("pk_users");
 
-                    b.ToTable("users", (string)null);
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email");
+
+                    b.HasIndex("NormalizedUsername")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_normalized_username");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_username");
+
+                    b.ToTable("users", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_users_password_hash_not_empty", "char_length(trim(password_hash)) > 0");
+
+                            t.HasCheckConstraint("ck_users_username_format", "username ~ '^[A-Za-z0-9_]+$'");
+
+                            t.HasCheckConstraint("ck_users_username_not_empty", "char_length(trim(username)) > 0");
+                        });
 
                     b.HasData(
                         new
                         {
                             Id = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
-                            CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
+                            CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
                             Email = "demo_user@example.com",
+                            IsDeleted = false,
                             PasswordHash = "hashed_password_placeholder",
                             Role = 0,
-                            UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
+                            UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
                             Username = "demo_user"
                         });
                 });
 
-            modelBuilder.Entity("QuizTopic", b =>
+            modelBuilder.Entity("QuizQuizTopic", b =>
                 {
                     b.HasOne("Quizate.Data.Models.Quiz", null)
                         .WithMany()
                         .HasForeignKey("QuizzesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_quiz_topic_quizzes_quizzes_id");
+                        .HasConstraintName("fk_quiz_quiz_topic_quizzes_quizzes_id");
 
-                    b.HasOne("Quizate.Data.Models.Topic", null)
+                    b.HasOne("Quizate.Data.Models.QuizTopic", null)
                         .WithMany()
-                        .HasForeignKey("TopicsId")
+                        .HasForeignKey("TopicsName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_quiz_topic_topics_topics_id");
+                        .HasConstraintName("fk_quiz_quiz_topic_quiz_topics_topics_name");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.MultipleChoiceOption", b =>
+            modelBuilder.Entity("Quizate.Data.Models.Question", b =>
                 {
-                    b.HasOne("Quizate.Data.Models.MultipleChoiceQuestion", "Question")
-                        .WithMany("Options")
-                        .HasForeignKey("QuestionId")
+                    b.HasOne("Quizate.Data.Models.QuestionType", "QuestionType")
+                        .WithMany("Questions")
+                        .HasForeignKey("QuestionTypeName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_multiple_choice_options_multiple_choice_questions_question_");
+                        .HasConstraintName("fk_question_question_types_question_type_name");
 
-                    b.Navigation("Question");
-                });
-
-            modelBuilder.Entity("Quizate.Data.Models.MultipleChoiceQuestion", b =>
-                {
                     b.HasOne("Quizate.Data.Models.Quiz", "Quiz")
-                        .WithMany("MultipleChoiceQuestions")
+                        .WithMany("Questions")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_multiple_choice_questions_quizzes_quiz_id");
+                        .HasConstraintName("fk_question_quizzes_quiz_id");
+
+                    b.Navigation("QuestionType");
 
                     b.Navigation("Quiz");
                 });
@@ -524,31 +470,22 @@ namespace Quizate.Data.Migrations
                         .HasForeignKey("CreatorId")
                         .HasConstraintName("fk_quizzes_users_creator_id");
 
-                    b.HasOne("Quizate.Data.Models.Language", "Language")
-                        .WithMany()
+                    b.HasOne("Quizate.Data.Models.QuizLanguage", "Language")
+                        .WithMany("Quizzes")
                         .HasForeignKey("LanguageCode")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
-                        .HasConstraintName("fk_quizzes_languages_language_code");
-
-                    b.HasOne("Quizate.Data.Models.QuizType", "QuizType")
-                        .WithMany("Quizzes")
-                        .HasForeignKey("QuizTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_quizzes_quiz_types_quiz_type_id");
+                        .HasConstraintName("fk_quizzes_quiz_languages_language_code");
 
                     b.Navigation("Creator");
 
                     b.Navigation("Language");
-
-                    b.Navigation("QuizType");
                 });
 
             modelBuilder.Entity("Quizate.Data.Models.QuizAttempt", b =>
                 {
                     b.HasOne("Quizate.Data.Models.Quiz", "Quiz")
-                        .WithMany("QuizAttempts")
+                        .WithMany("Attempts")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -557,8 +494,6 @@ namespace Quizate.Data.Migrations
                     b.HasOne("Quizate.Data.Models.User", "User")
                         .WithMany("QuizAttempts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("fk_quiz_attempts_users_user_id");
 
                     b.Navigation("Quiz");
@@ -578,19 +513,19 @@ namespace Quizate.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.MultipleChoiceQuestion", b =>
+            modelBuilder.Entity("Quizate.Data.Models.QuestionType", b =>
                 {
-                    b.Navigation("Options");
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("Quizate.Data.Models.Quiz", b =>
                 {
-                    b.Navigation("MultipleChoiceQuestions");
+                    b.Navigation("Attempts");
 
-                    b.Navigation("QuizAttempts");
+                    b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuizType", b =>
+            modelBuilder.Entity("Quizate.Data.Models.QuizLanguage", b =>
                 {
                     b.Navigation("Quizzes");
                 });

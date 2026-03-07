@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Quizate.Data.Configurations;
 using Quizate.Data.Models;
 
 namespace Quizate.API.Data;
@@ -8,13 +7,13 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
 {
     public DbSet<User> Users { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
-    public DbSet<QuizType> QuizTypes { get; set; }
     public DbSet<Quiz> Quizzes { get; set; }
-    public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
-    public DbSet<MultipleChoiceOption> MultipleChoiceOptions { get; set; }
     public DbSet<QuizAttempt> QuizAttempts { get; set; }
-    public DbSet<Topic> Topics { get; set; }
-    public DbSet<Language> Languages { get; set; }
+    public DbSet<QuizTopic> QuizTopics { get; set; }
+    public DbSet<QuizLanguage> QuizLanguages { get; set; }
+    public DbSet<QuestionType> QuestionTypes { get; set; }
+
+    private readonly string MutlipleChoiceQuestionPayload = @"{""Title"":""What's the capital of Turkey?"",""Options"":[{""Text"":""Istanbul"",""IsCorrect"":false},{""Text"":""Ankara"",""IsCorrect"":true},{""Text"":""Izmir"",""IsCorrect"":false},{""Text"":""Bursa"",""IsCorrect"":false}]}";
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,8 +23,8 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
             new User
             {
                 Id = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
-                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
+                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
                 Username = "demo_user",
                 Email = "demo_user@example.com",
                 PasswordHash = "hashed_password_placeholder"
@@ -36,79 +35,40 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
             new Quiz
             {
                 Id = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
-                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
+                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
                 Title = "Sample Quiz",
                 Description = "This is a sample quiz.",
                 IsPublic = true,
-                QuizTypeId = new Guid("12345678-1234-1234-1234-123456789012"),
                 CreatorId = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
-                LanguageCode = "en"
+                LanguageCode = "en",
             }
         );
 
-        modelBuilder.Entity<QuizType>().HasData(
-            new QuizType
-            {
-                Id = new Guid("12345678-1234-1234-1234-123456789012"),
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
-                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
-                Name = "standard",
-                DisplayName = "Standard"
-            }
-        );
-
-        modelBuilder.Entity<MultipleChoiceQuestion>().HasData(
-            new MultipleChoiceQuestion
+        modelBuilder.Entity<Question>().HasData(
+            new Question
             {
                 Id = 1,
                 QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
-                Text = "What is the capital of France?",
-                DisplayOrder = 1
+                QuestionTypeName = "multiple_choice",
+                Payload = MutlipleChoiceQuestionPayload
             }
         );
 
-        modelBuilder.Entity<MultipleChoiceOption>().HasData(
-            new MultipleChoiceOption
+        modelBuilder.Entity<QuestionType>().HasData(
+            new QuestionType
             {
-                Id = 1,
-                QuestionId = 1,
-                Text = "Paris",
-                IsCorrect = true,
-                DisplayOrder = 1
-            },
-            new MultipleChoiceOption
-            {
-                Id = 2,
-                QuestionId = 1,
-                Text = "London",
-                IsCorrect = false,
-                DisplayOrder = 2
-            },
-            new MultipleChoiceOption
-            {
-                Id = 3,
-                QuestionId = 1,
-                Text = "Rome",
-                IsCorrect = false,
-                DisplayOrder = 3
-            },
-            new MultipleChoiceOption
-            {
-                Id = 4,
-                QuestionId = 1,
-                Text = "Berlin",
-                IsCorrect = false,
-                DisplayOrder = 4
+                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                Name = "multiple_choice",
             }
         );
 
-        modelBuilder.Entity<Topic>().HasData(
-            new Topic
+        modelBuilder.Entity<QuizTopic>().HasData(
+            new QuizTopic
             {
-                Id = new Guid("abcdef12-3456-7890-abcd-ef1234567890"),
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
-                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc).AddTicks(1654),
+                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
                 Name = "geography",
                 DisplayName = "Geography",
             }
@@ -121,15 +81,14 @@ public class QuizateDbContext(DbContextOptions<QuizateDbContext> options) : DbCo
                 QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
                 UserId = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
                 CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                Score = 50
+                Score = 50,
             }
         );
 
-        modelBuilder.Entity<Language>().HasData(
-            new Language
+        modelBuilder.Entity<QuizLanguage>().HasData(
+            new QuizLanguage
             {
                 Code = "en",
-                Name = "English"
             }
         );
 

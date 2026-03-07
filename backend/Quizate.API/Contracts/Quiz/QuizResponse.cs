@@ -9,9 +9,6 @@ public class QuizResponse
     public Guid? CreatorId { get; set; }
     public string? CreatorName { get; set; }
 
-    public Guid QuizTypeId { get; set; }
-    public required string QuizTypeName { get; set; }
-
     public required string LanguageCode { get; set; }
     public required string Title { get; set; }
     public string? Description { get; set; }

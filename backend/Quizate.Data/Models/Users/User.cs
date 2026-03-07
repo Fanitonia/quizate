@@ -14,8 +14,9 @@ public class User
     public DateTime? EmailVerifiedAt { get; set; }
     public required string PasswordHash { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
+    public bool IsDeleted { get; set; } = false;
 
-    public ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
-    public ICollection<QuizAttempt> QuizAttempts { get; set; } = new List<QuizAttempt>();
-    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public ICollection<Quiz> Quizzes { get; set; } = [];
+    public ICollection<QuizAttempt> QuizAttempts { get; set; } = [];
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
 }

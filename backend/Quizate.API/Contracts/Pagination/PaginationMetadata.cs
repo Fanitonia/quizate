@@ -7,6 +7,6 @@ public class PaginationMetadata
     public int PageSize { get; set; }
     public int TotalCount { get; set; }
 
-    public bool HasPrevious => CurrentPage > 1;
+    public bool HasPrevious => CurrentPage > 1 && CurrentPage <= TotalPages + 1;
     public bool HasNext => CurrentPage < TotalPages;
 }

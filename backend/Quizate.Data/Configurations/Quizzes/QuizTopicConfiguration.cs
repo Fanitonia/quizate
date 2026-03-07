@@ -4,15 +4,14 @@ using Quizate.Data.Models;
 
 namespace Quizate.Data.Configurations;
 
-internal class TopicConfiguration : IEntityTypeConfiguration<Topic>
+internal class QuizTopicConfiguration : IEntityTypeConfiguration<QuizTopic>
 {
-    public void Configure(EntityTypeBuilder<Topic> entity)
+    public void Configure(EntityTypeBuilder<QuizTopic> entity)
     {
+        entity.HasKey(t => t.Name);
+
         entity.Property(t => t.Name)
             .HasMaxLength(25);
-
-        entity.HasIndex(t => t.Name)
-            .IsUnique();
 
         entity.Property(t => t.DisplayName)
             .HasMaxLength(25);
