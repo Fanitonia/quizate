@@ -14,6 +14,7 @@ public class User
     public DateTime? EmailVerifiedAt { get; set; }
     public required string PasswordHash { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
+    public string? ProfilePictureUrl { get; set; }
     public bool IsDeleted { get; set; } = false;
 
     public ICollection<Quiz> Quizzes { get; set; } = [];

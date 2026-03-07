@@ -27,6 +27,9 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         entity.HasIndex(u => u.Email)
             .IsUnique();
 
+        entity.Property(u => u.ProfilePictureUrl)
+            .HasMaxLength(1024);
+
         entity.ToTable(t =>
         {
             t.HasCheckConstraint("ck_users_username_not_empty", "char_length(trim(username)) > 0");

@@ -67,6 +67,7 @@ namespace Quizate.Data.Migrations
                     email_verified_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     password_hash = table.Column<string>(type: "text", nullable: false),
                     role = table.Column<int>(type: "integer", nullable: false),
+                    profile_picture_url = table.Column<string>(type: "character varying(1024)", maxLength: 1024, nullable: true),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
@@ -225,8 +226,8 @@ namespace Quizate.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "users",
-                columns: new[] { "id", "created_at", "email", "email_verified_at", "is_deleted", "password_hash", "role", "updated_at", "username" },
-                values: new object[] { new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"), new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc), "demo_user@example.com", null, false, "hashed_password_placeholder", 0, new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc), "demo_user" });
+                columns: new[] { "id", "created_at", "email", "email_verified_at", "is_deleted", "password_hash", "profile_picture_url", "role", "updated_at", "username" },
+                values: new object[] { new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"), new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc), "demo_user@example.com", null, false, "hashed_password_placeholder", null, 0, new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc), "demo_user" });
 
             migrationBuilder.InsertData(
                 table: "quizzes",

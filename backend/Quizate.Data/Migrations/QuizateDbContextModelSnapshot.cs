@@ -370,6 +370,11 @@ namespace Quizate.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("password_hash");
 
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("profile_picture_url");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer")
                         .HasColumnName("role");

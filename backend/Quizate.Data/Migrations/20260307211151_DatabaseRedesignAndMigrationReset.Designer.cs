@@ -12,7 +12,7 @@ using Quizate.API.Data;
 namespace Quizate.Data.Migrations
 {
     [DbContext(typeof(QuizateDbContext))]
-    [Migration("20260307181214_DatabaseRedesignAndMigrationReset")]
+    [Migration("20260307211151_DatabaseRedesignAndMigrationReset")]
     partial class DatabaseRedesignAndMigrationReset
     {
         /// <inheritdoc />
@@ -372,6 +372,11 @@ namespace Quizate.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("password_hash");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)")
+                        .HasColumnName("profile_picture_url");
 
                     b.Property<int>("Role")
                         .HasColumnType("integer")
