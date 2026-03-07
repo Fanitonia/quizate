@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Quizate.API.Extensions.Validation;
+namespace Quizate.API.Helpers.Extensions;
 
 public static class ValidationExtensions
 {

@@ -56,7 +56,7 @@ public class QuizService(
 
         var questions = questionRows
             .Select(q => QuestionUtils.MapToQuestionResponse(q.QuestionTypeName, q.Payload))
-            .OfType<QuestionResponse>()
+            .OfType<QuestionObject>()
             .ToList();
 
         var response = new QuizQuestionsResponse

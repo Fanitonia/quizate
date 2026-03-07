@@ -1,6 +1,6 @@
 ﻿namespace Quizate.API.Contracts.Question;
 
-public class MultipleChoiceQuestionResponse : QuestionResponse
+public class MultipleChoiceQuestionObject : QuestionObject
 {
     public required string Title { get; set; }
     public string? ImageUrl { get; set; }

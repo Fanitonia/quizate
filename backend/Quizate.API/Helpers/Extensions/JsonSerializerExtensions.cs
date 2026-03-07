@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Quizate.API.Extensions.Utils;
+namespace Quizate.API.Helpers.Extensions;
 
 public static class JsonSerializerExtensions
 {

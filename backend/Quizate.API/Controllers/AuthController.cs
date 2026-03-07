@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Contracts;
-using Quizate.API.Extensions.Validation;
+using Quizate.API.Helpers.Extensions;
 using Quizate.API.Services.Auth;
 using Quizate.Data.Enums;
 using System.Security.Claims;

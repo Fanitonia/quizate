@@ -3,7 +3,7 @@
 namespace Quizate.API.Contracts.Question;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(MultipleChoiceQuestionResponse), QuestionTypeNames.MultipleChoice)]
-public abstract class QuestionResponse
+[JsonDerivedType(typeof(MultipleChoiceQuestionObject), QuestionTypeNames.MultipleChoice)]
+public abstract class QuestionObject
 {
 }
