@@ -20,6 +20,49 @@ public class UserController(IUserService userService) : ControllerBase
 
         return Ok(result.Data);
     }
+
+    [HttpGet("me")]
+    public async Task<ActionResult<MyInfoResponse>> GetMe(CancellationToken ct)
+    {
+        if (!User.GetUserId(out var userId))
+            return BadRequest();
+
+        var result = await userService.GetMyInfoAsync(userId, ct);
+
+        if (!result.Success)
+            return NotFound();
+
+        return Ok(result.Data);
+    }
+
+    [HttpPatch("me")]
+    public async Task<ActionResult> UpdateMe([FromBody] UpdateMyInfoRequest request, CancellationToken ct)
+    {
+        if (!User.GetUserId(out var userId))
+            return BadRequest();
+
+        var result = await userService.UpdateUserAsync(userId, request, ct);
+
+        if (!result.Success)
+            return NotFound();
+
+        return Ok();
+    }
+
+    [HttpDelete("me")]
+    public async Task<ActionResult> DeleteMe(CancellationToken ct)
+    {
+        if (!User.GetUserId(out var userId))
+            return BadRequest();
+
+        var result = await userService.DeleteUserAsync(userId, ct);
+
+        if (!result.Success)
+            return NotFound();
+
+        return Ok();
+    }
+
     [HttpGet("me/quizzes")]
     public async Task<ActionResult<List<QuizResponse>>> GetMyQuizzes()
     {
