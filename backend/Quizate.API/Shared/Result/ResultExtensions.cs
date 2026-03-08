@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Quizate.API.Services.Auth;
+namespace Quizate.API.Shared.Result;
 
-public static class AuthResultExtensions
+public static class ResultExtensions
 {
-    public static AuthResult<T> AddErrorsToModelState<T>(this AuthResult<T> authResult,
+    public static Result<T> AddErrorsToModelState<T>(this Result<T> authResult,
         ModelStateDictionary modelState,
         string key)
     {
@@ -16,7 +16,7 @@ public static class AuthResultExtensions
         return authResult;
     }
 
-    public static AuthResult AddErrorsToModelState(this AuthResult authResult,
+    public static Result AddErrorsToModelState(this Result authResult,
         ModelStateDictionary modelState,
         string key)
     {

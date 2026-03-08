@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Contracts;
 using Quizate.API.Helpers.Extensions;
 using Quizate.API.Services.Auth;
+using Quizate.API.Shared.Result;
 using Quizate.Data.Enums;
 using System.Security.Claims;
 

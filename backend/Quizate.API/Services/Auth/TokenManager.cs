@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Quizate.API.Data;
+using Quizate.API.Shared.Result;
 using Quizate.Data.Models;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -13,10 +14,10 @@ public class TokenManager(
     QuizateDbContext dbContext,
     IConfiguration configuration) : ITokenManager
 {
-    public async Task<AuthResult<AuthTokens>> RefreshTokenAsync(string? refreshToken)
+    public async Task<Result<AuthTokens>> RefreshTokenAsync(string? refreshToken)
     {
         if (string.IsNullOrEmpty(refreshToken))
-            return AuthResult<AuthTokens>.Fail(["Could not find a refresh token."]);
+            return Result<AuthTokens>.Fail(["Could not find a refresh token."]);
 
         var refreshTokenHash = Hasher.ComputeHash(refreshToken);
 
@@ -25,7 +26,7 @@ public class TokenManager(
             .FirstOrDefaultAsync(rt => rt.TokenHash == refreshTokenHash);
 
         if (existing == null || existing.IsExpired)
-            return AuthResult<AuthTokens>.Fail(["Invalid refresh token."]);
+            return Result<AuthTokens>.Fail(["Invalid refresh token."]);
 
         var (newRefreshToken, rawToken) = CreateRefreshToken(existing.UserId);
 
@@ -33,24 +34,24 @@ public class TokenManager(
         dbContext.RefreshTokens.Remove(existing);
         await dbContext.SaveChangesAsync();
 
-        return AuthResult<AuthTokens>.Ok(new AuthTokens
+        return Result<AuthTokens>.Ok(new AuthTokens
         {
             AccessToken = CreateAccessToken(existing.User),
             RefreshToken = rawToken
         });
     }
 
-    public async Task<AuthResult> RevokeRefreshTokensAsync(Guid userId)
+    public async Task<Result> RevokeRefreshTokensAsync(Guid userId)
     {
         var userTokens = await dbContext.RefreshTokens.Where(rt => rt.UserId == userId).ToListAsync();
 
         if (userTokens.Count == 0)
-            return AuthResult.Ok();
+            return Result.Ok();
 
         dbContext.RefreshTokens.RemoveRange(userTokens);
         await dbContext.SaveChangesAsync();
 
-        return AuthResult.Ok();
+        return Result.Ok();
     }
 
     public string CreateAccessToken(User user)

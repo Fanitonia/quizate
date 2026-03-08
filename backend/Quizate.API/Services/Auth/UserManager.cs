@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Contracts;
 using Quizate.API.Data;
+using Quizate.API.Shared.Result;
 using Quizate.Data.Models;
 
 namespace Quizate.API.Services.Auth;
@@ -11,7 +12,7 @@ public class UserManager(
     IPasswordHasher<User> passwordHasher,
     ITokenManager tokenManager) : IUserManager
 {
-    public async Task<AuthResult> RegisterAsync(RegisterRequest request)
+    public async Task<Result> RegisterAsync(RegisterRequest request)
     {
 
         string normalizedUsername = request.Username.ToLowerInvariant();
@@ -22,7 +23,7 @@ public class UserManager(
             || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
-            return AuthResult.Fail(["User already exist."]);
+            return Result.Fail(["User already exist."]);
 
         var user = new User
         {
@@ -37,10 +38,10 @@ public class UserManager(
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
-        return AuthResult.Ok();
+        return Result.Ok();
     }
 
-    public async Task<AuthResult<AuthTokens>> LoginAsync(LoginRequest request)
+    public async Task<Result<AuthTokens>> LoginAsync(LoginRequest request)
     {
         string normalizedInput = request.UsernameOrEmail.Trim().ToLowerInvariant();
 
@@ -50,18 +51,18 @@ public class UserManager(
                 || (u.Email != null && u.Email == normalizedInput));
 
         if (user == null)
-            return AuthResult<AuthTokens>.Fail(["Invalid username/email or password."]);
+            return Result<AuthTokens>.Fail(["Invalid username/email or password."]);
 
         var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         if (result == PasswordVerificationResult.Failed)
-            return AuthResult<AuthTokens>.Fail(["Invalid username/email or password."]);
+            return Result<AuthTokens>.Fail(["Invalid username/email or password."]);
 
         var (refreshToken, rawToken) = tokenManager.CreateRefreshToken(user.Id);
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
-        return AuthResult<AuthTokens>.Ok(new AuthTokens
+        return Result<AuthTokens>.Ok(new AuthTokens
         {
             AccessToken = tokenManager.CreateAccessToken(user),
             RefreshToken = rawToken
