@@ -1,7 +1,7 @@
-﻿using Quizate.API.Contracts.Question;
+﻿using Quizate.API.Contracts;
 using System.Text.Json;
 
-namespace Quizate.API.Services.Quiz.Utils;
+namespace Quizate.API.Services.Quizzes.Utils;
 
 public static class QuestionUtils
 {

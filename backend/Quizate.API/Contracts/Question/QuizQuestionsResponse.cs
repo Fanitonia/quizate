@@ -1,4 +1,4 @@
-﻿namespace Quizate.API.Contracts.Question;
+﻿namespace Quizate.API.Contracts;
 
 public class QuizQuestionsResponse
 {

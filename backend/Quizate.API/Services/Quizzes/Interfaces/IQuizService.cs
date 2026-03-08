@@ -1,9 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Quizate.API.Contracts;
-using Quizate.API.Contracts.Question;
+﻿using Quizate.API.Contracts;
 
-namespace Quizate.API.Services.Quiz;
+namespace Quizate.API.Services.Quizzes;
 
 public interface IQuizService
 {

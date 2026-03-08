@@ -15,7 +15,7 @@ public static class AuthServiceExtensions
         services.AddScoped<IUserManager, UserManager>();
         services.AddScoped<ICookieManager, CookieManager>();
         services.AddScoped<ITokenManager, TokenManager>();
-        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
 
         return services;
     }

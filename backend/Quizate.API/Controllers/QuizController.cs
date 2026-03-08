@@ -1,9 +1,8 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Contracts;
-using Quizate.API.Contracts.Question;
 using Quizate.API.Helpers.Extensions;
-using Quizate.API.Services.Quiz;
+using Quizate.API.Services.Quizzes;
 
 namespace Quizate.API.Controllers;
 

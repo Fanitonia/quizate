@@ -2,11 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Quizate.API.Contracts;
-using Quizate.API.Contracts.Question;
 using Quizate.API.Data;
-using Quizate.API.Services.Quiz.Utils;
+using Quizate.API.Services.Quizzes.Utils;
 
-namespace Quizate.API.Services.Quiz;
+namespace Quizate.API.Services.Quizzes;
 
 public class QuizService(
     QuizateDbContext context,

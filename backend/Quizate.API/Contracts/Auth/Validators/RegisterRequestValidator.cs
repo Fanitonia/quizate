@@ -2,6 +2,7 @@
 
 namespace Quizate.API.Contracts.Validators;
 
+
 public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
 {
     public RegisterRequestValidator()
