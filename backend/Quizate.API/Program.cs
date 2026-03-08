@@ -6,6 +6,7 @@ using Quizate.API.Contracts.Validators;
 using Quizate.API.Data;
 using Quizate.API.Services.Auth;
 using Quizate.API.Services.Quizzes;
+using Quizate.API.Services.Users;
 using Serilog;
 
 namespace Quizate.API;
@@ -51,6 +52,8 @@ public class Program
             builder.Services.AddAuthServices();
 
             builder.Services.AddScoped<IQuizService, QuizService>();
+
+            builder.Services.AddScoped<IUserService, UserService>();
 
 
             var app = builder.Build();
