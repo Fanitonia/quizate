@@ -23,7 +23,7 @@ public class UserManager(
             || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
-            return Result.Fail(["User already exist."]);
+            return Result.Failure("User already exist.");
 
         var user = new User
         {
@@ -38,7 +38,7 @@ public class UserManager(
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
-        return Result.Ok();
+        return Result.Success();
     }
 
     public async Task<Result<AuthTokens>> LoginAsync(LoginRequest request)
@@ -51,18 +51,18 @@ public class UserManager(
                 || (u.Email != null && u.Email == normalizedInput));
 
         if (user == null)
-            return Result<AuthTokens>.Fail(["Invalid username/email or password."]);
+            return Result<AuthTokens>.Failure("Invalid username/email or password.");
 
         var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         if (result == PasswordVerificationResult.Failed)
-            return Result<AuthTokens>.Fail(["Invalid username/email or password."]);
+            return Result<AuthTokens>.Failure("Invalid username/email or password.");
 
         var (refreshToken, rawToken) = tokenManager.CreateRefreshToken(user.Id);
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
-        return Result<AuthTokens>.Ok(new AuthTokens
+        return Result<AuthTokens>.Success(new AuthTokens
         {
             AccessToken = tokenManager.CreateAccessToken(user),
             RefreshToken = rawToken

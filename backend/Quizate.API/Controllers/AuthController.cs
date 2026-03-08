@@ -35,7 +35,7 @@ public class AuthController(
 
         var result = await userManager.RegisterAsync(request);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
         {
             result.AddErrorsToModelState(ModelState, "registerErrors");
             return ValidationProblem();
@@ -57,19 +57,19 @@ public class AuthController(
 
         var result = await userManager.LoginAsync(request);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
         {
             result.AddErrorsToModelState(ModelState, "loginErrors");
             return ValidationProblem();
         }
 
         cookieManager.SetRefreshTokenCookie(
-            result.Data!.RefreshToken,
+            result.Value!.RefreshToken,
             configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
             Response);
 
         cookieManager.SetAccessTokenCookie(
-            result.Data.AccessToken,
+            result.Value.AccessToken,
             configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
             Response);
 
@@ -83,19 +83,19 @@ public class AuthController(
 
         var result = await tokenManager.RefreshTokenAsync(refreshToken);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
         {
             result.AddErrorsToModelState(ModelState, "tokenErrors");
             return ValidationProblem();
         }
 
         cookieManager.SetRefreshTokenCookie(
-            result.Data!.RefreshToken,
+            result.Value!.RefreshToken,
             configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
             Response);
 
         cookieManager.SetAccessTokenCookie(
-            result.Data.AccessToken,
+            result.Value.AccessToken,
             configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
             Response);
 
@@ -119,7 +119,7 @@ public class AuthController(
 
         var result = await tokenManager.RevokeRefreshTokensAsync(userId);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
         {
             result.AddErrorsToModelState(ModelState, "tokenErrors");
             return ValidationProblem();

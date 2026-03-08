@@ -9,16 +9,15 @@ namespace Quizate.API.Controllers;
 [ApiController]
 public class UserController(IUserService userService) : ControllerBase
 {
-    // onur
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<UserInfoResponse>> GetUser(Guid userId, CancellationToken ct)
     {
         var result = await userService.GetUserAsync(userId, ct);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
             return NotFound();
 
-        return Ok(result.Data);
+        return Ok(result.Value);
     }
 
     [HttpGet("me")]
@@ -29,10 +28,10 @@ public class UserController(IUserService userService) : ControllerBase
 
         var result = await userService.GetMyInfoAsync(userId, ct);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
             return NotFound();
 
-        return Ok(result.Data);
+        return Ok(result.Value);
     }
 
     [HttpPatch("me")]
@@ -43,7 +42,7 @@ public class UserController(IUserService userService) : ControllerBase
 
         var result = await userService.UpdateUserAsync(userId, request, ct);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
             return NotFound();
 
         return Ok();
@@ -57,7 +56,7 @@ public class UserController(IUserService userService) : ControllerBase
 
         var result = await userService.DeleteUserAsync(userId, ct);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
             return NotFound();
 
         return Ok();
