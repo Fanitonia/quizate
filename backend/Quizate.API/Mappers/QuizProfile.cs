@@ -2,7 +2,7 @@
 using Quizate.API.Contracts;
 using Quizate.Data.Models;
 
-namespace Quizate.API.Profiles;
+namespace Quizate.API.Helpers.Mappers;
 
 public class QuizProfile : Profile
 {
