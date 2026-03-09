@@ -1,0 +1,1053 @@
+openapi: 3.1.1
+info:
+  title: Quizate.API | v1
+  version: 1.0.0
+servers:
+  - url: https://localhost:7151/
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+  /auth/refreshToken:
+    post:
+      tags:
+        - Auth
+      responses:
+        "200":
+          description: OK
+  /auth/refreshToken/{userId}:
+    delete:
+      tags:
+        - Auth
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+      security:
+        - CookieAuth: []
+  /quizzes:
+    get:
+      tags:
+        - Quiz
+      parameters:
+        - name: pageNumber
+          in: query
+          schema:
+            pattern: ^-?(?:0|[1-9]\d*)$
+            type:
+              - integer
+              - string
+            format: int32
+        - name: pageSize
+          in: query
+          schema:
+            pattern: ^-?(?:0|[1-9]\d*)$
+            type:
+              - integer
+              - string
+            format: int32
+        - name: user
+          in: query
+          schema:
+            type: string
+            format: uuid
+          description: Filter quizzes by creator user id.
+        - name: topic
+          in: query
+          schema:
+            type: string
+          description: Filter quizzes by topic name or slug.
+        - name: keyword
+          in: query
+          schema:
+            type: string
+          description: Search in quiz title and description.
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizResponse"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizResponse"
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizResponse"
+    post:
+      tags:
+        - Quiz
+      summary: Create a new quiz
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResponse"
+      security:
+        - CookieAuth: []
+  /quizzes/{quizId}:
+    get:
+      tags:
+        - Quiz
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/QuizResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/QuizResponse"
+    patch:
+      tags:
+        - Quiz
+      summary: Update quiz details
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizResponse"
+      security:
+        - CookieAuth: []
+    delete:
+      tags:
+        - Quiz
+      summary: Delete a quiz
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+      security:
+        - CookieAuth: []
+  /quizzes/{quizId}/questions:
+    get:
+      tags:
+        - Quiz
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/QuizQuestionsResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizQuestionsResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/QuizQuestionsResponse"
+  /attempts/{quizId}:
+    post:
+      tags:
+        - Attempt
+      summary: Save a quiz attempt
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AttemptRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/AttemptRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/AttemptRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AttemptResponse"
+      security:
+        - CookieAuth: []
+    get:
+      tags:
+        - Attempt
+      summary: List attempts for a quiz
+      parameters:
+        - name: quizId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AttemptResponse"
+      security:
+        - CookieAuth: []
+  /topics:
+    get:
+      tags:
+        - Topic
+      summary: List available quiz topics
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopicResponse"
+    post:
+      tags:
+        - Topic
+      summary: Create a topic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTopicRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/CreateTopicRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/CreateTopicRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopicResponse"
+      security:
+        - CookieAuth: []
+    put:
+      tags:
+        - Topic
+      summary: Update a topic
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTopicRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/UpdateTopicRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/UpdateTopicRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TopicResponse"
+      security:
+        - CookieAuth: []
+    delete:
+      tags:
+        - Topic
+      summary: Delete a topic
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Topic name to delete.
+      responses:
+        "200":
+          description: OK
+      security:
+        - CookieAuth: []
+  /quizTypes:
+    get:
+      tags:
+        - QuizType
+      summary: List quiz types
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizTypeResponse"
+    post:
+      tags:
+        - QuizType
+      summary: Create a quiz type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizTypeRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizTypeRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/CreateQuizTypeRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizTypeResponse"
+      security:
+        - CookieAuth: []
+  /quizTypes/{quizTypeId}:
+    put:
+      tags:
+        - QuizType
+      summary: Update a quiz type
+      parameters:
+        - name: quizTypeId
+          in: path
+          required: true
+          schema:
+            pattern: ^-?(?:0|[1-9]\d*)$
+            type:
+              - integer
+              - string
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizTypeRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizTypeRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/UpdateQuizTypeRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizTypeResponse"
+      security:
+        - CookieAuth: []
+    delete:
+      tags:
+        - QuizType
+      summary: Delete a quiz type
+      parameters:
+        - name: quizTypeId
+          in: path
+          required: true
+          schema:
+            pattern: ^-?(?:0|[1-9]\d*)$
+            type:
+              - integer
+              - string
+            format: int32
+      responses:
+        "200":
+          description: OK
+      security:
+        - CookieAuth: []
+  /users/{userId}:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/UserInfoResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfoResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/UserInfoResponse"
+    delete:
+      tags:
+        - User
+      summary: Delete a user account (admin)
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+      security:
+        - CookieAuth: []
+  /users/me:
+    get:
+      tags:
+        - User
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: "#/components/schemas/MyInfoResponse"
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyInfoResponse"
+            text/json:
+              schema:
+                $ref: "#/components/schemas/MyInfoResponse"
+    patch:
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMyInfoRequest"
+          text/json:
+            schema:
+              $ref: "#/components/schemas/UpdateMyInfoRequest"
+          application/*+json:
+            schema:
+              $ref: "#/components/schemas/UpdateMyInfoRequest"
+        required: true
+      responses:
+        "200":
+          description: OK
+    delete:
+      tags:
+        - User
+      responses:
+        "200":
+          description: OK
+  /users/me/quizzes:
+    get:
+      tags:
+        - User
+      responses:
+        "200":
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizResponse"
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizResponse"
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizResponse"
+components:
+  schemas:
+    AttemptAnswer:
+      required:
+        - questionIndex
+        - selectedOptionIndexes
+      type: object
+      properties:
+        questionIndex:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        selectedOptionIndexes:
+          type: array
+          items:
+            pattern: ^-?(?:0|[1-9]\d*)$
+            type:
+              - integer
+              - string
+            format: int32
+    AttemptRequest:
+      required:
+        - score
+      type: object
+      properties:
+        score:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        maxScore:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/AttemptAnswer"
+    AttemptResponse:
+      required:
+        - id
+        - quizId
+        - score
+      type: object
+      properties:
+        id:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        userId:
+          type:
+            - "null"
+            - string
+          format: uuid
+        quizId:
+          type: string
+          format: uuid
+        score:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        maxScore:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+    CreateQuizRequest:
+      required:
+        - languageCode
+        - title
+        - questions
+      type: object
+      properties:
+        languageCode:
+          type: string
+        title:
+          type: string
+        description:
+          type:
+            - "null"
+            - string
+        thumbnailUrl:
+          type:
+            - "null"
+            - string
+        isPublic:
+          type: boolean
+        quizTypeId:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - "null"
+            - string
+          format: int32
+        topicNames:
+          type: array
+          items:
+            type: string
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionObject"
+    CreateQuizTypeRequest:
+      required:
+        - name
+        - displayName
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type:
+            - "null"
+            - string
+    CreateTopicRequest:
+      required:
+        - name
+        - displayName
+      type: object
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type:
+            - "null"
+            - string
+    LoginRequest:
+      required:
+        - usernameOrEmail
+        - password
+      type: object
+      properties:
+        usernameOrEmail:
+          type: string
+        password:
+          type: string
+    MyInfoResponse:
+      required:
+        - username
+        - normalizedUsername
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        username:
+          type: string
+        normalizedUsername:
+          type: string
+        email:
+          type:
+            - "null"
+            - string
+        isEmailVerified:
+          type: boolean
+        profilePictureUrl:
+          type:
+            - "null"
+            - string
+    Option:
+      required:
+        - text
+      type: object
+      properties:
+        text:
+          type: string
+        imageUrl:
+          type:
+            - "null"
+            - string
+        displayOrder:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        isCorrect:
+          type: boolean
+    QuestionObject:
+      required:
+        - type
+      type: object
+      anyOf:
+        - $ref: "#/components/schemas/QuestionObjectMultipleChoiceQuestionObject"
+      discriminator:
+        propertyName: type
+        mapping:
+          multiple_choice: "#/components/schemas/QuestionObjectMultipleChoiceQuestionObject"
+    QuestionObjectMultipleChoiceQuestionObject:
+      required:
+        - title
+        - options
+      properties:
+        type:
+          enum:
+            - multiple_choice
+          type: string
+        title:
+          type: string
+        imageUrl:
+          type:
+            - "null"
+            - string
+        points:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/Option"
+    QuizQuestionsResponse:
+      type: object
+      properties:
+        quizId:
+          type: string
+          format: uuid
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionObject"
+    QuizResponse:
+      required:
+        - languageCode
+        - title
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        creatorId:
+          type:
+            - "null"
+            - string
+          format: uuid
+        creatorName:
+          type:
+            - "null"
+            - string
+        languageCode:
+          type: string
+        title:
+          type: string
+        description:
+          type:
+            - "null"
+            - string
+        thumbnailUrl:
+          type:
+            - "null"
+            - string
+        isPublic:
+          type: boolean
+        questionsCount:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        attemptsCount:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+    QuizTypeResponse:
+      required:
+        - id
+        - name
+        - displayName
+      type: object
+      properties:
+        id:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - string
+          format: int32
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type:
+            - "null"
+            - string
+    RegisterRequest:
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type:
+            - "null"
+            - string
+        password:
+          type: string
+    TopicResponse:
+      required:
+        - name
+        - displayName
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        name:
+          type: string
+        displayName:
+          type: string
+        description:
+          type:
+            - "null"
+            - string
+    UpdateMyInfoRequest:
+      type: object
+      properties:
+        username:
+          type:
+            - "null"
+            - string
+        email:
+          type:
+            - "null"
+            - string
+    UpdateQuizRequest:
+      type: object
+      properties:
+        languageCode:
+          type:
+            - "null"
+            - string
+        title:
+          type:
+            - "null"
+            - string
+        description:
+          type:
+            - "null"
+            - string
+        thumbnailUrl:
+          type:
+            - "null"
+            - string
+        isPublic:
+          type:
+            - boolean
+            - "null"
+        quizTypeId:
+          pattern: ^-?(?:0|[1-9]\d*)$
+          type:
+            - integer
+            - "null"
+            - string
+          format: int32
+        topicNames:
+          type:
+            - array
+            - "null"
+          items:
+            type: string
+        questions:
+          type:
+            - array
+            - "null"
+          items:
+            $ref: "#/components/schemas/QuestionObject"
+    UpdateQuizTypeRequest:
+      type: object
+      properties:
+        name:
+          type:
+            - "null"
+            - string
+        displayName:
+          type:
+            - "null"
+            - string
+        description:
+          type:
+            - "null"
+            - string
+    UpdateTopicRequest:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+        newName:
+          type:
+            - "null"
+            - string
+        displayName:
+          type:
+            - "null"
+            - string
+        description:
+          type:
+            - "null"
+            - string
+    UserInfoResponse:
+      required:
+        - username
+        - normalizedUsername
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        username:
+          type: string
+        normalizedUsername:
+          type: string
+        profilePictureUrl:
+          type:
+            - "null"
+            - string
+  securitySchemes:
+    CookieAuth:
+      type: http
+      description: JWT is stored in HttpOnly cookie set by /auth/login and
+        /auth/refreshToken.
+      scheme: cookie
+tags:
+  - name: Auth
+  - name: Quiz
+  - name: Attempt
+  - name: Topic
+  - name: QuizType
+  - name: User
+

@@ -28,7 +28,7 @@ Quizate kullanıcıların quizler yaratabileceği ve paylaşabileceği bir platf
 Proje dokümantasyonuna aşağıdaki linklerden erişebilirsiniz:
 
 1. [Gereksinim Analizi](docs/gereksinim-analizi.md)
-2. [REST API Tasarımı](docs/api-tasarimi.md) (yapılmadı)
+2. [REST API Tasarımı](docs/api-tasarimi.md)
 3. [REST API](docs/rest-api.md) (yapılmadı)
 4. [Web Front-End](docs/web-frontend.md) (yapılmadı)
 5. [Mobil Front-End](docs/mobil-frontend.md) (yapılmadı)
