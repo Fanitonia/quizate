@@ -12,11 +12,14 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Quizate.API/Quizate.API.csproj", "Quizate.API/"]
-COPY ["Quizate.Data/Quizate.Data.csproj", "Quizate.Data/"]
-RUN dotnet restore "./Quizate.API/Quizate.API.csproj"
+COPY ["Directory.Packages.props", "."]
+COPY ["src/Quizate.API/Quizate.API.csproj", "src/Quizate.API/"]
+COPY ["src/Quizate.Application/Quizate.Application.csproj", "src/Quizate.Application/"]
+COPY ["src/Quizate.Core/Quizate.Core.csproj", "src/Quizate.Core/"]
+COPY ["src/Quizate.Persistence/Quizate.Persistence.csproj", "src/Quizate.Persistence/"]
+RUN dotnet restore "./src/Quizate.API/Quizate.API.csproj"
 COPY . .
-WORKDIR "/src/Quizate.API"
+WORKDIR "/src/src/Quizate.API"
 RUN dotnet build "./Quizate.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
