@@ -11,22 +11,13 @@ namespace Quizate.API.Controllers;
 [Route("quizzes")]
 [ApiController]
 public class QuizController(
-    IQuizService quizService,
-    IValidator<PaginationParameters> paginationValidator) : ControllerBase
+    IQuizService quizService) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<List<QuizResponse>>> GetQuizzes(
         [FromQuery] PaginationParameters pagination,
         CancellationToken ct)
     {
-        var paginationValidation = paginationValidator.Validate(pagination);
-
-        if (!paginationValidation.IsValid)
-        {
-            paginationValidation.AddErrorsToModelState(ModelState);
-            return ValidationProblem();
-        }
-
         var (quizzes, paginationMetaData) = await quizService.GetQuizzesAsync(pagination, ct);
 
         // TODO: bunun için bir cookiemanager metodu yazılabilir

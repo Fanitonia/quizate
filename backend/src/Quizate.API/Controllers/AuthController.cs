@@ -14,23 +14,13 @@ namespace Quizate.API.Controllers;
 public class AuthController(
     IAuthService authService,
     ICookieService cookieService,
-    IConfiguration configuration,
-    IValidator<LoginRequest> loginRequestValidator,
-    IValidator<RegisterRequest> registerRequestValidator) : ControllerBase
+    IConfiguration configuration) : ControllerBase
 {
     //TODO: password resetleme, email doğrulama, account silme, account güncelleme...
 
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
-        var validation = registerRequestValidator.Validate(request);
-
-        if (!validation.IsValid)
-        {
-            validation.AddErrorsToModelState(ModelState);
-            return ValidationProblem();
-        }
-
         var result = await authService.RegisterAsync(request);
 
         if (result.IsFailure)
@@ -45,14 +35,6 @@ public class AuthController(
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
-        var validation = loginRequestValidator.Validate(request);
-
-        if (!validation.IsValid)
-        {
-            validation.AddErrorsToModelState(ModelState);
-            return ValidationProblem();
-        }
-
         var result = await authService.LoginAsync(request);
 
         if (result.IsFailure)

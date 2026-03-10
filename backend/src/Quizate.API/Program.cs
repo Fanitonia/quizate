@@ -4,6 +4,7 @@ using Quizate.API.Extensions;
 using Quizate.Application.DependencyInjection;
 using Quizate.Persistence.DependencyInjection;
 using Serilog;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace Quizate.API;
 
@@ -35,6 +36,8 @@ public class Program
             });
 
             builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
+            builder.Services.AddFluentValidationAutoValidation();
 
             builder.Services.AddPersistenceServices(builder.Configuration);
 

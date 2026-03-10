@@ -17,6 +17,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="SharpGrip.FluentValidation.AutoValidation.Mvc" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" />
   </ItemGroup>
 
