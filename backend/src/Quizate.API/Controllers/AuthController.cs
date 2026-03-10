@@ -33,7 +33,7 @@ public class AuthController(
 
         var result = await authService.RegisterAsync(request);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
         {
             result.AddErrorsToModelState(ModelState, "registerErrors");
             return ValidationProblem();
@@ -55,7 +55,7 @@ public class AuthController(
 
         var result = await authService.LoginAsync(request);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
         {
             result.AddErrorsToModelState(ModelState, "loginErrors");
             return ValidationProblem();
@@ -81,7 +81,7 @@ public class AuthController(
 
         var result = await authService.RefreshAccessTokenAsync(refreshToken);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
         {
             result.AddErrorsToModelState(ModelState, "tokenErrors");
             return ValidationProblem();
@@ -117,7 +117,7 @@ public class AuthController(
 
         var result = await authService.RevokeRefreshTokensAsync(userId);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
         {
             result.AddErrorsToModelState(ModelState, "tokenErrors");
             return ValidationProblem();

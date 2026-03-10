@@ -16,7 +16,7 @@ public class UserController(IUserService userService) : ControllerBase
     {
         var result = await userService.GetUserAsync(userId, ct);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
             return NotFound();
 
         return Ok(result.Value);
@@ -31,7 +31,7 @@ public class UserController(IUserService userService) : ControllerBase
 
         var result = await userService.GetMyInfoAsync(userId, ct);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
             return NotFound();
 
         return Ok(result.Value);
@@ -46,7 +46,7 @@ public class UserController(IUserService userService) : ControllerBase
 
         var result = await userService.UpdateUserAsync(userId, request, ct);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
             return NotFound();
 
         return Ok();
@@ -61,7 +61,7 @@ public class UserController(IUserService userService) : ControllerBase
 
         var result = await userService.DeleteUserAsync(userId, ct);
 
-        if (!result.IsSuccess)
+        if (result.IsFailure)
             return NotFound();
 
         return Ok();
