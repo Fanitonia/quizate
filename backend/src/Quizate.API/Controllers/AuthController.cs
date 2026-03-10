@@ -1,0 +1,131 @@
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Quizate.API.Extensions;
+using Quizate.Application.Auth.DTOs.Requests;
+using Quizate.Application.Auth.Interfaces;
+using Quizate.Core.Enums;
+using System.Security.Claims;
+
+namespace Quizate.API.Controllers;
+
+[Route("auth")]
+[ApiController]
+public class AuthController(
+    IAuthService authService,
+    ICookieService cookieService,
+    IConfiguration configuration,
+    IValidator<LoginRequest> loginRequestValidator,
+    IValidator<RegisterRequest> registerRequestValidator) : ControllerBase
+{
+    //TODO: password resetleme, email doğrulama, account silme, account güncelleme...
+
+    [HttpPost("register")]
+    public async Task<ActionResult> Register([FromBody] RegisterRequest request)
+    {
+        var validation = registerRequestValidator.Validate(request);
+
+        if (!validation.IsValid)
+        {
+            validation.AddErrorsToModelState(ModelState);
+            return ValidationProblem();
+        }
+
+        var result = await authService.RegisterAsync(request);
+
+        if (!result.IsSuccess)
+        {
+            result.AddErrorsToModelState(ModelState, "registerErrors");
+            return ValidationProblem();
+        }
+
+        return Ok();
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult> Login([FromBody] LoginRequest request)
+    {
+        var validation = loginRequestValidator.Validate(request);
+
+        if (!validation.IsValid)
+        {
+            validation.AddErrorsToModelState(ModelState);
+            return ValidationProblem();
+        }
+
+        var result = await authService.LoginAsync(request);
+
+        if (!result.IsSuccess)
+        {
+            result.AddErrorsToModelState(ModelState, "loginErrors");
+            return ValidationProblem();
+        }
+
+        cookieService.SetRefreshTokenCookie(
+            result.Value!.RefreshToken,
+            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
+            Response);
+
+        cookieService.SetAccessTokenCookie(
+            result.Value.AccessToken,
+            configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
+            Response);
+
+        return Ok();
+    }
+
+    [HttpPost("refreshToken")]
+    public async Task<ActionResult> RefreshToken()
+    {
+        Request.Cookies.TryGetValue("REFRESH_TOKEN", out var refreshToken);
+
+        var result = await authService.RefreshAccessTokenAsync(refreshToken);
+
+        if (!result.IsSuccess)
+        {
+            result.AddErrorsToModelState(ModelState, "tokenErrors");
+            return ValidationProblem();
+        }
+
+        cookieService.SetRefreshTokenCookie(
+            result.Value!.RefreshToken,
+            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
+            Response);
+
+        cookieService.SetAccessTokenCookie(
+            result.Value.AccessToken,
+            configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
+            Response);
+
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpDelete("refreshToken/{userId:guid}")]
+    public async Task<ActionResult> RevokeRefreshTokens([FromRoute] Guid userId)
+    {
+        string? currentUserIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (!Guid.TryParse(currentUserIdClaim, out Guid currentUserId))
+            return BadRequest();
+
+        bool isAdmin = User.IsInRole(UserRole.Admin.ToString());
+        bool isSelf = currentUserId == userId;
+
+        if (!isAdmin && !isSelf)
+            return Forbid();
+
+        var result = await authService.RevokeRefreshTokensAsync(userId);
+
+        if (!result.IsSuccess)
+        {
+            result.AddErrorsToModelState(ModelState, "tokenErrors");
+            return ValidationProblem();
+        }
+
+        if (isSelf)
+            cookieService.RemoveRefreshTokenCookie(Response);
+
+        return NoContent();
+    }
+}
