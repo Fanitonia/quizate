@@ -1,6 +1,6 @@
 using FluentValidation;
-using Quizate.API.Configurations;
 using Quizate.API.Extensions;
+using Quizate.API.OpenApi.DependencyInjection;
 using Quizate.Application.DependencyInjection;
 using Quizate.Persistence.DependencyInjection;
 using Serilog;
@@ -29,11 +29,7 @@ public class Program
 
             builder.Services.AddProblemDetails();
 
-            builder.Services.AddOpenApi(options =>
-            {
-                options.AddDocumentTransformer<CookieSecurityDocumentTransformer>();
-                options.AddOperationTransformer<CookieSecurityOperationTransformer>();
-            });
+            builder.Services.AddOpenApiWithDefinedOptions();
 
             builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -73,7 +69,7 @@ public class Program
             await app.MigrateDatabaseAsync();
 
 
-            app.Run();
+            await app.RunAsync();
         }
         catch (Exception ex)
         {

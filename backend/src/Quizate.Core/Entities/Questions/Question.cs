@@ -1,5 +1,4 @@
 using Quizate.Core.Entities.Quizzes;
-using System.Text.Json;
 
 namespace Quizate.Core.Entities.Questions;
 

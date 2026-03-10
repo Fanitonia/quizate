@@ -1,9 +1,8 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
-using Quizate.Application.Auth.DTOs.Requests;
-using Quizate.Application.Auth.Interfaces;
+using Quizate.Application.Features.Auth.DTOs.Requests;
+using Quizate.Application.Features.Auth.Interfaces;
 using Quizate.Core.Enums;
 using System.Security.Claims;
 

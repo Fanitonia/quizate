@@ -1,8 +1,6 @@
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Quizate.API.Extensions;
-using Quizate.Application.Quizzes.DTOs.Responses;
-using Quizate.Application.Quizzes.Interfaces;
+using Quizate.Application.Features.Quizzes.DTOs.Responses;
+using Quizate.Application.Features.Quizzes.Interfaces;
 using Quizate.Application.Shared.Pagination;
 using Quizate.Application.Shared.Serializer;
 
@@ -20,7 +18,6 @@ public class QuizController(
     {
         var (quizzes, paginationMetaData) = await quizService.GetQuizzesAsync(pagination, ct);
 
-        // TODO: bunun için bir cookiemanager metodu yazılabilir
         Response.Headers.Append("X-Pagination", paginationMetaData.SerializeWithCamelCasing());
 
         return Ok(quizzes);

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Quizate.Core.Entities;
 
 namespace Quizate.Persistence.Configurations.Questions;
 

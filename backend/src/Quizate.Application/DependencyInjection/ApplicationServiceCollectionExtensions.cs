@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Quizate.Application.Auth.DependencyInjection;
-using Quizate.Application.Quizzes.DependencyInjection;
-using Quizate.Application.Users.DependencyInjection;
+using Quizate.Application.Features.Auth.DependencyInjection;
+using Quizate.Application.Features.Quizzes.DependencyInjection;
+using Quizate.Application.Features.Users.DependencyInjection;
 
 namespace Quizate.Application.DependencyInjection;
 
