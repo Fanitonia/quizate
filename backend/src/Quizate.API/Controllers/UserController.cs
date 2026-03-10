@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
 using Quizate.Application.Quizzes.DTOs.Responses;
 using Quizate.Application.Users.DTOs.Requests;
@@ -21,11 +22,12 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(result.Value);
     }
 
+    [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<MyInfoResponse>> GetMe(CancellationToken ct)
     {
         if (!User.TryGetUserId(out var userId))
-            return BadRequest();
+            return Unauthorized();
 
         var result = await userService.GetMyInfoAsync(userId, ct);
 
@@ -35,11 +37,12 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(result.Value);
     }
 
+    [Authorize]
     [HttpPatch("me")]
     public async Task<ActionResult> UpdateMe([FromBody] UpdateMyInfoRequest request, CancellationToken ct)
     {
         if (!User.TryGetUserId(out var userId))
-            return BadRequest();
+            return Unauthorized();
 
         var result = await userService.UpdateUserAsync(userId, request, ct);
 
@@ -49,11 +52,12 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok();
     }
 
+    [Authorize]
     [HttpDelete("me")]
     public async Task<ActionResult> DeleteMe(CancellationToken ct)
     {
         if (!User.TryGetUserId(out var userId))
-            return BadRequest();
+            return Unauthorized();
 
         var result = await userService.DeleteUserAsync(userId, ct);
 
@@ -63,11 +67,12 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok();
     }
 
+    [Authorize]
     [HttpGet("me/quizzes")]
     public async Task<ActionResult<List<QuizResponse>>> GetMyQuizzes()
     {
         if (!User.TryGetUserId(out var userId))
-            return BadRequest();
+            return Unauthorized();
 
         throw new NotImplementedException();
     }

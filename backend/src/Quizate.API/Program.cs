@@ -36,9 +36,9 @@ public class Program
 
             builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
-            builder.Services.AddPersistenceServices();
+            builder.Services.AddPersistenceServices(builder.Configuration);
 
-            builder.Services.AddApplicationServices();
+            builder.Services.AddApplicationServices(builder.Configuration);
 
 
             var app = builder.Build();

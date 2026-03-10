@@ -12,9 +12,9 @@ namespace Quizate.Application.Auth.DependencyInjection;
 
 internal static class AuthServiceCollectionExtensions
 {
-    public static IServiceCollection AddAuthServices(this IServiceCollection services)
+    public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddJwtAuthentication();
+        services.AddJwtAuthentication(configuration);
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICookieService, CookieService>();
@@ -23,10 +23,8 @@ internal static class AuthServiceCollectionExtensions
         return services;
     }
 
-    internal static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+    internal static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-
         services
             .AddAuthentication(options =>
             {

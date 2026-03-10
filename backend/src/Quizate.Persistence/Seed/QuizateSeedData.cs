@@ -7,7 +7,7 @@ namespace Quizate.Persistence.Seed;
 
 internal static class QuizateSeedData
 {
-    private static readonly string MutlipleChoiceQuestionPayload = @"{""Title"":""What's the capital of Turkey?"",""Options"":[{""Text"":""Istanbul"",""IsCorrect"":false},{""Text"":""Ankara"",""IsCorrect"":true},{""Text"":""Izmir"",""IsCorrect"":false},{""Text"":""Bursa"",""IsCorrect"":false}]}";
+    private static readonly string MultipleChoiceQuestionPayload = @"{""Title"":""What's the capital of Turkey?"",""Options"":[{""Text"":""Istanbul"",""IsCorrect"":false},{""Text"":""Ankara"",""IsCorrect"":true},{""Text"":""Izmir"",""IsCorrect"":false},{""Text"":""Bursa"",""IsCorrect"":false}]}";
 
     public static ModelBuilder SeedInitialData(this ModelBuilder modelBuilder)
     {
@@ -43,7 +43,7 @@ internal static class QuizateSeedData
                 Id = 1,
                 QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
                 QuestionTypeName = "multiple_choice",
-                Payload = MutlipleChoiceQuestionPayload
+                Payload = MultipleChoiceQuestionPayload
             }
         );
 

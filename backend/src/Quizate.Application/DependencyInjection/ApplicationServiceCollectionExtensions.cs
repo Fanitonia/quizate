@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Quizate.Application.Auth.DependencyInjection;
 using Quizate.Application.Quizzes.DependencyInjection;
 using Quizate.Application.Users.DependencyInjection;
@@ -7,10 +8,10 @@ namespace Quizate.Application.DependencyInjection;
 
 public static class ApplicationServiceCollectionExtensions
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuthServices();
-        services.AddUsersServices();
+        services.AddAuthServices(configuration);
+        services.AddUserServices();
         services.AddQuizServices();
 
         services.AddAutoMapper(cfg =>

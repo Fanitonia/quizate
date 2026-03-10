@@ -6,7 +6,7 @@ namespace Quizate.Application.Quizzes.Helpers;
 
 public static class QuestionPayloadSerializer
 {
-    public static QuestionObject? SerializeToQuestionObject(string questionTypeName, string payload)
+    public static QuestionObject? DeserializeQuestionObject(string questionTypeName, string payload)
     {
         return questionTypeName switch
         {

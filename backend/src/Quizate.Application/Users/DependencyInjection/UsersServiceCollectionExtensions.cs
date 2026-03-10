@@ -6,7 +6,7 @@ namespace Quizate.Application.Users.DependencyInjection;
 
 public static class ApplicationServiceCollectionExtensions
 {
-    public static IServiceCollection AddUsersServices(this IServiceCollection services)
+    public static IServiceCollection AddUserServices(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
 

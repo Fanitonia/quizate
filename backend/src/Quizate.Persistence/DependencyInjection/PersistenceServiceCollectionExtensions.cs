@@ -6,12 +6,10 @@ namespace Quizate.Persistence.DependencyInjection;
 
 public static class PersistenceServiceCollectionExtensions
 {
-    public static IServiceCollection AddPersistenceServices(this IServiceCollection services)
+    public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var config = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-
         services.AddDbContext<QuizateDbContext>(options =>
-                options.UseNpgsql(config.GetConnectionString("DatabaseConnection"))
+                options.UseNpgsql(configuration.GetConnectionString("DatabaseConnection"))
                 .UseSnakeCaseNamingConvention());
 
         return services;
