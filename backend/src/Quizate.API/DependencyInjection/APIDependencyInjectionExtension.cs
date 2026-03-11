@@ -14,7 +14,6 @@ internal static class APIDependencyInjectionExtension
             .WriteTo.Console()
             .CreateLogger();
 
-
         services.AddSerilog();
 
         services.AddControllers();
@@ -29,7 +28,7 @@ internal static class APIDependencyInjectionExtension
         services.AddOpenApi(options =>
         {
             options.AddDocumentTransformer<OpenApiDocumentTransformer>();
-            options.AddOperationTransformer<OpenApiSecurityOperationTransformer>();
+            options.AddOperationTransformer<OpenApiOperationTransformer>();
         });
 
         services.AddCors(opt =>
@@ -38,7 +37,7 @@ internal static class APIDependencyInjectionExtension
             {
                 policy.AllowAnyMethod()
                       .AllowAnyHeader()
-                      .WithOrigins(new[] { "https://api.quizate.com/", "https://quizate.com/" });
+                      .WithOrigins(new[] { "https://api.quizate.com", "https://quizate.com" });
             });
         });
 

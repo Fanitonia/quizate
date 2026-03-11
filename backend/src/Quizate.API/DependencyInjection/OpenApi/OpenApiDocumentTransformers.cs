@@ -3,7 +3,7 @@ using Microsoft.OpenApi;
 
 namespace Quizate.API.DependencyInjection.OpenApi;
 
-internal class OpenApiDocumentTransformer : IOpenApiDocumentTransformer
+internal class OpenApiDocumentTransformer(IHostEnvironment environment) : IOpenApiDocumentTransformer
 {
     public Task TransformAsync(
         OpenApiDocument document,
@@ -22,6 +22,17 @@ internal class OpenApiDocumentTransformer : IOpenApiDocumentTransformer
                 Description = "JWT is stored in HttpOnly cookie set by /auth/login and /auth/refreshToken."
             }
         };
+
+        if (environment.IsProduction())
+        {
+            document.Servers =
+            [
+                new OpenApiServer
+                {
+                    Url = "https://api.quizate.com"
+                }
+            ];
+        }
 
         return Task.CompletedTask;
     }
