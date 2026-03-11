@@ -5,17 +5,17 @@ namespace Quizate.Domain.Entities.Quizzes;
 
 public class Quiz
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public Guid Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public User? Creator { get; set; }
     public Guid? CreatorId { get; set; }
 
-    public required string LanguageCode { get; set; }
+    public string LanguageCode { get; set; }
     public QuizLanguage Language { get; set; } = null!;
 
-    public required string Title { get; set; }
+    public string Title { get; set; }
     public string? Description { get; set; }
     public string? ThumbnailUrl { get; set; }
     public bool IsPublic { get; set; }
@@ -23,4 +23,50 @@ public class Quiz
     public ICollection<Question> Questions { get; set; } = [];
     public ICollection<QuizTopic> Topics { get; set; } = [];
     public ICollection<QuizAttempt> Attempts { get; set; } = [];
+
+    public Quiz(
+        string title,
+        string languageCode,
+        Guid? creatorId = null,
+        string? description = null,
+        string? thumbnailUrl = null,
+        bool isPublic = true,
+        Guid id = default,
+        DateTime createdAt = default,
+        DateTime updatedAt = default)
+    {
+        Id = id;
+        Title = title;
+        LanguageCode = languageCode;
+        CreatorId = creatorId;
+        Description = description;
+        ThumbnailUrl = thumbnailUrl;
+        IsPublic = isPublic;
+        CreatedAt = createdAt == default ? DateTime.UtcNow : createdAt;
+        UpdatedAt = updatedAt == default ? DateTime.UtcNow : updatedAt;
+    }
+
+    public void UpdateTitle(string title)
+    {
+        Title = title ?? Title;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateDescription(string description)
+    {
+        Description = description ?? Description;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateThumbnailUrl(string thumbnailUrl)
+    {
+        ThumbnailUrl = thumbnailUrl ?? ThumbnailUrl;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateVisibiltity(bool isPublic)
+    {
+        IsPublic = isPublic;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

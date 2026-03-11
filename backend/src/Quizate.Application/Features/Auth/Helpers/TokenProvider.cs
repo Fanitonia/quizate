@@ -41,12 +41,11 @@ internal static class TokenProvider
     {
         string rawToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
 
-        return (new RefreshToken
-        {
-            UserId = userId,
-            TokenHash = Sha256Hasher.ComputeHash(rawToken),
-            ExpiresAtUtc = DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"))
-        }, rawToken);
+        return
+            (new RefreshToken(
+                Sha256Hasher.ComputeHash(rawToken),
+                userId,
+                DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"))),
+            rawToken);
     }
 }
-

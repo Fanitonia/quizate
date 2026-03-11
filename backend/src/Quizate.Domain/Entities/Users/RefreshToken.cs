@@ -2,12 +2,20 @@
 
 public class RefreshToken
 {
-    public required string TokenHash { get; set; }
-    public DateTime ExpiresAtUtc { get; set; }
-    public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+    public string TokenHash { get; private set; }
+    public DateTime ExpiresAtUtc { get; private set; }
+    public DateTime CreatedAtUtc { get; private set; }
+
+    public Guid UserId { get; private set; }
+    public User User { get; set; } = null!;
 
     public bool IsExpired => DateTime.UtcNow >= ExpiresAtUtc;
 
-    public Guid UserId { get; set; }
-    public User User { get; set; } = null!;
+    public RefreshToken(string tokenHash, Guid userId, DateTime expiresAtUtc, DateTime createdAtUtc = default)
+    {
+        TokenHash = tokenHash;
+        ExpiresAtUtc = expiresAtUtc;
+        CreatedAtUtc = createdAtUtc == default ? DateTime.UtcNow : createdAtUtc;
+        UserId = userId;
+    }
 }

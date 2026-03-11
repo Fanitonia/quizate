@@ -12,76 +12,61 @@ internal static class QuizateSeedData
     public static ModelBuilder SeedInitialData(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().HasData(
-            new User
-            {
-                Id = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                Username = "demo_user",
-                Email = "demo_user@example.com",
-                PasswordHash = "hashed_password_placeholder"
-            }
+            new User(
+                "demo_user",
+                "hashed_password_placeholder",
+                "demo_user@example.com",
+                id: new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
+                createdAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                updatedAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc))
         );
 
         modelBuilder.Entity<Quiz>().HasData(
-            new Quiz
-            {
-                Id = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                Title = "Sample Quiz",
-                Description = "This is a sample quiz.",
-                IsPublic = true,
-                CreatorId = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
-                LanguageCode = "en",
-            }
+            new Quiz(
+                "Sample Quiz",
+                "en",
+                creatorId: new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
+                description: "This is a sample quiz.",
+                isPublic: true,
+                id: new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
+                createdAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                updatedAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc))
         );
 
         modelBuilder.Entity<Question>().HasData(
-            new Question
-            {
-                Id = 1,
-                QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
-                QuestionTypeName = "multiple_choice",
-                Payload = MultipleChoiceQuestionPayload
-            }
+            new Question(
+                new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
+                "multiple_choice",
+                MultipleChoiceQuestionPayload,
+                id: 1)
         );
 
         modelBuilder.Entity<QuestionType>().HasData(
-            new QuestionType
-            {
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                Name = "multiple_choice",
-            }
+            new QuestionType(
+                "multiple_choice",
+                createdAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                updatedAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc))
         );
 
         modelBuilder.Entity<QuizTopic>().HasData(
-            new QuizTopic
-            {
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                UpdatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                Name = "geography",
-                DisplayName = "Geography",
-            }
+            new QuizTopic(
+                "geography",
+                "Geography",
+                createdAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
+                updatedAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc))
         );
 
         modelBuilder.Entity<QuizAttempt>().HasData(
-            new QuizAttempt
-            {
-                Id = 1,
-                QuizId = new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
-                UserId = new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
-                CreatedAt = new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc),
-                Score = 50,
-            }
+            new QuizAttempt(
+                new Guid("d1b2c3d4-e5f6-7890-abcd-ef1234567890"),
+                50,
+                id: 1,
+                userId: new Guid("655a37fa-b9e1-4cad-a684-383ac587e906"),
+                createdAt: new DateTime(2026, 2, 20, 19, 17, 31, 60, DateTimeKind.Utc))
         );
 
         modelBuilder.Entity<QuizLanguage>().HasData(
-            new QuizLanguage
-            {
-                Code = "en",
-            }
+            new QuizLanguage("en")
         );
 
         return modelBuilder;

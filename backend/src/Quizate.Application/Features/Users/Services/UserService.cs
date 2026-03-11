@@ -42,8 +42,7 @@ public class UserService(
         if (user == null)
             return Result.Failure("User not found.");
 
-        user.IsDeleted = true;
-        user.UpdatedAt = DateTime.UtcNow;
+        user.MarkAsDeleted();
 
         await context.SaveChangesAsync(ct);
 
@@ -66,8 +65,7 @@ public class UserService(
             if (isUsernameTaken)
                 return Result.Failure("Username is already taken.");
 
-            user.UpdatedAt = DateTime.UtcNow;
-            user.Username = request.Username;
+            user.UpdateUsername(request.Username);
         }
 
         if (request.Email != null)
@@ -78,8 +76,7 @@ public class UserService(
             if (isEmailTaken)
                 return Result.Failure("Email is already taken.");
 
-            user.UpdatedAt = DateTime.UtcNow;
-            user.Email = request.Email;
+            user.UpdateEmail(request.Email);
         }
 
         await context.SaveChangesAsync(ct);

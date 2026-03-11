@@ -2,7 +2,12 @@
 
 public class QuizLanguage
 {
-    public required string Code { get; set; }
+    public string Code { get; private set; }
 
     public ICollection<Quiz> Quizzes { get; set; } = [];
+
+    public QuizLanguage(string code)
+    {
+        Code = code;
+    }
 }

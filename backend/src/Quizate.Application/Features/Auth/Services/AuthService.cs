@@ -28,15 +28,10 @@ public class AuthService(
         if (isUserExist)
             return Result.Failure("User already exist.");
 
-        var user = new User
-        {
-            Username = request.Username,
-            Email = normalizedEmail,
-            PasswordHash = "init"
-        };
+        var user = new User(normalizedUsername, "password_placeholder", normalizedEmail);
 
         string hashedPassword = passwordHasher.HashPassword(user, request.Password);
-        user.PasswordHash = hashedPassword;
+        user.UpdatePasswordHash(hashedPassword);
 
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
@@ -56,18 +51,20 @@ public class AuthService(
         if (user == null)
             return Result<AuthTokens>.Failure("Invalid username/email or password.");
 
-        var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+        var passwordResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
-        if (result == PasswordVerificationResult.Failed)
+        if (passwordResult == PasswordVerificationResult.Failed)
             return Result<AuthTokens>.Failure("Invalid username/email or password.");
 
+        var accessToken = TokenProvider.CreateJwtToken(user, configuration);
         var (refreshToken, rawToken) = TokenProvider.CreateRefreshToken(user.Id, configuration);
+
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
         return Result<AuthTokens>.Success(new AuthTokens
         {
-            AccessToken = TokenProvider.CreateJwtToken(user, configuration),
+            AccessToken = accessToken,
             RefreshToken = rawToken
         });
     }
@@ -86,6 +83,7 @@ public class AuthService(
         if (existing == null || existing.IsExpired)
             return Result<AuthTokens>.Failure(["Invalid refresh token."]);
 
+        var accessToken = TokenProvider.CreateJwtToken(existing.User, configuration);
         var (newRefreshToken, rawToken) = TokenProvider.CreateRefreshToken(existing.UserId, configuration);
 
         dbContext.RefreshTokens.Add(newRefreshToken);
@@ -94,7 +92,7 @@ public class AuthService(
 
         return Result<AuthTokens>.Success(new AuthTokens
         {
-            AccessToken = TokenProvider.CreateJwtToken(existing.User, configuration),
+            AccessToken = accessToken,
             RefreshToken = rawToken
         });
     }

@@ -4,13 +4,21 @@ namespace Quizate.Domain.Entities.Questions;
 
 public class Question
 {
-    public int Id { get; set; }
+    public int Id { get; private set; }
 
-    public Quiz Quiz { get; set; } = null!;
-    public Guid QuizId { get; set; }
+    public Quiz Quiz { get; private set; } = null!;
+    public Guid QuizId { get; private set; }
 
-    public required string QuestionTypeName { get; set; }
+    public string QuestionTypeName { get; private set; }
     public QuestionType QuestionType { get; set; } = null!;
 
-    public required string Payload { get; set; }
+    public string Payload { get; set; }
+
+    public Question(Guid quizId, string questionTypeName, string payload, int id = default)
+    {
+        Id = id;
+        QuizId = quizId;
+        QuestionTypeName = questionTypeName;
+        Payload = payload;
+    }
 }
