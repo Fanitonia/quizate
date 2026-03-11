@@ -16,6 +16,14 @@ public class AuthService(
     IPasswordHasher<User> passwordHasher,
     IConfiguration configuration) : IAuthService
 {
+    private readonly JwtSettings jwtSettings = new()
+    {
+        SecretKey = configuration.GetValue<string>("Jwt:SecretKey")!,
+        ExpirationMinutes = configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
+        Issuer = configuration.GetValue<string>("Jwt:Issuer")!,
+        Audience = configuration.GetValue<string>("Jwt:Audience")!
+    };
+
     public async Task<Result> RegisterAsync(RegisterRequest request)
     {
         string normalizedUsername = request.Username.ToLowerInvariant();
@@ -56,8 +64,8 @@ public class AuthService(
         if (passwordResult == PasswordVerificationResult.Failed)
             return Result<AuthTokens>.Failure("Invalid username/email or password.");
 
-        var accessToken = TokenProvider.CreateJwtToken(user, configuration);
-        var (refreshToken, rawToken) = TokenProvider.CreateRefreshToken(user.Id, configuration);
+        var accessToken = TokenProvider.CreateJwtToken(user, jwtSettings);
+        var (refreshToken, rawToken) = TokenProvider.CreateRefreshToken(user.Id, configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"));
 
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
@@ -83,8 +91,9 @@ public class AuthService(
         if (existing == null || existing.IsExpired)
             return Result<AuthTokens>.Failure(["Invalid refresh token."]);
 
-        var accessToken = TokenProvider.CreateJwtToken(existing.User, configuration);
-        var (newRefreshToken, rawToken) = TokenProvider.CreateRefreshToken(existing.UserId, configuration);
+        var accessToken = TokenProvider.CreateJwtToken(existing.User, jwtSettings);
+        var (newRefreshToken, rawToken) = TokenProvider.CreateRefreshToken(existing.UserId,
+            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"));
 
         dbContext.RefreshTokens.Add(newRefreshToken);
         dbContext.RefreshTokens.Remove(existing);

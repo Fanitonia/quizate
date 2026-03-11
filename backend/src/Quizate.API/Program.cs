@@ -24,18 +24,21 @@ public class Program
             if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.MapOpenApi();
-                app.UseSwaggerUI(options =>
-                {
-                    options.SwaggerEndpoint("/openapi/v1.json", "v1");
-                    options.RoutePrefix = string.Empty;
-                    options.EnablePersistAuthorization();
-                });
             }
             else
             {
                 app.UseExceptionHandler();
             }
+
+            // şimdilik böyle
+            app.MapOpenApi();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/openapi/v1.json", "v1");
+                options.RoutePrefix = string.Empty;
+                options.EnablePersistAuthorization();
+            });
+
 
             app.UseHttpsRedirection();
 

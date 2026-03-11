@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.JsonWebTokens;
+﻿using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Quizate.Application.Features.Auth.DTOs;
 using Quizate.Domain.Entities.Users;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -10,7 +10,7 @@ namespace Quizate.Application.Features.Auth.Helpers;
 
 internal static class TokenProvider
 {
-    public static string CreateJwtToken(User user, IConfiguration configuration)
+    public static string CreateJwtToken(User user, JwtSettings jwtSettings)
     {
         var claims = new List<Claim>
             {
@@ -20,16 +20,16 @@ internal static class TokenProvider
             };
 
         var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:SecretKey")!));
+            Encoding.UTF8.GetBytes(jwtSettings.SecretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes")),
+            Expires = DateTime.UtcNow.AddMinutes(jwtSettings.ExpirationMinutes),
             SigningCredentials = credentials,
-            Issuer = configuration.GetValue<string>("Jwt:Issuer"),
-            Audience = configuration.GetValue<string>("Jwt:Audience"),
+            Issuer = jwtSettings.Issuer,
+            Audience = jwtSettings.Audience,
         };
 
         var handler = new JsonWebTokenHandler();
@@ -37,7 +37,7 @@ internal static class TokenProvider
         return handler.CreateToken(tokenDescriptor);
     }
 
-    public static (RefreshToken, string rawToken) CreateRefreshToken(Guid userId, IConfiguration configuration)
+    public static (RefreshToken, string rawToken) CreateRefreshToken(Guid userId, int expirationDays)
     {
         string rawToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
 
@@ -45,7 +45,7 @@ internal static class TokenProvider
             (new RefreshToken(
                 Sha256Hasher.ComputeHash(rawToken),
                 userId,
-                DateTime.UtcNow.AddDays(configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"))),
+                DateTime.UtcNow.AddDays(expirationDays)),
             rawToken);
     }
 }
