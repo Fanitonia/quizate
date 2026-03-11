@@ -2,23 +2,24 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizate.Domain.Entities.Users;
 
-namespace Quizate.Persistence.Configurations.Users;
+namespace Quizate.Persistence.EntityConfigurations.Users;
 
 internal class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> entity)
     {
         entity.Property(u => u.Username)
-            .HasMaxLength(25);
+            .HasMaxLength(25)
+            .IsRequired();
+
+        entity.HasIndex(u => u.Username)
+            .IsUnique();
 
         entity.Property(u => u.NormalizedUsername)
             .HasMaxLength(25)
             .HasComputedColumnSql("lower(username)", stored: true);
 
         entity.HasIndex(u => u.NormalizedUsername)
-            .IsUnique();
-
-        entity.HasIndex(u => u.Username)
             .IsUnique();
 
         entity.Property(u => u.Email)
@@ -29,6 +30,12 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 
         entity.Property(u => u.ProfilePictureUrl)
             .HasMaxLength(1024);
+
+        entity.Property(u => u.PasswordHash)
+            .IsRequired();
+
+        entity.Property(u => u.Role)
+            .IsRequired();
 
         entity.ToTable(t =>
         {

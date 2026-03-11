@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizate.Domain.Entities.Questions;
 
-namespace Quizate.Persistence.Configurations.Questions;
+namespace Quizate.Persistence.EntityConfigurations.Questions;
 
 internal class QuestionTypeConfiguration : IEntityTypeConfiguration<QuestionType>
 {

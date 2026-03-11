@@ -1,5 +1,8 @@
 ﻿namespace Quizate.Domain.Entities.Questions.QuestionTypes;
 
+/// <summary>
+/// Represents the payload for a multiple-choice question. stored as JSON in the Question.Payload property
+/// </summary>
 public class MultipleChoiceQuestionPayload
 {
     public required string Title { get; set; }

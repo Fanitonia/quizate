@@ -2,14 +2,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizate.Domain.Entities.Quizzes;
 
-namespace Quizate.Persistence.Configurations.Quizzes;
+namespace Quizate.Persistence.EntityConfigurations.Quizzes;
 
 internal class QuizConfiguration : IEntityTypeConfiguration<Quiz>
 {
     public void Configure(EntityTypeBuilder<Quiz> entity)
     {
         entity.Property(q => q.Title)
-            .HasMaxLength(100);
+            .HasMaxLength(100)
+            .IsRequired();
 
         entity.Property(q => q.Description)
             .HasMaxLength(400);

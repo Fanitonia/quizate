@@ -8,11 +8,11 @@ public class QuizAttempt
 
     public DateTime CreatedAt { get; private set; }
 
-    public User? User { get; set; }
     public Guid? UserId { get; private set; }
+    public User? User { get; set; }
 
-    public Quiz Quiz { get; set; } = null!;
     public Guid QuizId { get; private set; }
+    public Quiz Quiz { get; set; } = null!;
 
     public int Score { get; private set; }
 

@@ -9,18 +9,18 @@ using Quizate.Persistence;
 
 #nullable disable
 
-namespace Quizate.Data.Migrations
+namespace Quizate.Persistence.Migrations
 {
     [DbContext(typeof(QuizateDbContext))]
-    [Migration("20260307211151_DatabaseRedesignAndMigrationReset")]
-    partial class DatabaseRedesignAndMigrationReset
+    [Migration("20260311192445_DatabaseRedesignAndMigrationRese")]
+    partial class DatabaseRedesignAndMigrationRese
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.3")
+                .HasAnnotation("ProductVersion", "10.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -44,7 +44,7 @@ namespace Quizate.Data.Migrations
                     b.ToTable("quiz_quiz_topic", (string)null);
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.Question", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Questions.Question", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,7 +88,7 @@ namespace Quizate.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuestionType", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Questions.QuestionType", b =>
                 {
                     b.Property<string>("Name")
                         .HasMaxLength(20)
@@ -120,7 +120,7 @@ namespace Quizate.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.Quiz", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Quizzes.Quiz", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -192,7 +192,7 @@ namespace Quizate.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuizAttempt", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Quizzes.QuizAttempt", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -242,7 +242,7 @@ namespace Quizate.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuizLanguage", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Quizzes.QuizLanguage", b =>
                 {
                     b.Property<string>("Code")
                         .HasMaxLength(10)
@@ -261,7 +261,7 @@ namespace Quizate.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuizTopic", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Quizzes.QuizTopic", b =>
                 {
                     b.Property<string>("Name")
                         .HasMaxLength(25)
@@ -273,7 +273,8 @@ namespace Quizate.Data.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
                         .HasColumnName("description");
 
                     b.Property<string>("DisplayName")
@@ -306,7 +307,7 @@ namespace Quizate.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.RefreshToken", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Users.RefreshToken", b =>
                 {
                     b.Property<string>("TokenHash")
                         .HasColumnType("text")
@@ -336,7 +337,7 @@ namespace Quizate.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.User", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -432,14 +433,14 @@ namespace Quizate.Data.Migrations
 
             modelBuilder.Entity("QuizQuizTopic", b =>
                 {
-                    b.HasOne("Quizate.Data.Models.Quiz", null)
+                    b.HasOne("Quizate.Domain.Entities.Quizzes.Quiz", null)
                         .WithMany()
                         .HasForeignKey("QuizzesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_quiz_quiz_topic_quizzes_quizzes_id");
 
-                    b.HasOne("Quizate.Data.Models.QuizTopic", null)
+                    b.HasOne("Quizate.Domain.Entities.Quizzes.QuizTopic", null)
                         .WithMany()
                         .HasForeignKey("TopicsName")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -447,16 +448,16 @@ namespace Quizate.Data.Migrations
                         .HasConstraintName("fk_quiz_quiz_topic_quiz_topics_topics_name");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.Question", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Questions.Question", b =>
                 {
-                    b.HasOne("Quizate.Data.Models.QuestionType", "QuestionType")
+                    b.HasOne("Quizate.Domain.Entities.Questions.QuestionType", "QuestionType")
                         .WithMany("Questions")
                         .HasForeignKey("QuestionTypeName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_questions_question_types_question_type_name");
 
-                    b.HasOne("Quizate.Data.Models.Quiz", "Quiz")
+                    b.HasOne("Quizate.Domain.Entities.Quizzes.Quiz", "Quiz")
                         .WithMany("Questions")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -468,14 +469,14 @@ namespace Quizate.Data.Migrations
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.Quiz", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Quizzes.Quiz", b =>
                 {
-                    b.HasOne("Quizate.Data.Models.User", "Creator")
+                    b.HasOne("Quizate.Domain.Entities.Users.User", "Creator")
                         .WithMany("Quizzes")
                         .HasForeignKey("CreatorId")
                         .HasConstraintName("fk_quizzes_users_creator_id");
 
-                    b.HasOne("Quizate.Data.Models.QuizLanguage", "Language")
+                    b.HasOne("Quizate.Domain.Entities.Quizzes.QuizLanguage", "Language")
                         .WithMany("Quizzes")
                         .HasForeignKey("LanguageCode")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -487,16 +488,16 @@ namespace Quizate.Data.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuizAttempt", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Quizzes.QuizAttempt", b =>
                 {
-                    b.HasOne("Quizate.Data.Models.Quiz", "Quiz")
+                    b.HasOne("Quizate.Domain.Entities.Quizzes.Quiz", "Quiz")
                         .WithMany("Attempts")
                         .HasForeignKey("QuizId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_quiz_attempts_quizzes_quiz_id");
 
-                    b.HasOne("Quizate.Data.Models.User", "User")
+                    b.HasOne("Quizate.Domain.Entities.Users.User", "User")
                         .WithMany("QuizAttempts")
                         .HasForeignKey("UserId")
                         .HasConstraintName("fk_quiz_attempts_users_user_id");
@@ -506,9 +507,9 @@ namespace Quizate.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.RefreshToken", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Users.RefreshToken", b =>
                 {
-                    b.HasOne("Quizate.Data.Models.User", "User")
+                    b.HasOne("Quizate.Domain.Entities.Users.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -518,24 +519,24 @@ namespace Quizate.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuestionType", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Questions.QuestionType", b =>
                 {
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.Quiz", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Quizzes.Quiz", b =>
                 {
                     b.Navigation("Attempts");
 
                     b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.QuizLanguage", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Quizzes.QuizLanguage", b =>
                 {
                     b.Navigation("Quizzes");
                 });
 
-            modelBuilder.Entity("Quizate.Data.Models.User", b =>
+            modelBuilder.Entity("Quizate.Domain.Entities.Users.User", b =>
                 {
                     b.Navigation("QuizAttempts");
 

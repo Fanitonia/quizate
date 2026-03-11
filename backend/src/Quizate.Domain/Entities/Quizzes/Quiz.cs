@@ -5,20 +5,20 @@ namespace Quizate.Domain.Entities.Quizzes;
 
 public class Quiz
 {
-    public Guid Id { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public Guid Id { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
 
+    public Guid? CreatorId { get; private set; }
     public User? Creator { get; set; }
-    public Guid? CreatorId { get; set; }
 
-    public string LanguageCode { get; set; }
+    public string LanguageCode { get; private set; }
     public QuizLanguage Language { get; set; } = null!;
 
-    public string Title { get; set; }
-    public string? Description { get; set; }
-    public string? ThumbnailUrl { get; set; }
-    public bool IsPublic { get; set; }
+    public string Title { get; private set; }
+    public string? Description { get; private set; }
+    public string? ThumbnailUrl { get; private set; }
+    public bool IsPublic { get; private set; }
 
     public ICollection<Question> Questions { get; set; } = [];
     public ICollection<QuizTopic> Topics { get; set; } = [];

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Quizate.Persistence.DependencyInjection;
 
-public static class PersistenceServiceCollectionExtensions
+public static class PersistenceDependencyInjectionExtension
 {
     public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
     {

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizate.Domain.Entities.Users;
 
-namespace Quizate.Persistence.Configurations.Users;
+namespace Quizate.Persistence.EntityConfigurations.Users;
 
 internal class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 {

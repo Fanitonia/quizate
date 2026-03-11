@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Quizate.Data.Migrations
+namespace Quizate.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class DatabaseRedesignAndMigrationReset : Migration
+    public partial class DatabaseRedesignAndMigrationRese : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,7 +45,7 @@ namespace Quizate.Data.Migrations
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     display_name = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false),
-                    description = table.Column<string>(type: "text", nullable: true)
+                    description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {

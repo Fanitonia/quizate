@@ -5,7 +5,7 @@ namespace Quizate.Domain.Entities.Users;
 
 public class User
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
@@ -16,7 +16,7 @@ public class User
     public string PasswordHash { get; private set; }
     public UserRole Role { get; private set; }
     public string? ProfilePictureUrl { get; private set; }
-    public bool IsDeleted { get; private set; } = false;
+    public bool IsDeleted { get; private set; }
 
     public ICollection<Quiz> Quizzes { get; set; } = [];
     public ICollection<QuizAttempt> QuizAttempts { get; set; } = [];
@@ -40,6 +40,7 @@ public class User
         Id = id == default ? Guid.NewGuid() : id;
         CreatedAt = createdAt == default ? DateTime.UtcNow : createdAt;
         UpdatedAt = updatedAt == default ? DateTime.UtcNow : updatedAt;
+        IsDeleted = false;
     }
 
     public void UpdateUsername(string username)
