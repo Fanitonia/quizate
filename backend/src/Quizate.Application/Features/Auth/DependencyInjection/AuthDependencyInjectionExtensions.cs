@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Quizate.Application.Features.Auth.DependencyInjection;
 
-internal static class AuthServiceCollectionExtensions
+internal static class AuthDependencyInjectionExtensions
 {
     public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
     {

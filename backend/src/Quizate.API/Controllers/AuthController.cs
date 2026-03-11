@@ -15,8 +15,7 @@ public class AuthController(
     ICookieService cookieService,
     IConfiguration configuration) : ControllerBase
 {
-    //TODO: password resetleme, email doğrulama, account silme, account güncelleme...
-
+    //TODO: password resetleme, email doğrulama...
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
@@ -28,7 +27,17 @@ public class AuthController(
             return ValidationProblem();
         }
 
-        return Ok();
+        cookieService.SetRefreshTokenCookie(
+            result.Value!.RefreshToken,
+            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
+            Response);
+
+        cookieService.SetAccessTokenCookie(
+            result.Value.AccessToken,
+            configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
+            Response);
+
+        return Created();
     }
 
     [HttpPost("login")]

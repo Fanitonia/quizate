@@ -6,7 +6,7 @@ using Quizate.Application.Features.Users.DependencyInjection;
 
 namespace Quizate.Application.DependencyInjection;
 
-public static class ApplicationServiceCollectionExtensions
+public static class ApplicationDependencyInjectionExtension
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {

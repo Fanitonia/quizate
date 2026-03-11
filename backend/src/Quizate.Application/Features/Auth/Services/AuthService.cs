@@ -24,7 +24,7 @@ public class AuthService(
         Audience = configuration.GetValue<string>("Jwt:Audience")!
     };
 
-    public async Task<Result> RegisterAsync(RegisterRequest request)
+    public async Task<Result<AuthTokens>> RegisterAsync(RegisterRequest request)
     {
         string normalizedUsername = request.Username.ToLowerInvariant();
         string? normalizedEmail = request.Email?.ToLowerInvariant();
@@ -34,9 +34,9 @@ public class AuthService(
             || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
-            return Result.Failure("User already exist.");
+            return Result<AuthTokens>.Failure("User already exist.");
 
-        var user = new User(normalizedUsername, "password_placeholder", normalizedEmail);
+        var user = new User(request.Username, "password_placeholder", normalizedEmail);
 
         string hashedPassword = passwordHasher.HashPassword(user, request.Password);
         user.UpdatePasswordHash(hashedPassword);
@@ -44,7 +44,15 @@ public class AuthService(
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync();
 
-        return Result.Success();
+        var accesToken = TokenProvider.CreateJwtToken(user, jwtSettings);
+        var (refreshToken, rawRefreshToken) = TokenProvider.CreateRefreshToken(user.Id,
+            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"));
+
+        return Result<AuthTokens>.Success(new AuthTokens
+        {
+            AccessToken = accesToken,
+            RefreshToken = rawRefreshToken
+        });
     }
 
     public async Task<Result<AuthTokens>> LoginAsync(LoginRequest request)
@@ -65,7 +73,8 @@ public class AuthService(
             return Result<AuthTokens>.Failure("Invalid username/email or password.");
 
         var accessToken = TokenProvider.CreateJwtToken(user, jwtSettings);
-        var (refreshToken, rawToken) = TokenProvider.CreateRefreshToken(user.Id, configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"));
+        var (refreshToken, rawToken) = TokenProvider.CreateRefreshToken(user.Id,
+            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"));
 
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
