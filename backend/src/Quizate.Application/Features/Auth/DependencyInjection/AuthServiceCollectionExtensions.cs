@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Quizate.Application.Features.Auth.Interfaces;
 using Quizate.Application.Features.Auth.Services;
-using Quizate.Core.Entities.Users;
+using Quizate.Domain.Entities.Users;
 using System.Text;
 
 namespace Quizate.Application.Features.Auth.DependencyInjection;

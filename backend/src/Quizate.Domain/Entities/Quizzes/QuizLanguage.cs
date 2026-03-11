@@ -1,4 +1,4 @@
-﻿namespace Quizate.Core.Entities.Quizzes;
+﻿namespace Quizate.Domain.Entities.Quizzes;
 
 public class QuizLanguage
 {

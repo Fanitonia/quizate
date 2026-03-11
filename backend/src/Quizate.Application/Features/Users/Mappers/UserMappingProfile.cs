@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Quizate.Application.Features.Users.DTOs.Responses;
-using Quizate.Core.Entities.Users;
+using Quizate.Domain.Entities.Users;
 
 namespace Quizate.Application.Features.Users.Mappers;
 

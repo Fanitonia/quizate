@@ -6,7 +6,7 @@ using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Auth.Helpers;
 using Quizate.Application.Features.Auth.Interfaces;
 using Quizate.Application.Shared.Result;
-using Quizate.Core.Entities.Users;
+using Quizate.Domain.Entities.Users;
 using Quizate.Persistence;
 
 namespace Quizate.Application.Features.Auth.Services;

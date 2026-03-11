@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Quizate.Core\Quizate.Core.csproj" />
+    <ProjectReference Include="..\Quizate.Domain\Quizate.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Quizate.Core.Entities.Users;
+using Quizate.Domain.Entities.Users;
 
 namespace Quizate.Persistence.Configurations.Users;
 

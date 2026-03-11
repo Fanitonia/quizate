@@ -1,4 +1,4 @@
-﻿namespace Quizate.Core.Enums;
+﻿namespace Quizate.Domain.Enums;
 
 public enum UserRole
 {

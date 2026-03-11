@@ -1,4 +1,4 @@
-using Quizate.Core.Entities.Questions;
+using Quizate.Domain.Entities.Questions;
 
 public class QuestionType
 {

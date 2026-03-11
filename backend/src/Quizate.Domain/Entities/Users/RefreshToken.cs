@@ -1,4 +1,4 @@
-﻿namespace Quizate.Core.Entities.Users;
+﻿namespace Quizate.Domain.Entities.Users;
 
 public class RefreshToken
 {

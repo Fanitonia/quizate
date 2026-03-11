@@ -6,7 +6,7 @@
   <Folder Name="/src/">
     <Project Path="src/Quizate.API/Quizate.API.csproj" />
     <Project Path="src/Quizate.Application/Quizate.Application.csproj" Id="a71f8438-82d0-4cd6-bbd5-0c2476bda65e" />
-    <Project Path="src/Quizate.Core/Quizate.Core.csproj" />
+    <Project Path="src/Quizate.Domain/Quizate.Domain.csproj" />
     <Project Path="src/Quizate.Persistence/Quizate.Persistence.csproj" />
   </Folder>
 </Solution>

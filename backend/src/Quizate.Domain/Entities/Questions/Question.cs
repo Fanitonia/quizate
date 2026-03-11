@@ -1,6 +1,6 @@
-using Quizate.Core.Entities.Quizzes;
+using Quizate.Domain.Entities.Quizzes;
 
-namespace Quizate.Core.Entities.Questions;
+namespace Quizate.Domain.Entities.Questions;
 
 public class Question
 {

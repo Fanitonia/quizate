@@ -1,6 +1,6 @@
-﻿using Quizate.Core.Entities.Users;
+﻿using Quizate.Domain.Entities.Users;
 
-namespace Quizate.Core.Entities.Quizzes;
+namespace Quizate.Domain.Entities.Quizzes;
 
 public class QuizAttempt
 {

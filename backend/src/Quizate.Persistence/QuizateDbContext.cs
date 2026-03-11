@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Quizate.Core.Entities.Questions;
-using Quizate.Core.Entities.Quizzes;
-using Quizate.Core.Entities.Users;
+using Quizate.Domain.Entities.Questions;
+using Quizate.Domain.Entities.Quizzes;
+using Quizate.Domain.Entities.Users;
 using Quizate.Persistence.Seed;
 
 namespace Quizate.Persistence;

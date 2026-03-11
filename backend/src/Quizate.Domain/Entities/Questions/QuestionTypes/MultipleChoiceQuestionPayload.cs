@@ -1,4 +1,4 @@
-﻿namespace Quizate.Core.Entities.Questions.QuestionTypes;
+﻿namespace Quizate.Domain.Entities.Questions.QuestionTypes;
 
 public class MultipleChoiceQuestionPayload
 {

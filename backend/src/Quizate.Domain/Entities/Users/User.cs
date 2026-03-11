@@ -1,7 +1,7 @@
-using Quizate.Core.Entities.Quizzes;
-using Quizate.Core.Enums;
+using Quizate.Domain.Entities.Quizzes;
+using Quizate.Domain.Enums;
 
-namespace Quizate.Core.Entities.Users;
+namespace Quizate.Domain.Entities.Users;
 
 public class User
 {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
 using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Auth.Interfaces;
-using Quizate.Core.Enums;
+using Quizate.Domain.Enums;
 using System.Security.Claims;
 
 namespace Quizate.API.Controllers;
