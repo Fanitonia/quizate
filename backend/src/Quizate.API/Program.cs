@@ -48,6 +48,8 @@ public class Program
 
             app.MapControllers();
 
+            app.UseCors();
+
             await app.MigrateDatabaseAsync();
 
 

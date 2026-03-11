@@ -28,8 +28,18 @@ internal static class APIDependencyInjectionExtension
 
         services.AddOpenApi(options =>
         {
-            options.AddDocumentTransformer<CookieSecurityDocumentTransformer>();
-            options.AddOperationTransformer<CookieSecurityOperationTransformer>();
+            options.AddDocumentTransformer<OpenApiDocumentTransformer>();
+            options.AddOperationTransformer<OpenApiSecurityOperationTransformer>();
+        });
+
+        services.AddCors(opt =>
+        {
+            opt.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyMethod()
+                      .AllowAnyHeader()
+                      .WithOrigins(new[] { "https://api.quizate.com/", "https://quizate.com/" });
+            });
         });
 
         return services;

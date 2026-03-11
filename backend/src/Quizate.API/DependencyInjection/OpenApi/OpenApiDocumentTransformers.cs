@@ -3,7 +3,7 @@ using Microsoft.OpenApi;
 
 namespace Quizate.API.DependencyInjection.OpenApi;
 
-internal class CookieSecurityDocumentTransformer : IOpenApiDocumentTransformer
+internal class OpenApiDocumentTransformer : IOpenApiDocumentTransformer
 {
     public Task TransformAsync(
         OpenApiDocument document,

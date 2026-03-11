@@ -4,7 +4,7 @@ using Microsoft.OpenApi;
 
 namespace Quizate.API.DependencyInjection.OpenApi;
 
-internal class CookieSecurityOperationTransformer : IOpenApiOperationTransformer
+internal class OpenApiSecurityOperationTransformer : IOpenApiOperationTransformer
 {
     public Task TransformAsync(
         OpenApiOperation operation,
