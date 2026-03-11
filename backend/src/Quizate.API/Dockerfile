@@ -15,7 +15,7 @@ WORKDIR /src
 COPY ["Directory.Packages.props", "."]
 COPY ["src/Quizate.API/Quizate.API.csproj", "src/Quizate.API/"]
 COPY ["src/Quizate.Application/Quizate.Application.csproj", "src/Quizate.Application/"]
-COPY ["src/Quizate.Core/Quizate.Core.csproj", "src/Quizate.Core/"]
+COPY ["src/Quizate.Domain/Quizate.Domain.csproj", "src/Quizate.Domain/"]
 COPY ["src/Quizate.Persistence/Quizate.Persistence.csproj", "src/Quizate.Persistence/"]
 RUN dotnet restore "./src/Quizate.API/Quizate.API.csproj"
 COPY . .
