@@ -24,7 +24,7 @@ public class CookieService : ICookieService
             SameSite = SameSiteMode.Strict,
             Secure = true,
             Expires = DateTime.UtcNow.AddDays(expirationDays),
-            Path = "/auth/refreshToken"
+            Path = "/auth"
         });
     }
 
@@ -37,7 +37,7 @@ public class CookieService : ICookieService
     {
         response.Cookies.Delete("REFRESH_TOKEN", new CookieOptions
         {
-            Path = "/auth/refreshToken"
+            Path = "/auth"
         });
     }
 }

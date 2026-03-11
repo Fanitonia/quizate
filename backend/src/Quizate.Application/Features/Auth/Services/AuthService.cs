@@ -86,11 +86,25 @@ public class AuthService(
         });
     }
 
-    public async Task<Result<AuthTokens>> RefreshAccessTokenAsync(string? refreshToken)
+    public async Task<Result> LogoutAsync(string refreshToken)
     {
-        if (string.IsNullOrEmpty(refreshToken))
-            return Result<AuthTokens>.Failure(["Could not find a refresh token."]);
+        var refreshTokenHash = Sha256Hasher.ComputeHash(refreshToken);
 
+        var refreshTokenEntity = await dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.TokenHash == refreshTokenHash);
+
+        if (refreshTokenEntity != null)
+        {
+            dbContext.RefreshTokens.Remove(refreshTokenEntity);
+            await dbContext.SaveChangesAsync();
+
+            return Result.Success();
+        }
+
+        return Result.Failure("Invalid refresh token.");
+    }
+
+    public async Task<Result<AuthTokens>> RefreshAccessTokenAsync(string refreshToken)
+    {
         var refreshTokenHash = Sha256Hasher.ComputeHash(refreshToken);
 
         var existing = await dbContext.RefreshTokens

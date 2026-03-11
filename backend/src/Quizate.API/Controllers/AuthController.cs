@@ -64,10 +64,34 @@ public class AuthController(
         return Ok();
     }
 
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<ActionResult> Logout()
+    {
+        Request.Cookies.TryGetValue("REFRESH_TOKEN", out var refreshToken);
+
+        if (refreshToken == null)
+            return Unauthorized();
+
+        var result = await authService.LogoutAsync(refreshToken);
+
+        if (result.IsFailure)
+            return Unauthorized();
+
+        cookieService.RemoveRefreshTokenCookie(Response);
+        cookieService.RemoveAccessTokenCookie(Response);
+
+        return Ok();
+    }
+
+
     [HttpPost("refreshToken")]
     public async Task<ActionResult> RefreshToken()
     {
         Request.Cookies.TryGetValue("REFRESH_TOKEN", out var refreshToken);
+
+        if (refreshToken == null)
+            return Unauthorized();
 
         var result = await authService.RefreshAccessTokenAsync(refreshToken);
 

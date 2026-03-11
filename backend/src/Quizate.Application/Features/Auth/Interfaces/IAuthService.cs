@@ -8,6 +8,7 @@ public interface IAuthService
 {
     public Task<Result<AuthTokens>> RegisterAsync(RegisterRequest request);
     public Task<Result<AuthTokens>> LoginAsync(LoginRequest request);
-    public Task<Result<AuthTokens>> RefreshAccessTokenAsync(string? refreshToken);
+    public Task<Result> LogoutAsync(string refreshToken);
+    public Task<Result<AuthTokens>> RefreshAccessTokenAsync(string refreshToken);
     public Task<Result> RevokeRefreshTokensAsync(Guid userId);
 }
