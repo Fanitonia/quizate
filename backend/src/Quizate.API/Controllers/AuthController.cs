@@ -4,7 +4,6 @@ using Quizate.API.Extensions;
 using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Auth.Interfaces;
 using Quizate.Domain.Enums;
-using System.Security.Claims;
 
 namespace Quizate.API.Controllers;
 
@@ -73,13 +72,13 @@ public class AuthController(
         if (refreshToken == null)
             return Unauthorized();
 
-        var result = await authService.LogoutAsync(refreshToken);
+        var result = await authService.RevokeRefreshTokenAsync(refreshToken);
 
         if (result.IsFailure)
             return Unauthorized();
 
-        cookieService.RemoveRefreshTokenCookie(Response);
-        cookieService.RemoveAccessTokenCookie(Response);
+        cookieService.DeleteRefreshTokenCookie(Response);
+        cookieService.DeleteAccessTokenCookie(Response);
 
         return Ok();
     }
@@ -118,10 +117,8 @@ public class AuthController(
     [HttpDelete("refreshToken/{userId:guid}")]
     public async Task<ActionResult> RevokeRefreshTokens([FromRoute] Guid userId)
     {
-        string? currentUserIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (!Guid.TryParse(currentUserIdClaim, out Guid currentUserId))
-            return BadRequest();
+        if (!User.TryGetUserId(out Guid currentUserId))
+            return Unauthorized();
 
         bool isAdmin = User.IsInRole(UserRole.Admin.ToString());
         bool isSelf = currentUserId == userId;
@@ -129,7 +126,7 @@ public class AuthController(
         if (!isAdmin && !isSelf)
             return Forbid();
 
-        var result = await authService.RevokeRefreshTokensAsync(userId);
+        var result = await authService.RevokeAllRefreshTokensAsync(userId);
 
         if (result.IsFailure)
         {
@@ -138,8 +135,26 @@ public class AuthController(
         }
 
         if (isSelf)
-            cookieService.RemoveRefreshTokenCookie(Response);
+            cookieService.DeleteRefreshTokenCookie(Response);
 
         return NoContent();
+    }
+
+    [Authorize]
+    [HttpPost("changePassword")]
+    public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeRequest request, CancellationToken ct)
+    {
+        if (!User.TryGetUserId(out Guid userId))
+            return Unauthorized();
+
+        var result = await authService.ChangePasswordAsync(request, userId, ct);
+
+        if (result.IsFailure)
+        {
+            result.AddErrorsToModelState(ModelState, "changePasswordErrors");
+            return ValidationProblem();
+        }
+
+        return Ok();
     }
 }

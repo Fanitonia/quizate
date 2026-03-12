@@ -28,12 +28,12 @@ public class CookieService : ICookieService
         });
     }
 
-    public void RemoveAccessTokenCookie(HttpResponse response)
+    public void DeleteAccessTokenCookie(HttpResponse response)
     {
         response.Cookies.Delete("ACCESS_TOKEN");
     }
 
-    public void RemoveRefreshTokenCookie(HttpResponse response)
+    public void DeleteRefreshTokenCookie(HttpResponse response)
     {
         response.Cookies.Delete("REFRESH_TOKEN", new CookieOptions
         {
