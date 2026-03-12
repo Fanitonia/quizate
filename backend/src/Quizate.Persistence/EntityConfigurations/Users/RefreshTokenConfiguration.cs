@@ -14,5 +14,7 @@ internal class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken
         {
             t.HasCheckConstraint("ck_refresh_tokens_token_hash_not_empty", "char_length(trim(token_hash)) > 0");
         });
+
+        entity.HasQueryFilter(u => u.User.IsDeleted == false);
     }
 }

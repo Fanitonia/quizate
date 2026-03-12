@@ -43,5 +43,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             t.HasCheckConstraint("ck_users_password_hash_not_empty", "char_length(trim(password_hash)) > 0");
             t.HasCheckConstraint("ck_users_username_format", "username ~ '^[A-Za-z0-9_]+$'");
         });
+
+        entity.HasQueryFilter(u => u.IsDeleted == false);
     }
 }

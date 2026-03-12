@@ -84,7 +84,7 @@ public class AuthController(
     }
 
 
-    [HttpPost("refreshToken")]
+    [HttpPost("refresh-token")]
     public async Task<ActionResult> RefreshToken()
     {
         Request.Cookies.TryGetValue("REFRESH_TOKEN", out var refreshToken);
@@ -114,7 +114,7 @@ public class AuthController(
     }
 
     [Authorize]
-    [HttpDelete("refreshToken/{userId:guid}")]
+    [HttpDelete("refresh-token/{userId:guid}")]
     public async Task<ActionResult> RevokeRefreshTokens([FromRoute] Guid userId)
     {
         if (!User.TryGetUserId(out Guid currentUserId))
@@ -141,7 +141,7 @@ public class AuthController(
     }
 
     [Authorize]
-    [HttpPost("changePassword")]
+    [HttpPost("change-password")]
     public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeRequest request, CancellationToken ct)
     {
         if (!User.TryGetUserId(out Guid userId))
