@@ -9,6 +9,7 @@ internal static class QuizzesServiceCollectionExtensions
     public static IServiceCollection AddQuizServices(this IServiceCollection service)
     {
         service.AddScoped<IQuizService, QuizService>();
+        service.AddScoped<ITopicService, TopicService>();
 
         return service;
     }

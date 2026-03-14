@@ -14,7 +14,7 @@ public class AuthController(
     ICookieService cookieService,
     IConfiguration configuration) : ControllerBase
 {
-    //TODO: password resetleme, email doğrulama...
+    // onur
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
@@ -39,6 +39,7 @@ public class AuthController(
         return Created();
     }
 
+    // onur
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
@@ -63,6 +64,7 @@ public class AuthController(
         return Ok();
     }
 
+    // onur
     [Authorize]
     [HttpPost("logout")]
     public async Task<ActionResult> Logout()
@@ -80,7 +82,7 @@ public class AuthController(
         cookieService.DeleteRefreshTokenCookie(Response);
         cookieService.DeleteAccessTokenCookie(Response);
 
-        return Ok();
+        return NoContent();
     }
 
 
@@ -155,6 +157,12 @@ public class AuthController(
             return ValidationProblem();
         }
 
-        return Ok();
+        return NoContent();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<ActionResult> ResetPassword()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Quizzes.Interfaces;
@@ -11,6 +12,7 @@ namespace Quizate.API.Controllers;
 public class QuizController(
     IQuizService quizService) : ControllerBase
 {
+    // onur
     [HttpGet]
     public async Task<ActionResult<List<QuizResponse>>> GetQuizzes(
         [FromQuery] PaginationParameters pagination,
@@ -23,6 +25,7 @@ public class QuizController(
         return Ok(quizzes);
     }
 
+    // onur
     [HttpGet("{quizId:guid}")]
     public async Task<ActionResult<QuizResponse>> GetQuiz(Guid quizId, CancellationToken ct)
     {
@@ -34,6 +37,7 @@ public class QuizController(
         return Ok(quiz);
     }
 
+    // onur
     [HttpGet("{quizId:guid}/questions")]
     public async Task<ActionResult<QuizQuestionsResponse>> GetQuestions(Guid quizId, CancellationToken ct)
     {
@@ -43,5 +47,27 @@ public class QuizController(
             return NotFound();
 
         return Ok(questions);
+    }
+
+    // onur
+    [HttpPost]
+    public async Task<ActionResult> CreateQuiz()
+    {
+        throw new NotImplementedException();
+    }
+
+    // onur
+    [Authorize]
+    [HttpPatch("{quizId:guid}")]
+    public async Task<ActionResult> UpdateQuiz()
+    {
+        throw new NotImplementedException();
+    }
+
+    // onur
+    [HttpDelete("{quizId:guid}")]
+    public async Task<ActionResult> DeleteQuiz()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -18,12 +18,12 @@ internal static class AuthDependencyInjectionExtensions
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ICookieService, CookieService>();
-        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
         return services;
     }
 
-    internal static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
         services
             .AddAuthentication(options =>

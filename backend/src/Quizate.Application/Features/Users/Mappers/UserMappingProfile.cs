@@ -9,6 +9,6 @@ public class UserMappingProfile : Profile
     public UserMappingProfile()
     {
         CreateMap<User, UserInfoResponse>();
-        CreateMap<User, MyInfoResponse>();
+        CreateMap<User, DetailedUserInfoResponse>();
     }
 }

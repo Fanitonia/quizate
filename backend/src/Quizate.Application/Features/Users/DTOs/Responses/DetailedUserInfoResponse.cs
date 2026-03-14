@@ -1,6 +1,6 @@
 ﻿namespace Quizate.Application.Features.Users.DTOs.Responses;
 
-public class MyInfoResponse
+public class DetailedUserInfoResponse
 {
     public Guid Id { get; set; }
     public DateTime CreatedAt { get; set; }

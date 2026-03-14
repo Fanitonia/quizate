@@ -23,15 +23,15 @@ public class UserService(
         return Result<UserInfoResponse>.Success(mapper.Map<UserInfoResponse>(user));
     }
 
-    public async Task<Result<MyInfoResponse>> GetMyInfoAsync(Guid userId, CancellationToken ct)
+    public async Task<Result<DetailedUserInfoResponse>> GetMyInfoAsync(Guid userId, CancellationToken ct)
     {
         var user = await context.Users
             .FindAsync(new object[] { userId }, ct);
 
         if (user == null)
-            return Result<MyInfoResponse>.Failure("User not found.");
+            return Result<DetailedUserInfoResponse>.Failure("User not found.");
 
-        return Result<MyInfoResponse>.Success(mapper.Map<MyInfoResponse>(user));
+        return Result<DetailedUserInfoResponse>.Success(mapper.Map<DetailedUserInfoResponse>(user));
     }
 
     public async Task<Result> DeleteUserAsync(Guid userId, CancellationToken ct)

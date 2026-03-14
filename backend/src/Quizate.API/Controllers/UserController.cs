@@ -12,6 +12,14 @@ namespace Quizate.API.Controllers;
 [ApiController]
 public class UserController(IUserService userService) : ControllerBase
 {
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<ICollection<DetailedUserInfoResponse>>> GetAllUsers(CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    // onur
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<UserInfoResponse>> GetUser(Guid userId, CancellationToken ct)
     {
@@ -23,9 +31,31 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(result.Value);
     }
 
+    [HttpGet("{userId:guid}/quizzes")]
+    public async Task<ActionResult<ICollection<QuizResponse>>> GetUserQuizzes(Guid userId, CancellationToken ct)
+    {
+        throw new NotImplementedException();
+    }
+
+    // onur
+    [Authorize]
+    [HttpDelete("{userId:guid}")]
+    public async Task<ActionResult> DeleteUser(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    [Authorize]
+    [HttpPatch("{userId:guid}/role")]
+    public async Task<ActionResult> UpdateUserRole(Guid userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    // huseyin
     [Authorize]
     [HttpGet("me")]
-    public async Task<ActionResult<MyInfoResponse>> GetMe(CancellationToken ct)
+    public async Task<ActionResult<DetailedUserInfoResponse>> GetMe(CancellationToken ct)
     {
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
@@ -38,6 +68,7 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(result.Value);
     }
 
+    // huseyin
     [Authorize]
     [HttpPatch("me")]
     public async Task<ActionResult> UpdateMe([FromBody] UpdateMyInfoRequest request, CancellationToken ct)
@@ -54,6 +85,14 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [Authorize]
+    [HttpPatch("me/profile-picture")]
+    public async Task<ActionResult> UpdateUserProfilePicture()
+    {
+        throw new NotImplementedException();
+    }
+
+    // huseyin
+    [Authorize]
     [HttpDelete("me")]
     public async Task<ActionResult> DeleteMe(CancellationToken ct)
     {
@@ -68,6 +107,7 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok();
     }
 
+    // onur
     [Authorize]
     [HttpGet("me/quizzes")]
     public async Task<ActionResult<List<QuizResponse>>> GetMyQuizzes()
