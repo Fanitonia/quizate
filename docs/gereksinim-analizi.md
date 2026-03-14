@@ -6,6 +6,8 @@
 
 1. **Üye Olma** (Onur Güdeloğlu)
 
+1. **Çıkış Yapma** (Onur Güdeloğlu)
+
 1. **Kullanıcının Kendi Profiline Erişmesi** (Hüseyin Kahraman)
 
 1. **Kullanıcının Profilini Güncellemesi** (Hüseyin Kahraman)
@@ -22,11 +24,11 @@
 
 1. **Quizleri Listeleme** (Onur Güdeloğlu)
 
-1. **Quizleri Filtreleme** (Onur Güdeloğlu)
-
 1. **Bir Quiz'e Erişme** (Onur Güdeloğlu)
 
 1. **Bir Quiz'i Silme** (Onur Güdeloğlu)
+
+1. **Bir Quiz'in Sorularını Alma** (Onur Güdeloğlu)
 
 1. **Bir Quiz'in Detaylarını Güncelleme** (Onur Güdeloğlu)
 
@@ -41,15 +43,6 @@
 1. **Quiz Konu Başlığı (Topic) Silme (Sadece Admin)** (Hüseyin Kahraman)
 
 1. **Quiz Konu Başlığı (Topic) Güncelleme (Sadece Admin)** (Hüseyin Kahraman)
-
-1. **Quiz Tiplerini Listeleme** (Onur Güdeloğlu)
-
-1. **Quiz Tipi Ekleme (Sadece Admin)** (Onur Güdeloğlu)
-
-1. **Quiz Tipi Güncelleme (Sadece Admin)** (Onur Güdeloğlu)
-
-1. **Quiz Tipi Silme (Sadece Admin)** (Onur Güdeloğlu)
-
 
 # Gereksinim Dağılımları
 
