@@ -17,7 +17,6 @@ internal static class AuthDependencyInjectionExtensions
         services.AddJwtAuthentication(configuration);
 
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<ICookieService, CookieService>();
         services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
 
         return services;

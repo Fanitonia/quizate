@@ -125,12 +125,18 @@ public class UserController(
     // onur
     [Authorize]
     [HttpGet("me/quizzes")]
-    public async Task<ActionResult<List<QuizResponse>>> GetMyQuizzes()
+    public async Task<ActionResult<List<QuizResponse>>> GetMyQuizzes(
+        [FromQuery] PaginationParameters pagination, CancellationToken ct)
     {
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        throw new NotImplementedException();
+        var (result, paginationMetadata) = await quizService.GetQuizzesAsync(pagination, ct, userId);
+
+        Response.Headers.Append("X-Pagination", paginationMetadata.SerializeWithCamelCasing());
+
+        return Ok(result);
+
     }
 
     [Authorize]

@@ -11,7 +11,6 @@ namespace Quizate.API.Controllers;
 [ApiController]
 public class AuthController(
     IAuthService authService,
-    ICookieService cookieService,
     IConfiguration configuration) : ControllerBase
 {
     // onur
@@ -26,15 +25,8 @@ public class AuthController(
             return ValidationProblem();
         }
 
-        cookieService.SetRefreshTokenCookie(
-            result.Value!.RefreshToken,
-            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
-            Response);
-
-        cookieService.SetAccessTokenCookie(
-            result.Value.AccessToken,
-            configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
-            Response);
+        Response.SetCookie(Cookies.AccessToken, result.Value!.AccessToken, configuration);
+        Response.SetCookie(Cookies.RefreshToken, result.Value!.RefreshToken, configuration);
 
         return Created();
     }
@@ -51,15 +43,8 @@ public class AuthController(
             return ValidationProblem();
         }
 
-        cookieService.SetRefreshTokenCookie(
-            result.Value!.RefreshToken,
-            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
-            Response);
-
-        cookieService.SetAccessTokenCookie(
-            result.Value.AccessToken,
-            configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
-            Response);
+        Response.SetCookie(Cookies.AccessToken, result.Value!.AccessToken, configuration);
+        Response.SetCookie(Cookies.RefreshToken, result.Value!.RefreshToken, configuration);
 
         return Ok();
     }
@@ -79,8 +64,8 @@ public class AuthController(
         if (result.IsFailure)
             return Unauthorized();
 
-        cookieService.DeleteRefreshTokenCookie(Response);
-        cookieService.DeleteAccessTokenCookie(Response);
+        Response.DeleteCookie(Cookies.AccessToken);
+        Response.DeleteCookie(Cookies.RefreshToken);
 
         return NoContent();
     }
@@ -102,15 +87,8 @@ public class AuthController(
             return ValidationProblem();
         }
 
-        cookieService.SetRefreshTokenCookie(
-            result.Value!.RefreshToken,
-            configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"),
-            Response);
-
-        cookieService.SetAccessTokenCookie(
-            result.Value.AccessToken,
-            configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes"),
-            Response);
+        Response.SetCookie(Cookies.AccessToken, result.Value!.AccessToken, configuration);
+        Response.SetCookie(Cookies.RefreshToken, result.Value!.RefreshToken, configuration);
 
         return Ok();
     }
@@ -137,7 +115,7 @@ public class AuthController(
         }
 
         if (isSelf)
-            cookieService.DeleteRefreshTokenCookie(Response);
+            Response.DeleteCookie(Cookies.RefreshToken);
 
         return NoContent();
     }

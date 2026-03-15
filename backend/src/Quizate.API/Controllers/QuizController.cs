@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Quizate.API.Extensions;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Quizzes.Interfaces;
 using Quizate.Application.Shared.Pagination;
@@ -21,7 +22,7 @@ public class QuizController(
     {
         var (quizzes, paginationMetadata) = await quizService.GetQuizzesAsync(pagination, ct, userId);
 
-        Response.Headers.Append("X-Pagination", paginationMetadata.SerializeWithCamelCasing());
+        Response.SetHeader(Headers.XPagination, paginationMetadata.SerializeWithCamelCasing());
 
         return Ok(quizzes);
     }
