@@ -7,7 +7,8 @@ public interface IQuizService
 {
     public Task<(IEnumerable<QuizResponse>, PaginationMetadata)> GetQuizzesAsync(
         PaginationParameters pagination,
-        CancellationToken ct);
+        CancellationToken ct,
+        Guid? userId = null);
 
     public Task<QuizResponse?> GetQuizAsync(Guid quizId, CancellationToken ct);
 

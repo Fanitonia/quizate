@@ -16,18 +16,27 @@ public class QuizService(
 {
     public async Task<(IEnumerable<QuizResponse>, PaginationMetadata)> GetQuizzesAsync(
         PaginationParameters pagination,
-        CancellationToken ct)
+        CancellationToken ct,
+        Guid? userId = null)
     {
-        var result = await context.Quizzes
+        var baseQuery = context.Quizzes
             .AsNoTracking()
-            .OrderByDescending(q => q.CreatedAt)
             .Skip((pagination.PageNumber - 1) * pagination.PageSize)
-            .Take(pagination.PageSize)
+            .Take(pagination.PageSize);
+
+        if (userId.HasValue)
+            baseQuery = baseQuery.Where(q => q.CreatorId == userId.Value);
+
+        // order seçenekleri eklenebilir
+        baseQuery = baseQuery.OrderByDescending(q => q.CreatedAt);
+
+        var result = await baseQuery
             .ProjectTo<QuizResponse>(mapper.ConfigurationProvider)
             .ToListAsync(ct);
 
         var totalCount = await context.Quizzes
             .AsNoTracking()
+            .Where(q => !userId.HasValue || q.CreatorId == userId.Value)
             .CountAsync(ct);
 
         var paginationMetaData = new PaginationMetadata(

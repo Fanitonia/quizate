@@ -3,26 +3,33 @@ using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
 using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
+using Quizate.Application.Features.Quizzes.Interfaces;
 using Quizate.Application.Features.Users.DTOs.Requests;
 using Quizate.Application.Features.Users.DTOs.Responses;
 using Quizate.Application.Features.Users.Interfaces;
+using Quizate.Application.Shared.Pagination;
+using Quizate.Application.Shared.Serializer;
 
 namespace Quizate.API.Controllers;
 
 [Route("users")]
 [ApiController]
-public class UserController(IUserService userService) : ControllerBase
+public class UserController(
+    IUserService userService,
+    IQuizService quizService) : ControllerBase
 {
     [Authorize]
     [HttpGet]
-    public async Task<ActionResult<ICollection<DetailedUserInfoResponse>>> GetAllUsers(CancellationToken ct)
+    public async Task<ActionResult<ICollection<DetailedUserInfoResponse>>> GetAllUsers(
+        CancellationToken ct)
     {
         throw new NotImplementedException();
     }
 
     // onur
     [HttpGet("{userId:guid}")]
-    public async Task<ActionResult<UserInfoResponse>> GetUser(Guid userId, CancellationToken ct)
+    public async Task<ActionResult<UserInfoResponse>> GetUser(
+        Guid userId, CancellationToken ct)
     {
         var result = await userService.GetUserAsync(userId, ct);
 
@@ -33,9 +40,16 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpGet("{userId:guid}/quizzes")]
-    public async Task<ActionResult<ICollection<QuizResponse>>> GetUserQuizzes(Guid userId, CancellationToken ct)
+    public async Task<ActionResult<ICollection<QuizResponse>>> GetUserQuizzes(
+        [FromRoute] Guid userId,
+        [FromQuery] PaginationParameters pagination,
+        CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var (result, paginationMetadata) = await quizService.GetQuizzesAsync(pagination, ct, userId);
+
+        Response.Headers.Append("X-Pagination", paginationMetadata.SerializeWithCamelCasing());
+
+        return Ok(result);
     }
 
     // onur
