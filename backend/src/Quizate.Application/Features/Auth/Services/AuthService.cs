@@ -141,23 +141,4 @@ public class AuthService(
 
         return Result.Success();
     }
-    public async Task<Result> ChangePasswordAsync(PasswordChangeRequest request, Guid userId, CancellationToken ct)
-    {
-        var user = await dbContext.Users.FindAsync(userId, ct);
-
-        if (user == null)
-            return Result.Failure("Could not found the user.");
-
-        var passwordResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.OldPassword);
-
-        if (passwordResult == PasswordVerificationResult.Failed)
-            return Result.Failure("Password is incorrect.");
-
-        var newPasswordHash = passwordHasher.HashPassword(user, request.NewPassword);
-        user.UpdatePasswordHash(newPasswordHash);
-
-        dbContext.SaveChanges();
-
-        return Result.Success();
-    }
 }

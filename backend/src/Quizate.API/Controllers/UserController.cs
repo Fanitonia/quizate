@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
+using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Users.DTOs.Requests;
 using Quizate.Application.Features.Users.DTOs.Responses;
@@ -60,7 +61,7 @@ public class UserController(IUserService userService) : ControllerBase
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        var result = await userService.GetMyInfoAsync(userId, ct);
+        var result = await userService.GetDetailedUserAsync(userId, ct);
 
         if (result.IsFailure)
             return NotFound();
@@ -71,12 +72,12 @@ public class UserController(IUserService userService) : ControllerBase
     // huseyin
     [Authorize]
     [HttpPatch("me")]
-    public async Task<ActionResult> UpdateMe([FromBody] UpdateMyInfoRequest request, CancellationToken ct)
+    public async Task<ActionResult> UpdateMe([FromBody] UpdateUserRequest request)
     {
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        var result = await userService.UpdateUserAsync(userId, request, ct);
+        var result = await userService.UpdateUserAsync(userId, request);
 
         if (result.IsFailure)
             return NotFound();
@@ -94,12 +95,12 @@ public class UserController(IUserService userService) : ControllerBase
     // huseyin
     [Authorize]
     [HttpDelete("me")]
-    public async Task<ActionResult> DeleteMe(CancellationToken ct)
+    public async Task<ActionResult> DeleteMe()
     {
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        var result = await userService.DeleteUserAsync(userId, ct);
+        var result = await userService.DeleteUserAsync(userId);
 
         if (result.IsFailure)
             return NotFound();
@@ -115,6 +116,30 @@ public class UserController(IUserService userService) : ControllerBase
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
+        throw new NotImplementedException();
+    }
+
+    [Authorize]
+    [HttpPost("me/change-password")]
+    public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeRequest request)
+    {
+        if (!User.TryGetUserId(out Guid userId))
+            return Unauthorized();
+
+        var result = await userService.ChangePasswordAsync(request, userId);
+
+        if (result.IsFailure)
+        {
+            result.AddErrorsToModelState(ModelState, "changePasswordErrors");
+            return ValidationProblem();
+        }
+
+        return NoContent();
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<ActionResult> ResetPassword()
+    {
         throw new NotImplementedException();
     }
 }

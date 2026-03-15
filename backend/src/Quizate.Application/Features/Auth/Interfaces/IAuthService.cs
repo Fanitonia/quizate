@@ -11,5 +11,4 @@ public interface IAuthService
     public Task<Result<AuthTokens>> RefreshAccessTokenAsync(string refreshToken);
     public Task<Result> RevokeRefreshTokenAsync(string refreshToken);
     public Task<Result> RevokeAllRefreshTokensAsync(Guid userId);
-    public Task<Result> ChangePasswordAsync(PasswordChangeRequest request, Guid userId, CancellationToken ct);
 }

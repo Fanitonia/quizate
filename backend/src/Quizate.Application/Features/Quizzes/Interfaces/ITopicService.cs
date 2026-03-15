@@ -6,8 +6,8 @@ namespace Quizate.Application.Features.Quizzes.Interfaces;
 
 public interface ITopicService
 {
-    public Task<ICollection<TopicResponse>> GetTopicsAsync();
-    public Task<Result> CreateTopic(CreateTopicRequest request);
-    public Task<Result> UpdateTopic(UpdateTopicRequest request, string topicName);
-    public Task<Result> DeleteTopic(string topicName);
+    public Task<ICollection<TopicResponse>> GetTopicsAsync(CancellationToken ct);
+    public Task<Result> CreateTopicAsync(CreateTopicRequest request);
+    public Task<Result> UpdateTopicAsync(UpdateTopicRequest request, string topicName);
+    public Task<Result> DeleteTopicAsync(string topicName);
 }

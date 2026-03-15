@@ -10,7 +10,7 @@ public static class QuestionPayloadSerializer
     {
         return questionTypeName switch
         {
-            QuestionTypeNames.MultipleChoice => JsonSerializer.Deserialize<MultipleChoiceQuestionObject>(payload),
+            QuestionTypes.MultipleChoice => JsonSerializer.Deserialize<MultipleChoiceQuestionObject>(payload),
             _ => throw new NotSupportedException($"Question type '{questionTypeName}' is not supported.")
         };
     }

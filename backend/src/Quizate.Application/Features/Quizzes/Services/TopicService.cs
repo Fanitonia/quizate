@@ -13,7 +13,17 @@ public class TopicService(
     QuizateDbContext context,
     IMapper mapper) : ITopicService
 {
-    public async Task<Result> CreateTopic(CreateTopicRequest request)
+    public async Task<ICollection<TopicResponse>> GetTopicsAsync(CancellationToken ct)
+    {
+        var topics = await context.QuizTopics
+            .AsNoTracking()
+            .OrderBy(t => t.Name)
+            .ToListAsync(ct);
+
+        return mapper.Map<ICollection<TopicResponse>>(topics);
+    }
+
+    public async Task<Result> CreateTopicAsync(CreateTopicRequest request)
     {
         request.Name = request.Name.ToLower().Trim();
         var newTopic = mapper.Map<QuizTopic>(request);
@@ -24,7 +34,7 @@ public class TopicService(
         return Result.Success();
     }
 
-    public async Task<Result> DeleteTopic(string topicName)
+    public async Task<Result> DeleteTopicAsync(string topicName)
     {
         var topic = await context.QuizTopics.FindAsync(topicName);
 
@@ -37,14 +47,7 @@ public class TopicService(
         return Result.Success();
     }
 
-    public async Task<ICollection<TopicResponse>> GetTopicsAsync()
-    {
-        var topics = await context.QuizTopics.AsNoTracking().ToListAsync();
-
-        return mapper.Map<ICollection<TopicResponse>>(topics);
-    }
-
-    public async Task<Result> UpdateTopic(UpdateTopicRequest request, string topicName)
+    public async Task<Result> UpdateTopicAsync(UpdateTopicRequest request, string topicName)
     {
         var topic = await context.QuizTopics.FindAsync(topicName);
 

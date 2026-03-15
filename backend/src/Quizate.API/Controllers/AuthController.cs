@@ -141,28 +141,4 @@ public class AuthController(
 
         return NoContent();
     }
-
-    [Authorize]
-    [HttpPost("change-password")]
-    public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeRequest request, CancellationToken ct)
-    {
-        if (!User.TryGetUserId(out Guid userId))
-            return Unauthorized();
-
-        var result = await authService.ChangePasswordAsync(request, userId, ct);
-
-        if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "changePasswordErrors");
-            return ValidationProblem();
-        }
-
-        return NoContent();
-    }
-
-    [HttpPost("reset-password")]
-    public async Task<ActionResult> ResetPassword()
-    {
-        throw new NotImplementedException();
-    }
 }
