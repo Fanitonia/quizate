@@ -17,7 +17,7 @@ public class Result<T> : Result
 {
     public T? Value { get; private set; }
 
-    public static Result<T> Success(T data) => new() { _success = true, Value = data };
+    public static Result<T> Success(T value) => new() { _success = true, Value = value };
     public static new Result<T> Failure(string[] errors) => new() { _success = false, Errors = errors };
     public static new Result<T> Failure(string error) => new() { _success = false, Errors = new[] { error } };
 }

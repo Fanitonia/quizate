@@ -5,13 +5,16 @@ using Quizate.Application.Common.Pagination;
 using Quizate.Application.Common.Serializer;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Quizzes.Interfaces;
+using Quizate.Domain.Enums;
 
 namespace Quizate.API.Controllers;
 
 [Route("quizzes")]
 [ApiController]
 public class QuizController(
-    IQuizQueryService quizService) : ControllerBase
+    IQuizQueryService quizQuery,
+    IQuizCommandService quizCommand,
+    IQuizAuthorizationService quizAuth) : ControllerBase
 {
     // onur
     [HttpGet]
@@ -20,7 +23,7 @@ public class QuizController(
         [FromQuery] Guid? userId,
         CancellationToken ct)
     {
-        var result = await quizService.GetAllQuizzesAsync(pagination, ct, userId);
+        var result = await quizQuery.GetAllQuizzesAsync(pagination, ct, userId);
 
         Response.SetHeader(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
 
@@ -31,7 +34,7 @@ public class QuizController(
     [HttpGet("{quizId:guid}")]
     public async Task<ActionResult<QuizResponse>> GetQuiz(Guid quizId, CancellationToken ct)
     {
-        var quiz = await quizService.GetQuizAsync(quizId, ct);
+        var quiz = await quizQuery.GetQuizAsync(quizId, ct);
 
         if (quiz == null)
             return NotFound();
@@ -43,7 +46,7 @@ public class QuizController(
     [HttpGet("{quizId:guid}/questions")]
     public async Task<ActionResult<QuizQuestionsResponse>> GetQuestions(Guid quizId, CancellationToken ct)
     {
-        var questions = await quizService.GetQuizQuestionsAsync(quizId, ct);
+        var questions = await quizQuery.GetQuizQuestionsAsync(quizId, ct);
 
         if (questions == null)
             return NotFound();
@@ -67,9 +70,20 @@ public class QuizController(
     }
 
     // onur
+    [Authorize]
     [HttpDelete("{quizId:guid}")]
-    public async Task<ActionResult> DeleteQuiz()
+    public async Task<ActionResult> DeleteQuiz(Guid quizId)
     {
-        throw new NotImplementedException();
+        var isAdmin = User.IsInRole(UserRole.Admin.ToString());
+        var canDelete = isAdmin;
+
+        if (!canDelete && User.TryGetUserId(out var userId))
+            canDelete = await quizAuth.IsUserQuizOwner(quizId, userId);
+
+        if (!canDelete)
+            return Forbid();
+
+        await quizCommand.DeleteQuizAsync(quizId);
+        return NoContent();
     }
 }
