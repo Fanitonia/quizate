@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Quizate.Application.Common.Result;
 using Quizate.Application.Features.Auth.DTOs;
 using Quizate.Application.Features.Auth.DTOs.Requests;
+using Quizate.Application.Features.Auth.DTOs.Responses;
 using Quizate.Application.Features.Auth.Helpers;
 using Quizate.Application.Features.Auth.Interfaces;
-using Quizate.Application.Shared.Result;
 using Quizate.Domain.Entities.Users;
 using Quizate.Persistence;
 
@@ -24,7 +25,7 @@ public class AuthService(
         Audience = configuration.GetValue<string>("Jwt:Audience")!
     };
 
-    public async Task<Result<AuthTokens>> RegisterAsync(RegisterRequest request)
+    public async Task<Result<AuthTokensResponse>> RegisterAsync(RegisterRequest request)
     {
         string normalizedUsername = request.Username.ToLowerInvariant();
         string? normalizedEmail = request.Email?.ToLowerInvariant();
@@ -34,7 +35,7 @@ public class AuthService(
             || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
-            return Result<AuthTokens>.Failure("User already exist.");
+            return Result<AuthTokensResponse>.Failure("User already exist.");
 
         var user = new User(request.Username, "password_placeholder", normalizedEmail);
 
@@ -48,14 +49,14 @@ public class AuthService(
         var (refreshToken, rawRefreshToken) = TokenProvider.CreateRefreshToken(user.Id,
             configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"));
 
-        return Result<AuthTokens>.Success(new AuthTokens
+        return Result<AuthTokensResponse>.Success(new AuthTokensResponse
         {
             AccessToken = accesToken,
             RefreshToken = rawRefreshToken
         });
     }
 
-    public async Task<Result<AuthTokens>> LoginAsync(LoginRequest request)
+    public async Task<Result<AuthTokensResponse>> LoginAsync(LoginRequest request)
     {
         string normalizedInput = request.UsernameOrEmail.Trim().ToLowerInvariant();
 
@@ -65,12 +66,12 @@ public class AuthService(
                 || (u.Email != null && u.Email == normalizedInput));
 
         if (user == null)
-            return Result<AuthTokens>.Failure("Invalid username/email or password.");
+            return Result<AuthTokensResponse>.Failure("Invalid username/email or password.");
 
         var passwordResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         if (passwordResult == PasswordVerificationResult.Failed)
-            return Result<AuthTokens>.Failure("Invalid username/email or password.");
+            return Result<AuthTokensResponse>.Failure("Invalid username/email or password.");
 
         var accessToken = TokenProvider.CreateJwtToken(user, jwtSettings);
         var (refreshToken, rawToken) = TokenProvider.CreateRefreshToken(user.Id,
@@ -79,7 +80,7 @@ public class AuthService(
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
-        return Result<AuthTokens>.Success(new AuthTokens
+        return Result<AuthTokensResponse>.Success(new AuthTokensResponse
         {
             AccessToken = accessToken,
             RefreshToken = rawToken
@@ -103,7 +104,7 @@ public class AuthService(
         return Result.Failure("Invalid refresh token.");
     }
 
-    public async Task<Result<AuthTokens>> RefreshAccessTokenAsync(string refreshToken)
+    public async Task<Result<AuthTokensResponse>> RefreshAccessTokenAsync(string refreshToken)
     {
         var refreshTokenHash = Sha256Hasher.ComputeHash(refreshToken);
 
@@ -112,7 +113,7 @@ public class AuthService(
             .FirstOrDefaultAsync(rt => rt.TokenHash == refreshTokenHash);
 
         if (existing == null || existing.IsExpired)
-            return Result<AuthTokens>.Failure(["Invalid refresh token."]);
+            return Result<AuthTokensResponse>.Failure(["Invalid refresh token."]);
 
         var accessToken = TokenProvider.CreateJwtToken(existing.User, jwtSettings);
         var (newRefreshToken, rawToken) = TokenProvider.CreateRefreshToken(existing.UserId,
@@ -122,7 +123,7 @@ public class AuthService(
         dbContext.RefreshTokens.Remove(existing);
         await dbContext.SaveChangesAsync();
 
-        return Result<AuthTokens>.Success(new AuthTokens
+        return Result<AuthTokensResponse>.Success(new AuthTokensResponse
         {
             AccessToken = accessToken,
             RefreshToken = rawToken

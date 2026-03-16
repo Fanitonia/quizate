@@ -1,4 +1,4 @@
-﻿namespace Quizate.Application.Shared.Pagination;
+﻿namespace Quizate.Application.Common.Pagination;
 
 public class PaginationMetadata
 {

@@ -1,4 +1,4 @@
-﻿namespace Quizate.Application.Shared.Result;
+﻿namespace Quizate.Application.Common.Result;
 
 public class Result
 {

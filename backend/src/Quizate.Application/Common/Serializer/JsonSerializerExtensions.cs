@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
 
-namespace Quizate.Application.Shared.Serializer;
+namespace Quizate.Application.Common.Serializer;
 
 public static class JsonSerializerExtensions
 {
-    private static JsonSerializerOptions options = new JsonSerializerOptions
+    private static JsonSerializerOptions options = new()
     {
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };

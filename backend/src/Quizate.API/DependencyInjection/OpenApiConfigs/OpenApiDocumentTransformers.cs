@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi;
 
-namespace Quizate.API.DependencyInjection.OpenApi;
+namespace Quizate.API.DependencyInjection.OpenApiConfigs;
 
 internal class OpenApiDocumentTransformer(IHostEnvironment environment) : IOpenApiDocumentTransformer
 {

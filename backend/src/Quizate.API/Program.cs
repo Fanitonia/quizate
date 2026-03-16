@@ -14,7 +14,7 @@ public class Program
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddAPIServices()
+            builder.Services.AddWebApiServices(builder.Configuration)
                             .AddPersistenceServices(builder.Configuration)
                             .AddApplicationServices(builder.Configuration);
 
@@ -51,7 +51,6 @@ public class Program
             app.UseCors();
 
             await app.MigrateDatabaseAsync();
-
 
             await app.RunAsync();
         }

@@ -9,12 +9,14 @@ namespace Quizate.API.Controllers;
 
 [Route("topics")]
 [ApiController]
-public class TopicController(ITopicService topicService) : ControllerBase
+public class TopicController(
+    ITopicQueryService topicQuery,
+    ITopicCommandService topicCommand) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<ICollection<TopicResponse>>> GetTopics(CancellationToken ct)
     {
-        var result = await topicService.GetTopicsAsync(ct);
+        var result = await topicQuery.GetTopicsAsync(ct);
 
         return Ok(result);
     }
@@ -23,7 +25,7 @@ public class TopicController(ITopicService topicService) : ControllerBase
     [HttpPatch("{topicName}")]
     public async Task<ActionResult> UpdateTopic([FromRoute] string topicName, [FromBody] UpdateTopicRequest request)
     {
-        var result = await topicService.UpdateTopicAsync(request, topicName);
+        var result = await topicCommand.UpdateTopicAsync(request, topicName);
 
         if (result.IsFailure)
         {
@@ -38,7 +40,7 @@ public class TopicController(ITopicService topicService) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<TopicResponse>> CreateTopic(CreateTopicRequest request)
     {
-        var result = await topicService.CreateTopicAsync(request);
+        var result = await topicCommand.CreateTopicAsync(request);
 
         if (result.IsFailure)
         {
@@ -53,7 +55,7 @@ public class TopicController(ITopicService topicService) : ControllerBase
     [HttpDelete("{topicName}")]
     public async Task<ActionResult> DeleteTopic([FromRoute] string topicName)
     {
-        var result = await topicService.DeleteTopicAsync(topicName);
+        var result = await topicCommand.DeleteTopicAsync(topicName);
 
         if (result.IsFailure)
         {

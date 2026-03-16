@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
+using Quizate.Application.Common.Pagination;
+using Quizate.Application.Common.Serializer;
 using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Quizzes.Interfaces;
 using Quizate.Application.Features.Users.DTOs.Requests;
 using Quizate.Application.Features.Users.DTOs.Responses;
 using Quizate.Application.Features.Users.Interfaces;
-using Quizate.Application.Shared.Pagination;
-using Quizate.Application.Shared.Serializer;
 
 namespace Quizate.API.Controllers;
 
 [Route("users")]
 [ApiController]
 public class UserController(
-    IUserService userService,
-    IQuizService quizService) : ControllerBase
+    IUserCommandService userCommand,
+    IUserQueryService userQuery,
+    IQuizQueryService quizService) : ControllerBase
 {
     [Authorize]
     [HttpGet]
@@ -31,7 +32,7 @@ public class UserController(
     public async Task<ActionResult<UserInfoResponse>> GetUser(
         Guid userId, CancellationToken ct)
     {
-        var result = await userService.GetUserAsync(userId, ct);
+        var result = await userQuery.GetUserAsync(userId, ct);
 
         if (result.IsFailure)
             return NotFound();
@@ -45,11 +46,11 @@ public class UserController(
         [FromQuery] PaginationParameters pagination,
         CancellationToken ct)
     {
-        var (result, paginationMetadata) = await quizService.GetQuizzesAsync(pagination, ct, userId);
+        var result = await quizService.GetAllQuizzesAsync(pagination, ct, userId);
 
-        Response.Headers.Append("X-Pagination", paginationMetadata.SerializeWithCamelCasing());
+        Response.SetHeader(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
 
-        return Ok(result);
+        return Ok(result.Records);
     }
 
     // onur
@@ -75,7 +76,7 @@ public class UserController(
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        var result = await userService.GetDetailedUserAsync(userId, ct);
+        var result = await userQuery.GetDetailedUserAsync(userId, ct);
 
         if (result.IsFailure)
             return NotFound();
@@ -91,7 +92,7 @@ public class UserController(
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        var result = await userService.UpdateUserAsync(userId, request);
+        var result = await userCommand.UpdateUserInfoAsync(request, userId);
 
         if (result.IsFailure)
             return NotFound();
@@ -114,7 +115,7 @@ public class UserController(
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        var result = await userService.DeleteUserAsync(userId);
+        var result = await userCommand.DeleteUserAsync(userId);
 
         if (result.IsFailure)
             return NotFound();
@@ -131,11 +132,11 @@ public class UserController(
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        var (result, paginationMetadata) = await quizService.GetQuizzesAsync(pagination, ct, userId);
+        var result = await quizService.GetAllQuizzesAsync(pagination, ct, userId);
 
-        Response.Headers.Append("X-Pagination", paginationMetadata.SerializeWithCamelCasing());
+        Response.Headers.Append("X-Pagination", result.PaginationMetadata.SerializeWithCamelCasing());
 
-        return Ok(result);
+        return Ok(result.Records);
 
     }
 
@@ -146,7 +147,7 @@ public class UserController(
         if (!User.TryGetUserId(out Guid userId))
             return Unauthorized();
 
-        var result = await userService.ChangePasswordAsync(request, userId);
+        var result = await userCommand.ChangePasswordAsync(request, userId);
 
         if (result.IsFailure)
         {

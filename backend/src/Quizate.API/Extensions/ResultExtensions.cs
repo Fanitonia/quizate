@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Quizate.Application.Shared.Result;
+using Quizate.Application.Common.Result;
 
 namespace Quizate.API.Extensions;
 

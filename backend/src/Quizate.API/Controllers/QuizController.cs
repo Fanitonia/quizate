@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
+using Quizate.Application.Common.Pagination;
+using Quizate.Application.Common.Serializer;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Quizzes.Interfaces;
-using Quizate.Application.Shared.Pagination;
-using Quizate.Application.Shared.Serializer;
 
 namespace Quizate.API.Controllers;
 
 [Route("quizzes")]
 [ApiController]
 public class QuizController(
-    IQuizService quizService) : ControllerBase
+    IQuizQueryService quizService) : ControllerBase
 {
     // onur
     [HttpGet]
@@ -20,11 +20,11 @@ public class QuizController(
         [FromQuery] Guid? userId,
         CancellationToken ct)
     {
-        var (quizzes, paginationMetadata) = await quizService.GetQuizzesAsync(pagination, ct, userId);
+        var result = await quizService.GetAllQuizzesAsync(pagination, ct, userId);
 
-        Response.SetHeader(Headers.XPagination, paginationMetadata.SerializeWithCamelCasing());
+        Response.SetHeader(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
 
-        return Ok(quizzes);
+        return Ok(result.Records);
     }
 
     // onur
@@ -43,7 +43,7 @@ public class QuizController(
     [HttpGet("{quizId:guid}/questions")]
     public async Task<ActionResult<QuizQuestionsResponse>> GetQuestions(Guid quizId, CancellationToken ct)
     {
-        var questions = await quizService.GetQuestionsAsync(quizId, ct);
+        var questions = await quizService.GetQuizQuestionsAsync(quizId, ct);
 
         if (questions == null)
             return NotFound();
@@ -61,7 +61,7 @@ public class QuizController(
     // onur
     [Authorize]
     [HttpPatch("{quizId:guid}")]
-    public async Task<ActionResult> UpdateQuiz()
+    public async Task<ActionResult> UpdateQuiz(Guid quizId)
     {
         throw new NotImplementedException();
     }

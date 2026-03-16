@@ -1,43 +1,18 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Quizate.Application.Common.Result;
 using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Users.DTOs.Requests;
-using Quizate.Application.Features.Users.DTOs.Responses;
 using Quizate.Application.Features.Users.Interfaces;
-using Quizate.Application.Shared.Result;
 using Quizate.Domain.Entities.Users;
 using Quizate.Persistence;
 
 namespace Quizate.Application.Features.Users.Services;
 
-public class UserService(
+public class UserCommandService(
     QuizateDbContext context,
-    IMapper mapper,
-    IPasswordHasher<User> passwordHasher) : IUserService
+    IPasswordHasher<User> passwordHasher) : IUserCommandService
 {
-    public async Task<Result<UserInfoResponse>> GetUserAsync(Guid userId, CancellationToken ct)
-    {
-        var user = await context.Users
-            .FindAsync(new object[] { userId }, ct);
-
-        if (user == null)
-            return Result<UserInfoResponse>.Failure("User not found.");
-
-        return Result<UserInfoResponse>.Success(mapper.Map<UserInfoResponse>(user));
-    }
-
-    public async Task<Result<DetailedUserInfoResponse>> GetDetailedUserAsync(Guid userId, CancellationToken ct)
-    {
-        var user = await context.Users
-            .FindAsync(new object[] { userId }, ct);
-
-        if (user == null)
-            return Result<DetailedUserInfoResponse>.Failure("User not found.");
-
-        return Result<DetailedUserInfoResponse>.Success(mapper.Map<DetailedUserInfoResponse>(user));
-    }
-
     public async Task<Result> DeleteUserAsync(Guid userId)
     {
         var user = await context.Users
@@ -52,7 +27,7 @@ public class UserService(
         return Result.Success();
     }
 
-    public async Task<Result> UpdateUserAsync(Guid userId, UpdateUserRequest request)
+    public async Task<Result> UpdateUserInfoAsync(UpdateUserRequest request, Guid userId)
     {
         var user = await context.Users
             .FindAsync(userId);

@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Quizate.Application.Common.Pagination;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Quizzes.DTOs.Responses.Objects;
 using Quizate.Application.Features.Quizzes.Helpers;
 using Quizate.Application.Features.Quizzes.Interfaces;
-using Quizate.Application.Shared.Pagination;
 using Quizate.Persistence;
 
 namespace Quizate.Application.Features.Quizzes.Services;
 
-public class QuizService(
+public class QuizQueryService(
     QuizateDbContext context,
-    IMapper mapper) : IQuizService
+    IMapper mapper) : IQuizQueryService
 {
-    public async Task<(IEnumerable<QuizResponse>, PaginationMetadata)> GetQuizzesAsync(
+    public async Task<PaginatedList<QuizResponse>> GetAllQuizzesAsync(
         PaginationParameters pagination,
         CancellationToken ct,
         Guid? userId = null)
@@ -42,7 +42,7 @@ public class QuizService(
         var paginationMetaData = new PaginationMetadata(
             pagination.PageSize, pagination.PageNumber, totalCount);
 
-        return (result, paginationMetaData);
+        return new(paginationMetaData, result);
     }
 
     public async Task<QuizResponse?> GetQuizAsync(Guid quizId, CancellationToken ct)
@@ -54,7 +54,7 @@ public class QuizService(
             .FirstOrDefaultAsync(ct);
     }
 
-    public async Task<QuizQuestionsResponse?> GetQuestionsAsync(Guid quizId, CancellationToken ct)
+    public async Task<QuizQuestionsResponse?> GetQuizQuestionsAsync(Guid quizId, CancellationToken ct)
     {
         var questionRows = await context.Questions
              .AsNoTracking()

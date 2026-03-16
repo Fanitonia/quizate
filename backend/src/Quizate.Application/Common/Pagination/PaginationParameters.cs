@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Quizate.Application.Shared.Pagination;
+namespace Quizate.Application.Common.Pagination;
 
 public class PaginationParameters
 {

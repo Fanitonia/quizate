@@ -1,28 +1,16 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using Quizate.Application.Common.Result;
 using Quizate.Application.Features.Quizzes.DTOs.Requests;
-using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Quizzes.Interfaces;
-using Quizate.Application.Shared.Result;
 using Quizate.Domain.Entities.Quizzes;
 using Quizate.Persistence;
 
 namespace Quizate.Application.Features.Quizzes.Services;
 
-public class TopicService(
+public class TopicCommandService(
     QuizateDbContext context,
-    IMapper mapper) : ITopicService
+    IMapper mapper) : ITopicCommandService
 {
-    public async Task<ICollection<TopicResponse>> GetTopicsAsync(CancellationToken ct)
-    {
-        var topics = await context.QuizTopics
-            .AsNoTracking()
-            .OrderBy(t => t.Name)
-            .ToListAsync(ct);
-
-        return mapper.Map<ICollection<TopicResponse>>(topics);
-    }
-
     public async Task<Result> CreateTopicAsync(CreateTopicRequest request)
     {
         request.Name = request.Name.ToLower().Trim();

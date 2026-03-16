@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Quizate.Application.Shared.Pagination.Validators;
+namespace Quizate.Application.Common.Pagination.Validators;
 
 public class PaginationParametersValidators : AbstractValidator<PaginationParameters>
 {
