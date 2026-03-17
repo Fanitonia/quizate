@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
 using Quizate.Application.Common.Pagination;
 using Quizate.Application.Common.Serializer;
+using Quizate.Application.Features.Quizzes.DTOs.Requests;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
 using Quizate.Application.Features.Quizzes.Interfaces;
 using Quizate.Domain.Enums;
@@ -56,9 +57,17 @@ public class QuizController(
 
     // onur
     [HttpPost]
-    public async Task<ActionResult> CreateQuiz()
+    public async Task<ActionResult> CreateQuiz(CreateQuizRequest request)
     {
-        throw new NotImplementedException();
+        var result = await quizCommand.CreateQuizAsync(request);
+
+        if (result.IsFailure)
+        {
+            result.AddErrorsToModelState(ModelState, "quizErrors");
+            return ValidationProblem();
+        }
+
+        return CreatedAtAction(nameof(GetQuiz), new { quizId = result.Value.Id }, result.Value);
     }
 
     // onur

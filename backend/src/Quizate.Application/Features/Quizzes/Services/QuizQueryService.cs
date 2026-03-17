@@ -3,9 +3,9 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Quizate.Application.Common.Pagination;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
-using Quizate.Application.Features.Quizzes.DTOs.Responses.Objects;
 using Quizate.Application.Features.Quizzes.Helpers;
 using Quizate.Application.Features.Quizzes.Interfaces;
+using Quizate.Domain.Objects.Questions;
 using Quizate.Persistence;
 
 namespace Quizate.Application.Features.Quizzes.Services;

@@ -1,5 +1,5 @@
-﻿using Quizate.Application.Features.Quizzes.Constants;
-using Quizate.Application.Features.Quizzes.DTOs.Responses.Objects;
+﻿using Quizate.Domain.Constants;
+using Quizate.Domain.Objects.Questions;
 using System.Text.Json;
 
 namespace Quizate.Application.Features.Quizzes.Helpers;
@@ -11,6 +11,15 @@ public static class QuestionPayloadSerializer
         return questionTypeName switch
         {
             QuestionTypes.MultipleChoice => JsonSerializer.Deserialize<MultipleChoiceQuestionObject>(payload),
+            _ => throw new NotSupportedException($"Question type '{questionTypeName}' is not supported.")
+        };
+    }
+
+    public static string SerializeQuestionObject(string questionTypeName, QuestionObject questionObject)
+    {
+        return questionTypeName switch
+        {
+            QuestionTypes.MultipleChoice => JsonSerializer.Serialize((MultipleChoiceQuestionObject)questionObject),
             _ => throw new NotSupportedException($"Question type '{questionTypeName}' is not supported.")
         };
     }

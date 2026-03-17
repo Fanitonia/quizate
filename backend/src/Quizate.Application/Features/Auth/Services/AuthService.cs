@@ -49,6 +49,9 @@ public class AuthService(
         var (refreshToken, rawRefreshToken) = TokenProvider.CreateRefreshToken(user.Id,
             configuration.GetValue<int>("Jwt:RefreshTokenExpirationDays"));
 
+        dbContext.RefreshTokens.Add(refreshToken);
+        await dbContext.SaveChangesAsync();
+
         return Result<AuthTokensResponse>.Success(new AuthTokensResponse
         {
             AccessToken = accesToken,

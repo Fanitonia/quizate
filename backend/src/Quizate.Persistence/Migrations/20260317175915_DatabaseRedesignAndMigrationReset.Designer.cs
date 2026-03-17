@@ -12,15 +12,15 @@ using Quizate.Persistence;
 namespace Quizate.Persistence.Migrations
 {
     [DbContext(typeof(QuizateDbContext))]
-    [Migration("20260311192445_DatabaseRedesignAndMigrationRese")]
-    partial class DatabaseRedesignAndMigrationRese
+    [Migration("20260317175915_DatabaseRedesignAndMigrationReset")]
+    partial class DatabaseRedesignAndMigrationReset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.4")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

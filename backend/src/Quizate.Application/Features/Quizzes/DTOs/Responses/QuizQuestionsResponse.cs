@@ -1,4 +1,4 @@
-﻿using Quizate.Application.Features.Quizzes.DTOs.Responses.Objects;
+﻿using Quizate.Domain.Objects.Questions;
 
 namespace Quizate.Application.Features.Quizzes.DTOs.Responses;
 

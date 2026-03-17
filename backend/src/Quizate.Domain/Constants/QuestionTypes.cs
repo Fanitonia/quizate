@@ -1,4 +1,4 @@
-﻿namespace Quizate.Application.Features.Quizzes.Constants;
+﻿namespace Quizate.Domain.Constants;
 
 public static class QuestionTypes
 {
