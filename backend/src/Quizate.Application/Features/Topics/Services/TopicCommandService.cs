@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Quizate.Application.Common.Result;
-using Quizate.Application.Features.Quizzes.DTOs.Requests;
-using Quizate.Application.Features.Quizzes.Interfaces;
+using Quizate.Application.Features.Topics.DTOs.Requests;
+using Quizate.Application.Features.Topics.Interfaces;
 using Quizate.Domain.Entities.Quizzes;
 using Quizate.Persistence;
 
-namespace Quizate.Application.Features.Quizzes.Services;
+namespace Quizate.Application.Features.Topics.Services;
 
 public class TopicCommandService(
     QuizateDbContext context,

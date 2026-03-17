@@ -1,6 +1,6 @@
-﻿using Quizate.Application.Features.Quizzes.DTOs.Responses;
+﻿using Quizate.Application.Features.Topics.DTOs.Responses;
 
-namespace Quizate.Application.Features.Quizzes.Interfaces;
+namespace Quizate.Application.Features.Topics.Interfaces;
 
 public interface ITopicQueryService
 {

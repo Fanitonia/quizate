@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Quizate.Application.Features.Quizzes.DTOs.Requests;
-using Quizate.Application.Features.Quizzes.DTOs.Responses;
+using Quizate.Application.Features.Topics.DTOs.Requests;
+using Quizate.Application.Features.Topics.DTOs.Responses;
 using Quizate.Domain.Entities.Quizzes;
 
-namespace Quizate.Application.Features.Quizzes.Mappers;
+namespace Quizate.Application.Features.Topics.Mappers;
 
 internal class TopicMappingProfile : Profile
 {

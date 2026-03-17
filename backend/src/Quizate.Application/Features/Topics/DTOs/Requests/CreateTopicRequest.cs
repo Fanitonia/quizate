@@ -1,6 +1,6 @@
-﻿namespace Quizate.Application.Features.Quizzes.DTOs.Responses;
+﻿namespace Quizate.Application.Features.Topics.DTOs.Requests;
 
-public class TopicResponse
+public class CreateTopicRequest
 {
     public required string Name { get; set; }
     public required string DisplayName { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace Quizate.Application.Features.Quizzes.DTOs.Requests;
+﻿namespace Quizate.Application.Features.Topics.DTOs.Requests;
 
 public class UpdateTopicRequest
 {

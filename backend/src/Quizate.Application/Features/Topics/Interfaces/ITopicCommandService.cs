@@ -1,7 +1,7 @@
 ﻿using Quizate.Application.Common.Result;
-using Quizate.Application.Features.Quizzes.DTOs.Requests;
+using Quizate.Application.Features.Topics.DTOs.Requests;
 
-namespace Quizate.Application.Features.Quizzes.Interfaces;
+namespace Quizate.Application.Features.Topics.Interfaces;
 
 public interface ITopicCommandService
 {

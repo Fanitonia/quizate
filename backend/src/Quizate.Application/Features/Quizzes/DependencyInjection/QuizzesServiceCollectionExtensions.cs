@@ -11,8 +11,6 @@ internal static class QuizzesServiceCollectionExtensions
         service.AddScoped<IQuizQueryService, QuizQueryService>();
         service.AddScoped<IQuizCommandService, QuizCommandService>();
         service.AddScoped<IQuizAuthorizationService, QuizAuthorizationService>();
-        service.AddScoped<ITopicQueryService, TopicQueryService>();
-        service.AddScoped<ITopicCommandService, TopicCommandService>();
 
         return service;
     }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
-using Quizate.Application.Features.Quizzes.DTOs.Requests;
-using Quizate.Application.Features.Quizzes.DTOs.Responses;
-using Quizate.Application.Features.Quizzes.Interfaces;
+using Quizate.Application.Features.Topics.DTOs.Requests;
+using Quizate.Application.Features.Topics.DTOs.Responses;
+using Quizate.Application.Features.Topics.Interfaces;
 
 namespace Quizate.API.Controllers;
 
