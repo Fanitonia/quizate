@@ -34,7 +34,7 @@ public class TopicCommandService(
         var topic = await context.QuizTopics.FindAsync(topicName);
 
         if (topic == null)
-            return CommonErrors.NotFound("Topic", topicName);
+            return CommonErrors.NotFound;
 
         context.QuizTopics.Remove(topic);
         await context.SaveChangesAsync();
@@ -47,7 +47,7 @@ public class TopicCommandService(
         var topic = await context.QuizTopics.FindAsync(topicName);
 
         if (topic == null)
-            return CommonErrors.NotFound("Topic", topicName);
+            return CommonErrors.NotFound;
 
         if (request.DisplayName != null ||
             request.Description != null)

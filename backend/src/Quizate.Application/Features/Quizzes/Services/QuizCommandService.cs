@@ -63,7 +63,7 @@ public class QuizCommandService(
         var quiz = await context.Quizzes.FindAsync(quizId);
 
         if (quiz == null)
-            return CommonErrors.NotFound("Quiz", quizId.ToString());
+            return CommonErrors.NotFound;
 
         context.Quizzes.Remove(quiz);
         context.SaveChanges();
@@ -76,7 +76,7 @@ public class QuizCommandService(
         var quiz = await context.Quizzes.FindAsync(quizId);
 
         if (quiz == null)
-            return CommonErrors.NotFound("Quiz", quizId.ToString());
+            return CommonErrors.NotFound;
 
         quiz.UpdateTitle(request.Title);
         quiz.UpdateDescription(request.Description);

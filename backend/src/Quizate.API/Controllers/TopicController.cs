@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Quizate.Application.Common.Errors;
 using Quizate.Application.Features.Topics.DTOs.Requests;
 using Quizate.Application.Features.Topics.DTOs.Responses;
 using Quizate.Application.Features.Topics.Interfaces;
@@ -27,7 +28,12 @@ public class TopicController(
         var result = await topicCommand.UpdateTopicAsync(request, topicName);
 
         if (result.IsFailure)
+        {
+            if (result.Error == CommonErrors.NotFound)
+                return NotFound(result.Error);
+
             return BadRequest(result.Error);
+        }
 
         return NoContent();
     }
@@ -51,7 +57,12 @@ public class TopicController(
         var result = await topicCommand.DeleteTopicAsync(topicName);
 
         if (result.IsFailure)
+        {
+            if (result.Error == CommonErrors.NotFound)
+                return NotFound(result.Error);
+
             return BadRequest(result.Error);
+        }
 
         return NoContent();
     }

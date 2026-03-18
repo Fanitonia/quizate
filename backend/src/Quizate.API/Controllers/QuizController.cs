@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
+using Quizate.Application.Common.Errors;
 using Quizate.Application.Common.Pagination;
 using Quizate.Application.Common.Serializer;
 using Quizate.Application.Features.Quizzes.DTOs.Requests;
@@ -85,7 +86,12 @@ public class QuizController(
         var result = await quizCommand.UpdateQuizAsync(request, quizId);
 
         if (result.IsFailure)
+        {
+            if (result.Error == CommonErrors.NotFound)
+                return NotFound(result.Error);
+
             return BadRequest(result.Error);
+        }
 
         return NoContent();
     }
@@ -104,7 +110,16 @@ public class QuizController(
         if (!canDelete)
             return Forbid();
 
-        await quizCommand.DeleteQuizAsync(quizId);
+        var result = await quizCommand.DeleteQuizAsync(quizId);
+
+        if (result.IsFailure)
+        {
+            if (result.Error == CommonErrors.NotFound)
+                return NotFound(result.Error);
+
+            return BadRequest(result.Error);
+        }
+
         return NoContent();
     }
 }

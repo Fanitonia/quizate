@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizate.API.Extensions;
+using Quizate.Application.Common.Errors;
 using Quizate.Application.Common.Pagination;
 using Quizate.Application.Common.Serializer;
 using Quizate.Application.Features.Auth.DTOs.Requests;
@@ -59,18 +60,20 @@ public class UserController(
     }
 
     // onur
-    [Authorize(Roles = "Admin")]
     [HttpDelete("{userId:guid}")]
     public async Task<ActionResult> DeleteUser(Guid userId)
     {
-        throw new NotImplementedException();
-    }
+        var result = await userCommand.DeleteUserAsync(userId);
 
-    [Authorize(Roles = "Admin")]
-    [HttpPatch("{userId:guid}/role")]
-    public async Task<ActionResult> UpdateUserRole(Guid userId)
-    {
-        throw new NotImplementedException();
+        if (result.IsFailure)
+        {
+            if (result.Error == CommonErrors.NotFound)
+                return NotFound(result.Error);
+
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
     }
 
     // huseyin
@@ -110,6 +113,23 @@ public class UserController(
     public async Task<ActionResult> UpdateUserProfilePicture()
     {
         throw new NotImplementedException();
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPatch("{userId:guid}/role")]
+    public async Task<ActionResult> UpdateUserRole(Guid userId, [FromBody] UpdateUserRoleRequest request)
+    {
+        var result = await userCommand.UpdateUserRoleAsync(request, userId);
+
+        if (result.IsFailure)
+        {
+            if (result.Error == CommonErrors.NotFound)
+                return NotFound(result.Error);
+
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
     }
 
     // huseyin
@@ -156,6 +176,7 @@ public class UserController(
 
         if (result.IsFailure)
             return BadRequest(result.Error);
+
 
         return NoContent();
     }

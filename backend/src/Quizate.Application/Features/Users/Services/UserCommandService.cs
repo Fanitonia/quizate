@@ -7,6 +7,7 @@ using Quizate.Application.Features.Users.DTOs.Requests;
 using Quizate.Application.Features.Users.Errors;
 using Quizate.Application.Features.Users.Interfaces;
 using Quizate.Domain.Entities.Users;
+using Quizate.Domain.Enums;
 using Quizate.Persistence;
 
 namespace Quizate.Application.Features.Users.Services;
@@ -21,7 +22,7 @@ public class UserCommandService(
             .FindAsync(userId);
 
         if (user == null)
-            return CommonErrors.NotFound("User", userId.ToString());
+            return CommonErrors.NotFound;
 
         user.MarkAsDeleted();
         await context.SaveChangesAsync();
@@ -35,7 +36,7 @@ public class UserCommandService(
             .FindAsync(userId);
 
         if (user == null)
-            return CommonErrors.NotFound("User", userId.ToString());
+            return CommonErrors.NotFound;
 
         if (request.Username != null)
         {
@@ -64,12 +65,28 @@ public class UserCommandService(
         return Result.Success();
     }
 
+    public async Task<Result> UpdateUserRoleAsync(UpdateUserRoleRequest request, Guid userId)
+    {
+        var user = await context.Users.FindAsync(userId);
+
+        if (user == null)
+            return CommonErrors.NotFound;
+
+        if (!Enum.TryParse<UserRole>(request.Role, true, out var newRole))
+            return UserErrors.InvalidRole(request.Role);
+
+        user.UpdateRole(newRole);
+        await context.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
     public async Task<Result> ChangePasswordAsync(PasswordChangeRequest request, Guid userId)
     {
         var user = await context.Users.FindAsync(userId);
 
         if (user == null)
-            return CommonErrors.NotFound("User", userId.ToString());
+            return CommonErrors.NotFound;
 
         var passwordResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.OldPassword);
 
