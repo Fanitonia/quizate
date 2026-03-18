@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Quizate.API.Extensions;
 using Quizate.Application.Features.Topics.DTOs.Requests;
 using Quizate.Application.Features.Topics.DTOs.Responses;
 using Quizate.Application.Features.Topics.Interfaces;
@@ -28,10 +27,7 @@ public class TopicController(
         var result = await topicCommand.UpdateTopicAsync(request, topicName);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "topicErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
         return NoContent();
     }
@@ -43,10 +39,7 @@ public class TopicController(
         var result = await topicCommand.CreateTopicAsync(request);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "topicErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
         return Created();
     }
@@ -58,10 +51,7 @@ public class TopicController(
         var result = await topicCommand.DeleteTopicAsync(topicName);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "topicErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
         return NoContent();
     }

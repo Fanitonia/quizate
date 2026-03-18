@@ -62,20 +62,32 @@ public class QuizController(
         var result = await quizCommand.CreateQuizAsync(request);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "quizErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
-        return CreatedAtAction(nameof(GetQuiz), new { quizId = result.Value.Id }, result.Value);
+        return CreatedAtAction(nameof(GetQuiz), new { quizId = result.Value!.Id }, result.Value);
     }
 
     // onur
     [Authorize]
     [HttpPatch("{quizId:guid}")]
-    public async Task<ActionResult> UpdateQuiz(Guid quizId)
+    public async Task<ActionResult> UpdateQuiz(Guid quizId, [FromBody] UpdateQuizRequest request)
     {
-        throw new NotImplementedException();
+        // topic updateleme ekle
+        var isAdmin = User.IsInRole(UserRole.Admin.ToString());
+        var canUpdate = isAdmin;
+
+        if (!canUpdate && User.TryGetUserId(out var userId))
+            canUpdate = await quizAuth.IsUserQuizOwner(quizId, userId);
+
+        if (!canUpdate)
+            return Forbid();
+
+        var result = await quizCommand.UpdateQuizAsync(request, quizId);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return NoContent();
     }
 
     // onur

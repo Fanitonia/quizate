@@ -20,10 +20,7 @@ public class AuthController(
         var result = await authService.RegisterAsync(request);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "registerErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
         Response.SetCookie(Cookies.AccessToken, result.Value!.AccessToken, configuration);
         Response.SetCookie(Cookies.RefreshToken, result.Value!.RefreshToken, configuration);
@@ -38,10 +35,7 @@ public class AuthController(
         var result = await authService.LoginAsync(request);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "loginErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
         Response.SetCookie(Cookies.AccessToken, result.Value!.AccessToken, configuration);
         Response.SetCookie(Cookies.RefreshToken, result.Value!.RefreshToken, configuration);
@@ -62,7 +56,7 @@ public class AuthController(
         var result = await authService.RevokeRefreshTokenAsync(refreshToken);
 
         if (result.IsFailure)
-            return Unauthorized();
+            return BadRequest(result.Error);
 
         Response.DeleteCookie(Cookies.AccessToken);
         Response.DeleteCookie(Cookies.RefreshToken);
@@ -82,10 +76,7 @@ public class AuthController(
         var result = await authService.RefreshAccessTokenAsync(refreshToken);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "tokenErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
         Response.SetCookie(Cookies.AccessToken, result.Value!.AccessToken, configuration);
         Response.SetCookie(Cookies.RefreshToken, result.Value!.RefreshToken, configuration);
@@ -109,10 +100,7 @@ public class AuthController(
         var result = await authService.RevokeAllRefreshTokensAsync(userId);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "tokenErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
         if (isSelf)
             Response.DeleteCookie(Cookies.RefreshToken);

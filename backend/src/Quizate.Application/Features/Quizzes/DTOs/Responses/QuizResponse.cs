@@ -9,11 +9,12 @@ public class QuizResponse
     public Guid? CreatorId { get; set; }
     public string? CreatorName { get; set; }
 
-    public required string LanguageCode { get; set; }
     public required string Title { get; set; }
     public string? Description { get; set; }
     public string? ThumbnailUrl { get; set; }
     public bool IsPublic { get; set; }
+    public required string LanguageCode { get; set; }
+    public string[] Topics { get; set; } = [];
     public int QuestionsCount { get; set; }
     public int AttemptsCount { get; set; }
 }

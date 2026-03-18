@@ -32,12 +32,12 @@ public class UserController(
     public async Task<ActionResult<UserInfoResponse>> GetUser(
         Guid userId, CancellationToken ct)
     {
-        var result = await userQuery.GetUserAsync(userId, ct);
+        var user = await userQuery.GetUserAsync(userId, ct);
 
-        if (result.IsFailure)
+        if (user == null)
             return NotFound();
 
-        return Ok(result.Value);
+        return Ok(user);
     }
 
     [HttpGet("{userId:guid}/quizzes")]
@@ -76,12 +76,12 @@ public class UserController(
         if (!User.TryGetUserId(out var userId))
             return Unauthorized();
 
-        var result = await userQuery.GetDetailedUserAsync(userId, ct);
+        var user = await userQuery.GetDetailedUserAsync(userId, ct);
 
-        if (result.IsFailure)
+        if (user == null)
             return NotFound();
 
-        return Ok(result.Value);
+        return Ok(user);
     }
 
     // huseyin
@@ -150,10 +150,7 @@ public class UserController(
         var result = await userCommand.ChangePasswordAsync(request, userId);
 
         if (result.IsFailure)
-        {
-            result.AddErrorsToModelState(ModelState, "changePasswordErrors");
-            return ValidationProblem();
-        }
+            return BadRequest(result.Error);
 
         return NoContent();
     }

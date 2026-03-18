@@ -46,27 +46,38 @@ public class Quiz
         UpdatedAt = updatedAt == default ? DateTime.UtcNow : updatedAt;
     }
 
-    public void UpdateTitle(string title)
+    public void UpdateTitle(string? title)
     {
         Title = title ?? Title;
-        UpdatedAt = DateTime.UtcNow;
+        if (title != null)
+            UpdatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateDescription(string description)
+    public void UpdateDescription(string? description)
     {
         Description = description ?? Description;
-        UpdatedAt = DateTime.UtcNow;
+        if (description != null)
+            UpdatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateThumbnailUrl(string thumbnailUrl)
+    public void UpdateThumbnailUrl(string? thumbnailUrl)
     {
         ThumbnailUrl = thumbnailUrl ?? ThumbnailUrl;
-        UpdatedAt = DateTime.UtcNow;
+        if (thumbnailUrl != null)
+            UpdatedAt = DateTime.UtcNow;
     }
 
-    public void UpdateVisibiltity(bool isPublic)
+    public void UpdateVisibiltity(bool? isPublic)
     {
-        IsPublic = isPublic;
-        UpdatedAt = DateTime.UtcNow;
+        IsPublic = isPublic ?? IsPublic;
+        if (isPublic != null)
+            UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateLanguage(string? languageCode)
+    {
+        LanguageCode = languageCode ?? LanguageCode;
+        if (languageCode != null)
+            UpdatedAt = DateTime.UtcNow;
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Quizate.Application.Common.Errors;
 using Quizate.Application.Common.Result;
 using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Users.DTOs.Requests;
+using Quizate.Application.Features.Users.Errors;
 using Quizate.Application.Features.Users.Interfaces;
 using Quizate.Domain.Entities.Users;
 using Quizate.Persistence;
@@ -19,7 +21,7 @@ public class UserCommandService(
             .FindAsync(userId);
 
         if (user == null)
-            return Result.Failure("User not found.");
+            return CommonErrors.NotFound("User", userId.ToString());
 
         user.MarkAsDeleted();
         await context.SaveChangesAsync();
@@ -33,7 +35,7 @@ public class UserCommandService(
             .FindAsync(userId);
 
         if (user == null)
-            return Result.Failure("User not found.");
+            return CommonErrors.NotFound("User", userId.ToString());
 
         if (request.Username != null)
         {
@@ -41,7 +43,7 @@ public class UserCommandService(
                 .AnyAsync(u => u.Username == request.Username && u.Id != userId);
 
             if (isUsernameTaken)
-                return Result.Failure("Username is already taken.");
+                return UserErrors.UsernameTaken(request.Username);
 
             user.UpdateUsername(request.Username);
         }
@@ -52,7 +54,7 @@ public class UserCommandService(
                 .AnyAsync(u => u.Email == request.Email && u.Id != userId);
 
             if (isEmailTaken)
-                return Result.Failure("Email is already taken.");
+                return UserErrors.EmailTaken(request.Email);
 
             user.UpdateEmail(request.Email);
         }
@@ -67,12 +69,12 @@ public class UserCommandService(
         var user = await context.Users.FindAsync(userId);
 
         if (user == null)
-            return Result.Failure("Could not found the user.");
+            return CommonErrors.NotFound("User", userId.ToString());
 
         var passwordResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.OldPassword);
 
         if (passwordResult == PasswordVerificationResult.Failed)
-            return Result.Failure("Password is incorrect.");
+            return UserErrors.IncorrectPassword;
 
         var newPasswordHash = passwordHasher.HashPassword(user, request.NewPassword);
         user.UpdatePasswordHash(newPasswordHash);

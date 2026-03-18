@@ -5,6 +5,7 @@ using Quizate.Application.Common.Result;
 using Quizate.Application.Features.Auth.DTOs;
 using Quizate.Application.Features.Auth.DTOs.Requests;
 using Quizate.Application.Features.Auth.DTOs.Responses;
+using Quizate.Application.Features.Auth.Errors;
 using Quizate.Application.Features.Auth.Helpers;
 using Quizate.Application.Features.Auth.Interfaces;
 using Quizate.Domain.Entities.Users;
@@ -35,7 +36,7 @@ public class AuthService(
             || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
-            return Result<AuthTokensResponse>.Failure("User already exist.");
+            return AuthErrors.UserExist;
 
         var user = new User(request.Username, "password_placeholder", normalizedEmail);
 
@@ -52,11 +53,11 @@ public class AuthService(
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
-        return Result<AuthTokensResponse>.Success(new AuthTokensResponse
+        return new AuthTokensResponse
         {
             AccessToken = accesToken,
             RefreshToken = rawRefreshToken
-        });
+        };
     }
 
     public async Task<Result<AuthTokensResponse>> LoginAsync(LoginRequest request)
@@ -69,12 +70,12 @@ public class AuthService(
                 || (u.Email != null && u.Email == normalizedInput));
 
         if (user == null)
-            return Result<AuthTokensResponse>.Failure("Invalid username/email or password.");
+            return AuthErrors.InvalidCredentials;
 
         var passwordResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
 
         if (passwordResult == PasswordVerificationResult.Failed)
-            return Result<AuthTokensResponse>.Failure("Invalid username/email or password.");
+            return AuthErrors.InvalidCredentials;
 
         var accessToken = TokenProvider.CreateJwtToken(user, jwtSettings);
         var (refreshToken, rawToken) = TokenProvider.CreateRefreshToken(user.Id,
@@ -83,28 +84,11 @@ public class AuthService(
         dbContext.RefreshTokens.Add(refreshToken);
         await dbContext.SaveChangesAsync();
 
-        return Result<AuthTokensResponse>.Success(new AuthTokensResponse
+        return new AuthTokensResponse
         {
             AccessToken = accessToken,
             RefreshToken = rawToken
-        });
-    }
-
-    public async Task<Result> RevokeRefreshTokenAsync(string refreshToken)
-    {
-        var refreshTokenHash = Sha256Hasher.ComputeHash(refreshToken);
-
-        var refreshTokenEntity = await dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.TokenHash == refreshTokenHash);
-
-        if (refreshTokenEntity != null)
-        {
-            dbContext.RefreshTokens.Remove(refreshTokenEntity);
-            await dbContext.SaveChangesAsync();
-
-            return Result.Success();
-        }
-
-        return Result.Failure("Invalid refresh token.");
+        };
     }
 
     public async Task<Result<AuthTokensResponse>> RefreshAccessTokenAsync(string refreshToken)
@@ -116,7 +100,7 @@ public class AuthService(
             .FirstOrDefaultAsync(rt => rt.TokenHash == refreshTokenHash);
 
         if (existing == null || existing.IsExpired)
-            return Result<AuthTokensResponse>.Failure(["Invalid refresh token."]);
+            return AuthErrors.InvalidRefreshToken;
 
         var accessToken = TokenProvider.CreateJwtToken(existing.User, jwtSettings);
         var (newRefreshToken, rawToken) = TokenProvider.CreateRefreshToken(existing.UserId,
@@ -126,11 +110,26 @@ public class AuthService(
         dbContext.RefreshTokens.Remove(existing);
         await dbContext.SaveChangesAsync();
 
-        return Result<AuthTokensResponse>.Success(new AuthTokensResponse
+        return new AuthTokensResponse
         {
             AccessToken = accessToken,
             RefreshToken = rawToken
-        });
+        };
+    }
+
+    public async Task<Result> RevokeRefreshTokenAsync(string refreshToken)
+    {
+        var requestedTokenHash = Sha256Hasher.ComputeHash(refreshToken);
+
+        var refreshTokenEntity = await dbContext.RefreshTokens.FirstOrDefaultAsync(rt => rt.TokenHash == requestedTokenHash);
+
+        if (refreshTokenEntity == null)
+            return AuthErrors.InvalidRefreshToken;
+
+        dbContext.RefreshTokens.Remove(refreshTokenEntity);
+        await dbContext.SaveChangesAsync();
+
+        return Result.Success();
     }
 
     public async Task<Result> RevokeAllRefreshTokensAsync(Guid userId)

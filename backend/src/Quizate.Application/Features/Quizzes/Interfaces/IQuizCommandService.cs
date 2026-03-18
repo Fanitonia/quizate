@@ -8,5 +8,5 @@ public interface IQuizCommandService
 {
     public Task<Result> DeleteQuizAsync(Guid quizId);
     public Task<Result<QuizResponse?>> CreateQuizAsync(CreateQuizRequest request);
-    public Task<Result> UpdateQuizAsync(UpdateQuizRequest request);
+    public Task<Result> UpdateQuizAsync(UpdateQuizRequest request, Guid quizId);
 }

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Quizate.Application.Common.Errors;
 using Quizate.Application.Common.Result;
 using Quizate.Application.Features.Quizzes.DTOs.Requests;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
+using Quizate.Application.Features.Quizzes.Errors;
 using Quizate.Application.Features.Quizzes.Helpers;
 using Quizate.Application.Features.Quizzes.Interfaces;
 using Quizate.Domain.Entities.Questions;
@@ -31,7 +33,7 @@ public class QuizCommandService(
             .ToArray();
 
         if (missingTopics.Length > 0)
-            return Result<QuizResponse?>.Failure($"Topic(s) not found: {string.Join(", ", missingTopics)}");
+            return QuizErrors.InvalidTopics(missingTopics);
 
         var quiz = mapper.Map<Quiz>(request);
         quiz.Topics = topics;
@@ -61,7 +63,7 @@ public class QuizCommandService(
         var quiz = await context.Quizzes.FindAsync(quizId);
 
         if (quiz == null)
-            return Result.Failure("Quiz not found.");
+            return CommonErrors.NotFound("Quiz", quizId.ToString());
 
         context.Quizzes.Remove(quiz);
         context.SaveChanges();
@@ -69,8 +71,25 @@ public class QuizCommandService(
         return Result.Success();
     }
 
-    public Task<Result> UpdateQuizAsync(UpdateQuizRequest request)
+    public async Task<Result> UpdateQuizAsync(UpdateQuizRequest request, Guid quizId)
     {
-        throw new NotImplementedException();
+        var quiz = await context.Quizzes.FindAsync(quizId);
+
+        if (quiz == null)
+            return CommonErrors.NotFound("Quiz", quizId.ToString());
+
+        quiz.UpdateTitle(request.Title);
+        quiz.UpdateDescription(request.Description);
+        quiz.UpdateThumbnailUrl(request.ThumbnailUrl);
+        quiz.UpdateVisibiltity(request.IsPublic);
+        quiz.UpdateLanguage(request.LanguageCode);
+
+        context.Quizzes.Update(quiz);
+        var updatedRows = await context.SaveChangesAsync();
+
+        if (updatedRows == 0)
+            return CommonErrors.NoChangesWereMade;
+
+        return Result.Success();
     }
 }
