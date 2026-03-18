@@ -19,12 +19,17 @@ public class UserController(
     IUserQueryService userQuery,
     IQuizQueryService quizService) : ControllerBase
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<ActionResult<ICollection<DetailedUserInfoResponse>>> GetAllUsers(
+        [FromQuery] PaginationParameters pagination,
         CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var result = await userQuery.GetAllUsersAsync(pagination, ct);
+
+        Response.Headers.Append(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
+
+        return Ok(result.Records);
     }
 
     // onur
@@ -48,20 +53,20 @@ public class UserController(
     {
         var result = await quizService.GetAllQuizzesAsync(pagination, ct, userId);
 
-        Response.SetHeader(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
+        Response.Headers.Append(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
 
         return Ok(result.Records);
     }
 
     // onur
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{userId:guid}")]
     public async Task<ActionResult> DeleteUser(Guid userId)
     {
         throw new NotImplementedException();
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPatch("{userId:guid}/role")]
     public async Task<ActionResult> UpdateUserRole(Guid userId)
     {

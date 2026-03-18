@@ -26,7 +26,7 @@ public class QuizController(
     {
         var result = await quizQuery.GetAllQuizzesAsync(pagination, ct, userId);
 
-        Response.SetHeader(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
+        Response.Headers.Append(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
 
         return Ok(result.Records);
     }

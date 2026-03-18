@@ -20,7 +20,7 @@ public class TopicController(
         return Ok(result);
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPatch("{topicName}")]
     public async Task<ActionResult> UpdateTopic([FromRoute] string topicName, [FromBody] UpdateTopicRequest request)
     {
@@ -32,7 +32,7 @@ public class TopicController(
         return NoContent();
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<ActionResult<TopicResponse>> CreateTopic(CreateTopicRequest request)
     {
@@ -44,7 +44,7 @@ public class TopicController(
         return Created();
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{topicName}")]
     public async Task<ActionResult> DeleteTopic([FromRoute] string topicName)
     {

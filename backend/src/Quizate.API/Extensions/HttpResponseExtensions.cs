@@ -35,11 +35,6 @@ public static class HttpResponseExtensions
         }
     }
 
-    public static void SetHeader(this HttpResponse response, string key, string value)
-    {
-        response.Headers.Append(key, value);
-    }
-
     private static void SetAccessTokenCookie(this HttpResponse response, string value, IConfiguration configuration)
     {
         int expirationMinutes = configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes");

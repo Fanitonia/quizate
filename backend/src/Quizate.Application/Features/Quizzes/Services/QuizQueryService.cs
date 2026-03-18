@@ -40,7 +40,7 @@ public class QuizQueryService(
             .CountAsync(ct);
 
         var paginationMetaData = new PaginationMetadata(
-            pagination.PageSize, pagination.PageNumber, totalCount);
+            pagination, totalCount);
 
         return new(paginationMetaData, result);
     }

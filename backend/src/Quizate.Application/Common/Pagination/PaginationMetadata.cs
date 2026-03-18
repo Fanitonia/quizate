@@ -10,11 +10,11 @@ public class PaginationMetadata
     public bool HasPrevious => CurrentPage > 1 && CurrentPage <= TotalPages + 1;
     public bool HasNext => CurrentPage < TotalPages;
 
-    public PaginationMetadata(int pageSize, int pageNumber, int totalCount)
+    public PaginationMetadata(PaginationParameters pagination, int totalCount)
     {
-        PageSize = pageSize;
-        CurrentPage = pageNumber;
+        PageSize = pagination.PageSize;
+        CurrentPage = pagination.PageNumber;
         TotalCount = totalCount;
-        TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pageSize);
+        TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pagination.PageSize);
     }
 }

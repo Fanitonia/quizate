@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using Quizate.Application.Common.Pagination;
 using Quizate.Application.Features.Users.DTOs.Responses;
 using Quizate.Application.Features.Users.Interfaces;
@@ -32,8 +34,20 @@ public class UserQueryService(
         return mapper.Map<DetailedUserInfoResponse>(user);
     }
 
-    public Task<PaginatedList<DetailedUserInfoResponse>> GetAllUsersAsync(PaginationParameters pagination, CancellationToken ct)
+    public async Task<PaginatedList<DetailedUserInfoResponse>> GetAllUsersAsync(PaginationParameters pagination, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        var users = await context.Users
+            .AsNoTracking()
+            .Skip((pagination.PageNumber - 1) * pagination.PageNumber)
+            .Take(pagination.PageSize)
+            .ProjectTo<DetailedUserInfoResponse>(mapper.ConfigurationProvider)
+            .ToListAsync(ct);
+
+        var totalCount = await context.Users.CountAsync();
+
+        var paginationMetadata = new PaginationMetadata(
+            pagination, totalCount);
+
+        return new(paginationMetadata, users);
     }
 }
