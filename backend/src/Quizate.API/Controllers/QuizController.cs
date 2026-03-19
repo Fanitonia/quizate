@@ -11,6 +11,7 @@ using Quizate.Domain.Enums;
 
 namespace Quizate.API.Controllers;
 
+// TODO: attempt endpointleri ekle
 [Route("quizzes")]
 [ApiController]
 public class QuizController(

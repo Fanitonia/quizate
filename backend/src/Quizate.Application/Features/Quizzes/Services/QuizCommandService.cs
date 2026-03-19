@@ -38,9 +38,6 @@ public class QuizCommandService(
         var quiz = mapper.Map<Quiz>(request);
         quiz.Topics = topics;
 
-        context.Quizzes.Add(quiz);
-        await context.SaveChangesAsync();
-
         List<Question> questions = request.Questions
             .Select(question => new Question(
                 quiz.Id,
@@ -48,11 +45,10 @@ public class QuizCommandService(
                 QuestionPayloadSerializer.SerializeQuestionObject(question.QuestionType, question)))
             .ToList();
 
-        if (questions.Count > 0)
-        {
-            context.Questions.AddRange(questions);
-            await context.SaveChangesAsync();
-        }
+        quiz.Questions = questions;
+
+        context.Quizzes.Add(quiz);
+        await context.SaveChangesAsync();
 
         var quizResponse = mapper.Map<QuizResponse>(quiz);
         return Result<QuizResponse?>.Success(quizResponse);
@@ -66,11 +62,12 @@ public class QuizCommandService(
             return CommonErrors.NotFound;
 
         context.Quizzes.Remove(quiz);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return Result.Success();
     }
 
+    // TODO: topic updateleme
     public async Task<Result> UpdateQuizAsync(UpdateQuizRequest request, Guid quizId)
     {
         var quiz = await context.Quizzes.FindAsync(quizId);
@@ -84,11 +81,10 @@ public class QuizCommandService(
         quiz.UpdateVisibiltity(request.IsPublic);
         quiz.UpdateLanguage(request.LanguageCode);
 
-        context.Quizzes.Update(quiz);
         var updatedRows = await context.SaveChangesAsync();
 
         if (updatedRows == 0)
-            return CommonErrors.NoChangesWereMade;
+            return CommonErrors.UpdateRequestEmpty;
 
         return Result.Success();
     }

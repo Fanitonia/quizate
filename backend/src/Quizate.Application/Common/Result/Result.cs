@@ -50,6 +50,7 @@ public class Result<TValue> : Result
     public static implicit operator Result<TValue>(Error error) => new(error);
 }
 
+// TODO: opsiyonel http status code ekle. controller'da buna göre response döndürür.
 public record class Error(string Code, string Description)
 {
     public static Error None => new(String.Empty, String.Empty);

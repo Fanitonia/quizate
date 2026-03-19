@@ -57,7 +57,7 @@ public class TopicCommandService(
         }
         else
         {
-            return CommonErrors.NoChangesWereMade;
+            return CommonErrors.UpdateRequestEmpty;
         }
 
         return Result.Success();
