@@ -10,8 +10,8 @@ Quizate kullanıcıların quizler yaratabileceği ve paylaşabileceği bir platf
 
 ## Proje Linkleri
 
-- **REST API Adresi:** [quizate.com](https://quizate.com/)
-- **Web Frontend Adresi:** [api.quizate.com](https://api.quizate.com)
+- **REST API Adresi:** [api.quizate.com](https://api.quizate.com)
+- **Web Frontend Adresi:** [quizate.com](https://quizate.com/)
 
 
 ## Proje Ekibi
