@@ -15,6 +15,6 @@ public class QuizResponse
     public bool IsPublic { get; set; }
     public required string LanguageCode { get; set; }
     public string[] Topics { get; set; } = [];
-    public int QuestionsCount { get; set; }
-    public int AttemptsCount { get; set; }
+    public int QuestionCount { get; set; }
+    public int AttemptCount { get; set; }
 }

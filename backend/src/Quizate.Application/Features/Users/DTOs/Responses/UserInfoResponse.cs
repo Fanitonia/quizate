@@ -7,4 +7,5 @@ public class UserInfoResponse
     public required string Username { get; set; }
     public required string NormalizedUsername { get; set; }
     public string? ProfilePictureUrl { get; set; }
+    public required string Role { get; set; }
 }

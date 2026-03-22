@@ -5,4 +5,5 @@ public class TopicResponse
     public required string Name { get; set; }
     public required string DisplayName { get; set; }
     public string? Description { get; set; }
+    public int QuizCount { get; set; }
 }

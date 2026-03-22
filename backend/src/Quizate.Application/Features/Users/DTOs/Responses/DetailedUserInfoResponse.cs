@@ -9,4 +9,5 @@ public class DetailedUserInfoResponse
     public string? Email { get; set; }
     public bool IsEmailVerified { get; set; } = false;
     public string? ProfilePictureUrl { get; set; }
+    public required string Role { get; set; }
 }

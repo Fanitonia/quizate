@@ -11,8 +11,8 @@ public class QuizMappingProfile : Profile
     {
         CreateMap<Quiz, QuizResponse>()
             .ForMember(dest => dest.CreatorName, opt => opt.MapFrom(src => src.Creator != null ? src.Creator.Username : null))
-            .ForMember(dest => dest.QuestionsCount, opt => opt.MapFrom(src => src.Questions.Count))
-            .ForMember(dest => dest.AttemptsCount, opt => opt.MapFrom(src => src.Attempts.Count))
+            .ForMember(dest => dest.QuestionCount, opt => opt.MapFrom(src => src.Questions.Count))
+            .ForMember(dest => dest.AttemptCount, opt => opt.MapFrom(src => src.Attempts.Count))
             .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.Topics.Select(t => t.Name).ToArray()));
 
         CreateMap<CreateQuizRequest, Quiz>()
