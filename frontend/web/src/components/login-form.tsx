@@ -1,25 +1,12 @@
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSeparator,
-  FieldSet,
-  FieldTitle,
-} from "@/components/ui/field";
+import { Field, FieldLabel, FieldSet } from "@/components/ui/field";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "./ui/button";
@@ -34,11 +21,6 @@ interface LoginFormProps {
 
 function LoginForm({ className }: LoginFormProps) {
   function handleSubmit(e: FormData) {
-    var errors: { usernameOrEmail?: string[]; password?: string[] } = {
-      usernameOrEmail: [],
-      password: [],
-    };
-
     var emailUsername = e.get("email-username");
     var password = e.get("password");
 

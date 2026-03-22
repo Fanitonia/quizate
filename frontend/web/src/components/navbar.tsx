@@ -1,20 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-  ButtonGroupText,
-} from "@/components/ui/button-group";
-import { LogOut, Moon, Plus, Settings, Sun, User } from "lucide-react";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Moon, Plus, Sun } from "lucide-react";
 import { useTheme } from "@/components/providers/theme-provider";
 import { Link } from "@tanstack/react-router";
 
