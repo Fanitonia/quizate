@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { Moon, Plus, Sun } from "lucide-react";
-import { useTheme } from "@/components/providers/theme-provider";
+import { useTheme } from "@/stores/theme-provider";
 import { Link } from "@tanstack/react-router";
 
 function Navbar() {
@@ -24,7 +24,7 @@ function Navbar() {
           <Plus /> New Quiz
         </Button>
         <Button variant="ghost">Categories</Button>
-        <Button variant="ghost" size="icon-lg" onClick={toggleTheme}>
+        <Button variant="ghost-full" size="icon-lg" onClick={toggleTheme}>
           <Sun className="size-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
           <Moon className="absolute size-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
