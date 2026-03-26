@@ -1,8 +1,23 @@
+// EXTERNAL LIBRARIES
+import { createFileRoute, redirect } from "@tanstack/react-router";
+// API
+import { getCurrentUserQueryOptions } from "@/api/auth/query-options";
+// COMPONENTS
 import LoginForm from "@/features/auth/login/login-form";
-import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/(auth)/login")({
   component: RouteComponent,
+  loader: async ({ context }) => {
+    const currentUser = await context.queryClient.ensureQueryData(
+      getCurrentUserQueryOptions()
+    );
+
+    if (currentUser) {
+      throw redirect({
+        to: "/",
+      });
+    }
+  },
 });
 
 function RouteComponent() {

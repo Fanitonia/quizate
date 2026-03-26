@@ -1,6 +1,6 @@
-type LoginForm = {
-  "email-username": string;
-  password: string;
-};
+import { z } from "zod";
+import { loginFormSchema } from "./login-schemas";
 
-export { type LoginForm };
+type LoginFormFields = z.infer<typeof loginFormSchema>;
+
+export { type LoginFormFields };

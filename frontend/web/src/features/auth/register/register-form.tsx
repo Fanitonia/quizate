@@ -1,3 +1,10 @@
+// EXTERNAL LIBRARIES
+import { Link } from "@tanstack/react-router";
+
+// UTILS
+import { cn } from "@/lib/utils";
+
+// COMPONENTS
 import {
   Card,
   CardContent,
@@ -10,17 +17,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
-import { useActionState } from "react";
-import { registerAction } from "./register-action";
 
 function RegisterForm({ className }: { className?: string }) {
-  const [state, action, isPending] = useActionState(registerAction, {
-    errors: null,
-    form: null,
-  });
-
   return (
     <Card className={cn("min-w-min px-3 py-4", className)}>
       {/* TITLE */}
@@ -32,23 +30,13 @@ function RegisterForm({ className }: { className?: string }) {
       </CardHeader>
       {/* FORM */}
       <CardContent>
-        <form noValidate action={action}>
+        <form noValidate>
           <FieldSet>
             {/* USERNAME */}
             <Field>
               <FieldLabel htmlFor="username">Username</FieldLabel>
-              <Input
-                id="username"
-                name="username"
-                type="text"
-                defaultValue={state.form?.username || ""}
-              ></Input>
-              <FieldError
-                errors={state.errors?.fieldErrors.username?.map((error) => ({
-                  message: error,
-                }))}
-                className="text-sm"
-              ></FieldError>
+              <Input id="username" name="username" type="text"></Input>
+              <FieldError className="text-sm"></FieldError>
             </Field>
             {/* EMAIL */}
             <Field>
@@ -60,28 +48,14 @@ function RegisterForm({ className }: { className?: string }) {
                 name="email"
                 placeholder="quizate@example.com"
                 type="email"
-                defaultValue={state.form?.email || ""}
               ></Input>
-              <FieldError
-                errors={state.errors?.fieldErrors.email?.map((error) => ({
-                  message: error,
-                }))}
-              ></FieldError>
+              <FieldError></FieldError>
             </Field>
             {/* PASSWORD */}
             <Field>
               <FieldLabel htmlFor="password">Password</FieldLabel>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                defaultValue={state.form?.password || ""}
-              ></Input>
-              <FieldError
-                errors={state.errors?.fieldErrors.password?.map((error) => ({
-                  message: error,
-                }))}
-              ></FieldError>
+              <Input id="password" name="password" type="password"></Input>
+              <FieldError></FieldError>
             </Field>
             <Field>
               <FieldLabel htmlFor="confirm-password">
@@ -91,25 +65,13 @@ function RegisterForm({ className }: { className?: string }) {
                 id="confirm-password"
                 name="confirm-password"
                 type="password"
-                defaultValue={state.form?.confirmPassword || ""}
               ></Input>
-              <FieldError
-                errors={state.errors?.fieldErrors.confirmPassword?.map(
-                  (error) => ({
-                    message: error,
-                  })
-                )}
-              ></FieldError>
+              <FieldError></FieldError>
             </Field>
             <Separator></Separator>
             <Field>
               {/* REGISTER */}
-              <Button
-                size="lg"
-                className="w-full"
-                type="submit"
-                disabled={isPending}
-              >
+              <Button size="lg" className="w-full" type="submit">
                 Register
               </Button>
               {/* LOGIN */}

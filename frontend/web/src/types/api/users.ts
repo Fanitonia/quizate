@@ -9,7 +9,7 @@ interface UpdateUserRoleRequest {
 
 interface UserInfoResponse {
   id: string;
-  createdAt: Date;
+  createdAt: string;
   username: string;
   normalizedUsername: string;
   profilePictureUrl: string | null;

@@ -1,4 +1,7 @@
+// EXTERNAL LIBRARIES
 import { createFileRoute } from "@tanstack/react-router";
+
+// COMPONENTS
 import { Construction } from "lucide-react";
 
 export const Route = createFileRoute("/")({
