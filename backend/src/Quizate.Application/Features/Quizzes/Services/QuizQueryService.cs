@@ -21,7 +21,7 @@ public class QuizQueryService(
     {
         var baseQuery = context.Quizzes
             .AsNoTracking()
-            .Skip((pagination.PageNumber - 1) * pagination.PageSize)
+            .Skip((pagination.Page - 1) * pagination.PageSize)
             .Take(pagination.PageSize);
 
         if (userId.HasValue)

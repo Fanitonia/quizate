@@ -13,7 +13,7 @@ public class PaginationMetadata
     public PaginationMetadata(PaginationParameters pagination, int totalCount)
     {
         PageSize = pagination.PageSize;
-        CurrentPage = pagination.PageNumber;
+        CurrentPage = pagination.Page;
         TotalCount = totalCount;
         TotalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)pagination.PageSize);
     }

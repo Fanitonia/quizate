@@ -12,7 +12,7 @@ public class PaginationParametersValidators : AbstractValidator<PaginationParame
             .LessThanOrEqualTo(50)
                 .WithMessage("Page size must not exceed 50.");
 
-        RuleFor(p => p.PageNumber)
+        RuleFor(p => p.Page)
             .GreaterThan(0)
                 .WithMessage("Page number must be greater than 0.")
             .LessThanOrEqualTo(42949672)

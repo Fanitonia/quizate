@@ -40,7 +40,8 @@ internal static class APIDependencyInjectionExtension
             {
                 policy.AllowAnyMethod()
                       .AllowAnyHeader()
-                      .WithOrigins(new[] { "https://api.quizate.com", "https://quizate.com" });
+                      .AllowCredentials()
+                      .WithOrigins(new[] { "https://api.quizate.com", "https://quizate.com", "http://localhost:5173" });
             });
         });
 

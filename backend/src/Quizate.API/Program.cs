@@ -44,11 +44,11 @@ public class Program
 
             app.UseAuthentication();
 
+            app.UseCors();
+
             app.UseAuthorization();
 
             app.MapControllers();
-
-            app.UseCors();
 
             await app.MigrateDatabaseAsync();
 

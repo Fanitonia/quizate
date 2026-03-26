@@ -38,7 +38,7 @@ public class UserQueryService(
     {
         var users = await context.Users
             .AsNoTracking()
-            .Skip((pagination.PageNumber - 1) * pagination.PageNumber)
+            .Skip((pagination.Page - 1) * pagination.Page)
             .Take(pagination.PageSize)
             .ProjectTo<DetailedUserInfoResponse>(mapper.ConfigurationProvider)
             .ToListAsync(ct);

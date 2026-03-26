@@ -42,7 +42,7 @@ public static class HttpResponseExtensions
         response.Cookies.Append(Cookies.AccessToken, value, new CookieOptions
         {
             HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
+            SameSite = SameSiteMode.None,
             Secure = true,
             Expires = DateTime.UtcNow.AddMinutes(expirationMinutes)
         });
@@ -55,7 +55,7 @@ public static class HttpResponseExtensions
         response.Cookies.Append(Cookies.RefreshToken, value, new CookieOptions
         {
             HttpOnly = true,
-            SameSite = SameSiteMode.Strict,
+            SameSite = SameSiteMode.None,
             Secure = true,
             Expires = DateTime.UtcNow.AddDays(expirationDays),
             Path = "/auth"
@@ -64,13 +64,21 @@ public static class HttpResponseExtensions
 
     private static void DeleteAccessTokenCookie(this HttpResponse response)
     {
-        response.Cookies.Delete(Cookies.AccessToken);
+        response.Cookies.Delete(Cookies.AccessToken, new CookieOptions
+        {
+            HttpOnly = true,
+            SameSite = SameSiteMode.None,
+            Secure = true,
+        });
     }
 
     private static void DeleteRefreshTokenCookie(this HttpResponse response)
     {
         response.Cookies.Delete(Cookies.RefreshToken, new CookieOptions
         {
+            HttpOnly = true,
+            SameSite = SameSiteMode.None,
+            Secure = true,
             Path = "/auth"
         });
     }

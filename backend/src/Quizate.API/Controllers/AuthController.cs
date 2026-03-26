@@ -76,7 +76,7 @@ public class AuthController(
         var result = await authService.RefreshAccessTokenAsync(refreshToken);
 
         if (result.IsFailure)
-            return BadRequest(result.Error);
+            return Unauthorized(result.Error);
 
         Response.SetCookie(Cookies.AccessToken, result.Value!.AccessToken, configuration);
         Response.SetCookie(Cookies.RefreshToken, result.Value!.RefreshToken, configuration);
