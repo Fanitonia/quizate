@@ -2,39 +2,31 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 // API & TYPES
-import { getCurrentUserQueryOptions } from "@/api/auth/query-options";
+import { ensureCurrentUserIfLoggedIn } from "@/api/auth/query-options";
 import type { Context } from "@/routes/__root";
 
 // COMPONENTS
-import SomethingGoneWrong from "@/components/gone-wrong";
-import { Spinner } from "@/components/ui/spinner";
+import { ComponentLoader } from "@/components/component-loader";
 
 export const Route = createFileRoute("/(auth)")({
   component: RouteComponent,
   loader,
-  errorComponent: () => <SomethingGoneWrong />,
   pendingMs: 100,
-  pendingComponent: () => <PendingComponent />,
+  pendingComponent: () => <ComponentLoader />,
 });
 
 async function loader({ context }: { context: Context }) {
-  const currentUser = await context.queryClient.ensureQueryData(
-    getCurrentUserQueryOptions()
-  );
+  try {
+    const currentUser = await ensureCurrentUserIfLoggedIn(context.queryClient);
 
-  if (currentUser) {
-    throw redirect({
-      to: "/",
-    });
+    if (currentUser) {
+      throw redirect({
+        to: "/",
+      });
+    }
+  } catch {
+    console.log("Server error during auth route loader.");
   }
-}
-
-function PendingComponent() {
-  return (
-    <div className="flex flex-1 items-center justify-center p-4">
-      <Spinner className="size-8" />
-    </div>
-  );
 }
 
 function RouteComponent() {

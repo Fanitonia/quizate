@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Field,
   FieldError,
@@ -18,13 +17,15 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { CircleAlert } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import AlertError from "@/components/alert-error";
 
 // EXTERNAL LIBRARIES
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { AxiosError } from "axios";
 
 // UTILS
 import { cn } from "@/lib/utils";
@@ -34,7 +35,12 @@ import { login } from "@/api/auth/auth-requests";
 import type { LoginRequest } from "@/api/auth/auth-types";
 import type { LoginFormFields } from "./login-types";
 import { loginFormSchema } from "./login-schemas";
-import { getCurrentUserQueryOptions } from "@/api/auth/query-options";
+import {
+  currentUserQueryKey,
+  getCurrentUserQueryOptions,
+} from "@/api/auth/query-options";
+import { useUserStore } from "@/stores/user-store";
+import type { ErrorResponse } from "@/types/api/error";
 
 function LoginForm({ className }: { className?: string }) {
   const queryClient = useQueryClient();
@@ -43,6 +49,7 @@ function LoginForm({ className }: { className?: string }) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setError,
   } = useForm({
     resolver: zodResolver(loginFormSchema),
   });
@@ -52,10 +59,16 @@ function LoginForm({ className }: { className?: string }) {
   const { mutateAsync: loginMutateAsync, isError } = useMutation({
     mutationFn: (data: LoginRequest) => login(data),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+      useUserStore.getState().login();
+      await queryClient.invalidateQueries({ queryKey: currentUserQueryKey });
       await queryClient.prefetchQuery(getCurrentUserQueryOptions());
       navigate({
         to: "/",
+      });
+    },
+    onError: (error: AxiosError) => {
+      setError("root", {
+        message: (error.response?.data as ErrorResponse)?.description,
       });
     },
   });
@@ -91,7 +104,17 @@ function LoginForm({ className }: { className?: string }) {
                 <FieldError errors={[errors.password]}></FieldError>
               </Field>
             </FieldGroup>
-            {isError && <LoginError className="my-4" />}
+            {isError && (
+              <AlertError
+                className="my-4"
+                error={{
+                  title: "Login Failed",
+                  description:
+                    errors.root?.message ||
+                    "An error occurred during login. Please try again.",
+                }}
+              />
+            )}
             <Separator className="my-4"></Separator>
             <Field>
               <Button
@@ -100,6 +123,7 @@ function LoginForm({ className }: { className?: string }) {
                 type="submit"
                 disabled={isSubmitting}
               >
+                {isSubmitting && <Spinner />}
                 Login
               </Button>
             </Field>
@@ -139,19 +163,6 @@ function SignupFooter() {
         </Link>
       </div>
     </Field>
-  );
-}
-
-function LoginError({ className }: { className?: string }) {
-  return (
-    <Alert variant="destructive" className={className}>
-      <CircleAlert />
-      <AlertTitle>Login Failed</AlertTitle>
-      <AlertDescription>
-        User with the provided credentials does not exist or the password is
-        incorrect.
-      </AlertDescription>
-    </Alert>
   );
 }
 

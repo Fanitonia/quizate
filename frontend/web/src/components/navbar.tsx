@@ -1,12 +1,16 @@
 // EXTERNAL IMPORTS
 import { Link } from "@tanstack/react-router";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
 // API & TYPES
-import { getCurrentUserQueryOptions } from "@/api/auth/query-options";
+import {
+  currentUserQueryKey,
+  useCurrentUserQuery,
+} from "@/api/auth/query-options";
 import type { DetailedUserResponse } from "@/types/api/users";
 import { useTheme } from "@/stores/theme-provider";
+import { useUserStore } from "@/stores/user-store";
 
 // UI COMPONENTS
 import { Button } from "@/components/ui/button";
@@ -35,7 +39,7 @@ function Navbar() {
   }
 
   // AUTH
-  const { data: currentUser } = useQuery(getCurrentUserQueryOptions());
+  const { data: currentUser } = useCurrentUserQuery();
 
   return (
     <nav className="bg-background/80 sticky top-0 flex w-full flex-row items-center justify-around gap-4 border-b px-4 py-2">
@@ -78,8 +82,9 @@ function UserAvatar({ user }: { user: DetailedUserResponse }) {
   const { mutate: logoutMutate } = useMutation({
     mutationFn: () => logout(),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["currentUser"] });
-      await queryClient.prefetchQuery(getCurrentUserQueryOptions());
+      useUserStore.getState().logout();
+      await queryClient.cancelQueries({ queryKey: currentUserQueryKey });
+      queryClient.setQueryData(currentUserQueryKey, null);
     },
   });
 

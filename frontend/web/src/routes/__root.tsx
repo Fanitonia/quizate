@@ -1,5 +1,5 @@
 // EXTERNAL LIBRARIES
-import { useQuery, type QueryClient } from "@tanstack/react-query";
+import { type QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
   Outlet,
@@ -8,11 +8,12 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 // API
-import { getCurrentUserQueryOptions } from "@/api/auth/query-options";
+import { ensureCurrentUserIfLoggedIn } from "@/api/auth/query-options";
 
 // COMPONENTS
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import { ComponentLoader } from "@/components/component-loader";
 
 declare module "@tanstack/react-router" {
   interface StaticDataRouteOption {
@@ -21,8 +22,6 @@ declare module "@tanstack/react-router" {
 }
 
 const RootLayout = () => {
-  useQuery(getCurrentUserQueryOptions());
-
   const hideNavFooter = useMatches({
     select: (matches) =>
       matches.some((match) => match.staticData?.hideNavFooter),
@@ -46,6 +45,23 @@ type Context = {
 
 const Route = createRootRouteWithContext<Context>()({
   component: RootLayout,
+  loader: async ({ context }) => {
+    try {
+      await ensureCurrentUserIfLoggedIn(context.queryClient);
+    } catch (error) {
+      console.error("Server error during root loader.");
+    }
+  },
+  pendingMs: 0,
+  pendingComponent: () => <Loading />,
 });
+
+function Loading() {
+  return (
+    <div className="flex min-h-screen flex-1 items-center justify-center p-4">
+      <ComponentLoader />
+    </div>
+  );
+}
 
 export { Route, type Context };
