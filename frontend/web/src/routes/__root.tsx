@@ -44,6 +44,8 @@ type Context = {
   queryClient: QueryClient;
 };
 
-export const Route = createRootRouteWithContext<Context>()({
+const Route = createRootRouteWithContext<Context>()({
   component: RootLayout,
 });
+
+export { Route, type Context };

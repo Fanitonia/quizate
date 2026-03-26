@@ -1,8 +1,6 @@
-type RegisterForm = {
-  username: string;
-  email?: string;
-  password: string;
-  confirmPassword: string;
-};
+import { z } from "zod";
+import { registerFormSchema } from "./register-schemas";
 
-export type { RegisterForm };
+type RegisterFormFields = z.infer<typeof registerFormSchema>;
+
+export type { RegisterFormFields };

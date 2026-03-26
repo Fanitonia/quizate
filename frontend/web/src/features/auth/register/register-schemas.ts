@@ -1,7 +1,6 @@
 import { z } from "zod";
-import type { RegisterForm } from "./register-types";
 
-const registerFormSchema: z.ZodType<RegisterForm> = z
+const registerFormSchema = z
   .object({
     username: z
       .string("Username is required")

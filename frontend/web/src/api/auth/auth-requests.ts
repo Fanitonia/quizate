@@ -1,7 +1,7 @@
 import axios from "axios";
 import api from "../api";
 import type { DetailedUserResponse } from "@/types/api/users";
-import { type LoginRequest } from "./auth-types";
+import { type LoginRequest, type RegisterRequest } from "./auth-types";
 
 async function login(request: LoginRequest) {
   return api.post("/auth/login", request);
@@ -13,6 +13,10 @@ async function logout() {
 
 async function refresh() {
   return api.post("/auth/refresh-token");
+}
+
+async function register(request: RegisterRequest) {
+  return api.post("/auth/register", request);
 }
 
 async function getCurrentUser(): Promise<DetailedUserResponse | null> {
@@ -28,4 +32,4 @@ async function getCurrentUser(): Promise<DetailedUserResponse | null> {
   }
 }
 
-export { login, logout, refresh, getCurrentUser };
+export { login, logout, refresh, register, getCurrentUser };
