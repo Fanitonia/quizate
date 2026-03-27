@@ -10,13 +10,28 @@ import { getCurrentUser } from "./auth-requests";
 
 const currentUserQueryKey = ["currentUser"] as const;
 
+function useCurrentUserQuery() {
+  return useQuery({
+    ...getCurrentUserQueryOptions(),
+    enabled: shouldFetchCurrentUser(),
+  });
+}
+
+async function ensureCurrentUserIfLoggedIn(queryClient: QueryClient) {
+  if (!shouldFetchCurrentUser()) {
+    return null;
+  }
+
+  return queryClient.ensureQueryData(getCurrentUserQueryOptions());
+}
+
 function shouldFetchCurrentUser() {
   const { hasHydrated, isLoggedIn } = useUserStore.getState();
 
   return hasHydrated && isLoggedIn;
 }
 
-async function currentUserQueryFn() {
+async function getCurrentUserQueryFn() {
   const currentUser = await getCurrentUser();
   const { login, logout } = useUserStore.getState();
 
@@ -32,28 +47,10 @@ async function currentUserQueryFn() {
 function getCurrentUserQueryOptions() {
   return queryOptions({
     queryKey: currentUserQueryKey,
-    queryFn: currentUserQueryFn,
+    queryFn: getCurrentUserQueryFn,
     staleTime: 1 * 60 * 1000, // 1 minute
     retry: false,
   });
-}
-
-function useCurrentUserQuery() {
-  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
-  const hasHydrated = useUserStore((state) => state.hasHydrated);
-
-  return useQuery({
-    ...getCurrentUserQueryOptions(),
-    enabled: hasHydrated && isLoggedIn,
-  });
-}
-
-async function ensureCurrentUserIfLoggedIn(queryClient: QueryClient) {
-  if (!shouldFetchCurrentUser()) {
-    return null;
-  }
-
-  return queryClient.ensureQueryData(getCurrentUserQueryOptions());
 }
 
 export {

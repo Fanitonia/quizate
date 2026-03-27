@@ -58,7 +58,7 @@ const Route = createRootRouteWithContext<Context>()({
 
 function Loading() {
   return (
-    <div className="flex min-h-screen flex-1 items-center justify-center p-4">
+    <div className="flex min-h-dvh flex-1 items-center justify-center p-4">
       <ComponentLoader />
     </div>
   );
