@@ -1,8 +1,7 @@
 // EXTERNAL IMPORTS
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { LogOut, Menu, Moon, Plus, Settings, Sun, User } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 
 // API & TYPES
 import { logout } from "@/api/auth/auth-requests";
@@ -10,6 +9,19 @@ import {
   currentUserQueryKey,
   useCurrentUserQuery,
 } from "@/api/auth/query-options";
+
+// COMPONENTS & ICONS
+import {
+  LogOut,
+  Menu,
+  Moon,
+  Plus,
+  Sun,
+  User,
+  Globe,
+  Search,
+  List,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -27,13 +39,11 @@ import {
   SheetContent,
   SheetFooter,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useTheme } from "@/stores/theme-provider";
 import { useUserStore } from "@/stores/user-store";
 import type { DetailedUserResponse } from "@/types/api/users";
-import { Separator } from "@base-ui/react";
 
 type NavbarUser = DetailedUserResponse | null | undefined;
 
@@ -44,11 +54,6 @@ interface NavbarActionsProps {
 
 interface AuthButtonsProps {
   onNavigate?: () => void;
-}
-
-interface MobileMenuSectionProps {
-  title: string;
-  children: ReactNode;
 }
 
 function Navbar() {
@@ -65,11 +70,21 @@ function Navbar() {
   });
 
   return (
-    <nav className="bg-background/80 sticky top-0 flex w-full flex-row items-center justify-between gap-4 border-b px-4 py-2 sm:justify-around">
+    <nav className="bg-background/80 sticky top-0 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 border-b px-4 py-3 md:flex md:flex-row md:justify-around md:gap-4">
+      {/* Mobile search button */}
+      <Button
+        className="justify-self-start md:hidden"
+        variant="ghost"
+        size="icon"
+      >
+        <Search className="size-6" />
+      </Button>
+      {/* Logo */}
       <Link to="/" className="text-xl">
         Quizate
       </Link>
-      <div className="flex flex-row items-center justify-center">
+      {/* Responsive actions */}
+      <div className="col-start-3 flex flex-row items-center justify-self-end">
         <DesktopActions user={currentUser} onLogout={logoutMutate} />
         <MobileActions user={currentUser} onLogout={logoutMutate} />
       </div>
@@ -79,17 +94,21 @@ function Navbar() {
 
 function DesktopActions({ user, onLogout }: NavbarActionsProps) {
   return (
-    <div className="hidden flex-row items-center justify-center gap-2 sm:flex">
-      <Button variant="secondary">
-        <Plus /> New Quiz
-      </Button>
+    <div className="hidden items-center justify-center gap-2 md:flex md:flex-row">
       <Button variant="ghost">Categories</Button>
-      <ToggleThemeButton />
+      <Button className="justify-self-start" variant="ghost" size="icon">
+        <Search className="size-5" />
+      </Button>
+      <Button variant="secondary">
+        <Plus /> Create
+      </Button>
+
       {user ? (
         <AvatarDropdown user={user} onLogout={onLogout} />
       ) : (
         <AuthButtons />
       )}
+      <ToggleThemeButton />
     </div>
   );
 }
@@ -104,47 +123,53 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
   };
 
   return (
-    <div className="flex flex-row gap-2 sm:hidden">
-      <Button variant="secondary">
-        <Plus /> Create Quiz
-      </Button>
+    <div className="md:hidden">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger aria-label="Open menu">
-          <Menu size={32} />
+        <SheetTrigger
+          aria-label="Open menu"
+          className="flex items-center justify-center"
+        >
+          <Menu size={28} />
         </SheetTrigger>
-        <SheetContent className="px-6">
+        <SheetContent className="w-full! px-6 opacity-95">
           <SheetHeader>
-            <SheetTitle>Menu</SheetTitle>
+            {/* TODO: logo ile değiştir*/}
+            <h1 className="text-2xl">Quizate</h1>
           </SheetHeader>
-          {user ? (
-            <MobileMenuSection title="My Account">
-              <Button variant="ghost" className="w-full">
-                <User />
-                Profile
-              </Button>
-              <Button variant="ghost" className="w-full">
-                <Settings />
-                Settings
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-destructive w-full"
-                onClick={handleLogout}
-              >
-                <LogOut />
-                Logout
-              </Button>
-            </MobileMenuSection>
-          ) : (
-            <AuthButtons onNavigate={closeMenu} />
-          )}
-          <MobileMenuSection title="Quizzes">
-            <Button variant="ghost" className="w-full">
-              Categories
+          <div className="flex flex-row">
+            <Button variant="ghost" size="xl">
+              <List />
+              <p className="text-lg">Categories</p>
             </Button>
-          </MobileMenuSection>
+          </div>
           <SheetFooter>
-            <ToggleThemeButton />
+            <Button size="xl">
+              <Plus /> <p className="text-base">Create</p>
+            </Button>
+            {user ? (
+              <Button size="xl" variant="secondary">
+                <UserAvatar user={user as DetailedUserResponse} />
+                <p className="text-base">Profile</p>
+              </Button>
+            ) : (
+              <MobileAuthButtons onNavigate={closeMenu} />
+            )}
+            <div className="flex items-center justify-center gap-1">
+              <Button variant="secondary" size="xl" className="flex-2">
+                <Globe /> EN
+              </Button>
+              <ToggleThemeButton className="flex-1" xl={true} ghost={false} />
+              {user && (
+                <Button
+                  variant="destructive"
+                  size="xl"
+                  className="text-destructive flex-2"
+                  onClick={handleLogout}
+                >
+                  <LogOut /> Logout
+                </Button>
+              )}
+            </div>
           </SheetFooter>
         </SheetContent>
       </Sheet>
@@ -174,13 +199,27 @@ function AuthButtons({ onNavigate }: AuthButtonsProps) {
   );
 }
 
-function MobileMenuSection({ title, children }: MobileMenuSectionProps) {
+function MobileAuthButtons({ onNavigate }: AuthButtonsProps) {
   return (
-    <div className="flex flex-col items-center justify-center gap-1">
-      <h2 className="text-muted-foreground text-sm">{title}</h2>
-      <Separator className="bg-border h-px w-full" />
-      {children}
-    </div>
+    <ButtonGroup className="flex w-full">
+      <Button
+        variant="secondary"
+        size="xl"
+        className="flex-1"
+        render={<Link to="/login" />}
+        onClick={onNavigate}
+      >
+        <p className="text-base">Login</p>
+      </Button>
+      <Button
+        className="flex-1"
+        size="xl"
+        render={<Link to="/register" />}
+        onClick={onNavigate}
+      >
+        <p className="text-base">Signup</p>
+      </Button>
+    </ButtonGroup>
   );
 }
 
@@ -207,7 +246,7 @@ function AvatarDropdown({
       <DropdownMenuTrigger aria-label="Open account menu">
         <UserAvatar user={user} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent sideOffset={16} className="min-w-fit p-2">
+      <DropdownMenuContent sideOffset={16} className="min-w-fit px-3 py-2">
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -215,13 +254,17 @@ function AvatarDropdown({
             <User />
             Profile
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Settings />
-            Settings
-          </DropdownMenuItem>
           <DropdownMenuItem variant="destructive" onClick={onLogout}>
             <LogOut />
             Logout
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuGroup className="mt-2">
+          <DropdownMenuLabel>Language</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <Globe />
+            EN
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
@@ -229,7 +272,15 @@ function AvatarDropdown({
   );
 }
 
-function ToggleThemeButton() {
+function ToggleThemeButton({
+  className,
+  ghost = true,
+  xl = false,
+}: {
+  className?: string;
+  ghost?: boolean;
+  xl?: boolean;
+}) {
   const { setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -240,9 +291,14 @@ function ToggleThemeButton() {
   };
 
   return (
-    <Button variant="ghost-full" size="icon-lg" onClick={toggleTheme}>
-      <Sun className="size-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-      <Moon className="absolute size-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+    <Button
+      variant={ghost ? "ghost" : "secondary"}
+      size={xl ? "icon-xl" : "icon-lg"}
+      className={`${className}`}
+      onClick={toggleTheme}
+    >
+      <Sun className="size-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+      <Moon className="absolute size-5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
       <span className="sr-only">Toggle theme</span>
     </Button>
   );
