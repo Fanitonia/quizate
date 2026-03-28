@@ -13,7 +13,8 @@ import { ensureCurrentUserIfLoggedIn } from "@/api/auth/query-options";
 // COMPONENTS
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
-import { ComponentLoader } from "@/components/component-loader";
+import { ComponentLoader } from "@/components/feedback/component-loader";
+import NotFound from "@/components/feedback/not-found";
 
 declare module "@tanstack/react-router" {
   interface StaticDataRouteOption {
@@ -53,10 +54,11 @@ const Route = createRootRouteWithContext<Context>()({
     }
   },
   pendingMs: 0,
-  pendingComponent: () => <Loading />,
+  pendingComponent: () => <FullScreenLoader />,
+  notFoundComponent: () => <NotFound />,
 });
 
-function Loading() {
+function FullScreenLoader() {
   return (
     <div className="flex min-h-dvh flex-1 items-center justify-center p-4">
       <ComponentLoader />

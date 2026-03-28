@@ -56,6 +56,9 @@ interface AuthButtonsProps {
   onNavigate?: () => void;
 }
 
+// TODO: dil seçimini çalışır hale getir
+// TODO: search butonunu çalışır hale getir
+
 function Navbar() {
   const { data: currentUser } = useCurrentUserQuery();
   const queryClient = useQueryClient();
@@ -79,7 +82,7 @@ function Navbar() {
       >
         <Search className="size-6" />
       </Button>
-      {/* Logo */}
+      {/* TODO: logo ile değiştir*/}
       <Link to="/" className="text-xl">
         Quizate
       </Link>
@@ -108,6 +111,9 @@ function DesktopActions({ user, onLogout }: NavbarActionsProps) {
       ) : (
         <AuthButtons />
       )}
+      <Button variant="ghost">
+        <Globe /> EN
+      </Button>
       <ToggleThemeButton />
     </div>
   );
@@ -180,20 +186,11 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
 function AuthButtons({ onNavigate }: AuthButtonsProps) {
   return (
     <ButtonGroup className="flex w-full">
-      <Button
-        variant="secondary"
-        className="flex-1"
-        render={<Link to="/login" />}
-        onClick={onNavigate}
-      >
-        Login
+      <Button variant="secondary" className="flex-1" onClick={onNavigate}>
+        <Link to="/login">Login</Link>
       </Button>
-      <Button
-        className="flex-1"
-        render={<Link to="/register" />}
-        onClick={onNavigate}
-      >
-        Signup
+      <Button className="flex-1" onClick={onNavigate}>
+        <Link to="/register">Signup</Link>
       </Button>
     </ButtonGroup>
   );
@@ -206,18 +203,16 @@ function MobileAuthButtons({ onNavigate }: AuthButtonsProps) {
         variant="secondary"
         size="xl"
         className="flex-1"
-        render={<Link to="/login" />}
         onClick={onNavigate}
       >
-        <p className="text-base">Login</p>
+        <Link to="/login">
+          <p className="text-base">Login</p>
+        </Link>
       </Button>
-      <Button
-        className="flex-1"
-        size="xl"
-        render={<Link to="/register" />}
-        onClick={onNavigate}
-      >
-        <p className="text-base">Signup</p>
+      <Button className="flex-1" size="xl" onClick={onNavigate}>
+        <Link to="/register">
+          <p className="text-base">Signup</p>
+        </Link>
       </Button>
     </ButtonGroup>
   );
@@ -246,7 +241,7 @@ function AvatarDropdown({
       <DropdownMenuTrigger aria-label="Open account menu">
         <UserAvatar user={user} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent sideOffset={16} className="min-w-fit px-3 py-2">
+      <DropdownMenuContent sideOffset={20} className="min-w-fit px-3 py-2">
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
@@ -257,14 +252,6 @@ function AvatarDropdown({
           <DropdownMenuItem variant="destructive" onClick={onLogout}>
             <LogOut />
             Logout
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuGroup className="mt-2">
-          <DropdownMenuLabel>Language</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Globe />
-            EN
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

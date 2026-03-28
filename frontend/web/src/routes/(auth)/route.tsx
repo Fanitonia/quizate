@@ -6,7 +6,7 @@ import { ensureCurrentUserIfLoggedIn } from "@/api/auth/query-options";
 import type { Context } from "@/routes/__root";
 
 // COMPONENTS
-import { ComponentLoader } from "@/components/component-loader";
+import { ComponentLoader } from "@/components/feedback/component-loader";
 
 export const Route = createFileRoute("/(auth)")({
   component: RouteComponent,

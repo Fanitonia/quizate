@@ -27,7 +27,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
-import AlertError from "@/components/alert-error";
+import AlertError from "@/components/feedback/alert-error";
 
 // API / TYPES
 import type { RegisterFormFields } from "./register-types";
