@@ -1,5 +1,5 @@
 // REACT
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 
 // LIBRARIES
@@ -11,6 +11,10 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 // THEME
 import { ThemeProvider } from "./stores/theme-provider";
 import "./index.css";
+
+// I18N
+import "./utils/i18n";
+import { ComponentLoader } from "./components/feedback/component-loader";
 
 const queryClient = new QueryClient();
 
@@ -30,12 +34,14 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <ThemeProvider defaultTheme="dark">
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </ThemeProvider>
+      <Suspense fallback={<ComponentLoader />}>
+        <ThemeProvider defaultTheme="dark">
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </ThemeProvider>
+      </Suspense>
     </StrictMode>
   );
 }

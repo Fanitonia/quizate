@@ -1,0 +1,26 @@
+{
+  "notFound": {
+    "title": "404 - Page Not Found",
+    "description": "The page you are looking for does not exist."
+  },
+  "goneWrong": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. Please try again later."
+  },
+  "alertError": {
+    "title": "Error",
+    "description": "An error occurred. Please try again."
+  },
+  "footer": {
+    "copyright": "© {{year}} Quizate. All rights reserved."
+  },
+  "navbar": {
+    "categories": "Categories",
+    "create": "Create",
+    "login": "Login",
+    "signup": "Signup",
+    "logout": "Logout",
+    "profile": "Profile",
+    "myAccount": "My Account"
+  }
+}

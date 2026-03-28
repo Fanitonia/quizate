@@ -1,5 +1,9 @@
+// COMPONENTS & ICONS
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CircleAlert } from "lucide-react";
+
+// EXTERNAL
+import { useTranslation } from "react-i18next";
 
 interface AlertErrorProps {
   className?: string;
@@ -10,12 +14,14 @@ interface AlertErrorProps {
 }
 
 function AlertError({ className, error }: AlertErrorProps) {
+  const { t } = useTranslation();
+
   return (
     <Alert variant="destructive" className={className}>
       <CircleAlert />
-      <AlertTitle>{error?.title || "Error"}</AlertTitle>
+      <AlertTitle>{error?.title || t("alertError.title")}</AlertTitle>
       <AlertDescription>
-        {error?.description || "An error occurred. Please try again."}
+        {error?.description || t("alertError.description")}
       </AlertDescription>
     </Alert>
   );

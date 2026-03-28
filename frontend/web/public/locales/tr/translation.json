@@ -1,0 +1,26 @@
+{
+  "notFound": {
+    "title": "404 - Sayfa Bulunamadı",
+    "description": "Aradığınız sayfa mevcut değil."
+  },
+  "goneWrong": {
+    "title": "Bir şeyler ters gitti",
+    "description": "Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+  },
+  "alertError": {
+    "title": "Hata",
+    "description": "Bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "footer": {
+    "copyright": "© {{year}} Quizate. Tüm hakları saklıdır."
+  },
+  "navbar": {
+    "categories": "Kategoriler",
+    "create": "Oluştur",
+    "login": "Giriş Yap",
+    "signup": "Kayıt Ol",
+    "logout": "Çıkış Yap",
+    "profile": "Profil",
+    "myAccount": "Hesabım"
+  }
+}

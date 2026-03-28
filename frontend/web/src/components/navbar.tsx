@@ -1,14 +1,18 @@
-// EXTERNAL IMPORTS
+// EXTERNAL
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
-// API & TYPES
+// INTERNAL
 import { logout } from "@/api/auth/auth-requests";
 import {
   currentUserQueryKey,
   useCurrentUserQuery,
 } from "@/api/auth/query-options";
+import type { DetailedUserResponse } from "@/types/api/users";
+import { useTheme } from "@/stores/theme-provider";
+import { useUserStore } from "@/stores/user-store";
 
 // COMPONENTS & ICONS
 import {
@@ -28,6 +32,8 @@ import { ButtonGroup } from "@/components/ui/button-group";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -41,9 +47,6 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useTheme } from "@/stores/theme-provider";
-import { useUserStore } from "@/stores/user-store";
-import type { DetailedUserResponse } from "@/types/api/users";
 
 type NavbarUser = DetailedUserResponse | null | undefined;
 
@@ -96,14 +99,16 @@ function Navbar() {
 }
 
 function DesktopActions({ user, onLogout }: NavbarActionsProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="hidden items-center justify-center gap-2 md:flex md:flex-row">
-      <Button variant="ghost">Categories</Button>
+      <Button variant="ghost">{t("navbar.categories")}</Button>
       <Button className="justify-self-start" variant="ghost" size="icon">
         <Search className="size-5" />
       </Button>
       <Button variant="secondary">
-        <Plus /> Create
+        <Plus /> {t("navbar.create")}
       </Button>
 
       {user ? (
@@ -111,15 +116,15 @@ function DesktopActions({ user, onLogout }: NavbarActionsProps) {
       ) : (
         <AuthButtons />
       )}
-      <Button variant="ghost">
-        <Globe /> EN
-      </Button>
+      <LanguageSelector />
       <ToggleThemeButton />
     </div>
   );
 }
 
 function MobileActions({ user, onLogout }: NavbarActionsProps) {
+  const { t } = useTranslation();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const closeMenu = () => setIsOpen(false);
@@ -145,25 +150,23 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
           <div className="flex flex-row">
             <Button variant="ghost" size="xl">
               <List />
-              <p className="text-lg">Categories</p>
+              <p className="text-lg">{t("navbar.categories")}</p>
             </Button>
           </div>
           <SheetFooter>
             <Button size="xl">
-              <Plus /> <p className="text-base">Create</p>
+              <Plus /> <p className="text-base">{t("navbar.create")}</p>
             </Button>
             {user ? (
               <Button size="xl" variant="secondary">
                 <UserAvatar user={user as DetailedUserResponse} />
-                <p className="text-base">Profile</p>
+                <p className="text-base">{t("navbar.profile")}</p>
               </Button>
             ) : (
               <MobileAuthButtons onNavigate={closeMenu} />
             )}
             <div className="flex items-center justify-center gap-1">
-              <Button variant="secondary" size="xl" className="flex-2">
-                <Globe /> EN
-              </Button>
+              <LanguageSelector xl={true} ghost={false} className="flex-2" />
               <ToggleThemeButton className="flex-1" xl={true} ghost={false} />
               {user && (
                 <Button
@@ -172,7 +175,7 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
                   className="text-destructive flex-2"
                   onClick={handleLogout}
                 >
-                  <LogOut /> Logout
+                  <LogOut /> {t("navbar.logout")}
                 </Button>
               )}
             </div>
@@ -184,19 +187,23 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
 }
 
 function AuthButtons({ onNavigate }: AuthButtonsProps) {
+  const { t } = useTranslation();
+
   return (
     <ButtonGroup className="flex w-full">
       <Button variant="secondary" className="flex-1" onClick={onNavigate}>
-        <Link to="/login">Login</Link>
+        <Link to="/login">{t("navbar.login")}</Link>
       </Button>
       <Button className="flex-1" onClick={onNavigate}>
-        <Link to="/register">Signup</Link>
+        <Link to="/register">{t("navbar.signup")}</Link>
       </Button>
     </ButtonGroup>
   );
 }
 
 function MobileAuthButtons({ onNavigate }: AuthButtonsProps) {
+  const { t } = useTranslation();
+
   return (
     <ButtonGroup className="flex w-full">
       <Button
@@ -206,12 +213,12 @@ function MobileAuthButtons({ onNavigate }: AuthButtonsProps) {
         onClick={onNavigate}
       >
         <Link to="/login">
-          <p className="text-base">Login</p>
+          <p className="text-base">{t("navbar.login")}</p>
         </Link>
       </Button>
       <Button className="flex-1" size="xl" onClick={onNavigate}>
         <Link to="/register">
-          <p className="text-base">Signup</p>
+          <p className="text-base">{t("navbar.signup")}</p>
         </Link>
       </Button>
     </ButtonGroup>
@@ -236,6 +243,8 @@ function AvatarDropdown({
   user: DetailedUserResponse;
   onLogout: () => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger aria-label="Open account menu">
@@ -243,16 +252,70 @@ function AvatarDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent sideOffset={20} className="min-w-fit px-3 py-2">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("navbar.myAccount")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <User />
-            Profile
+            {t("navbar.profile")}
           </DropdownMenuItem>
           <DropdownMenuItem variant="destructive" onClick={onLogout}>
             <LogOut />
-            Logout
+            {t("navbar.logout")}
           </DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function LanguageSelector({
+  className,
+  xl = false,
+  ghost = true,
+}: {
+  className?: string;
+  xl?: boolean;
+  ghost?: boolean;
+}) {
+  const { i18n } = useTranslation();
+
+  function setLanguage(lang: string) {
+    i18n.changeLanguage(lang);
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant={ghost ? "ghost" : "secondary"}
+            className={className}
+            size={xl ? "xl" : "default"}
+          >
+            <Globe className="h-4 w-4" />
+            {i18n.language.toUpperCase().slice(0, 2)}
+          </Button>
+        }
+      ></DropdownMenuTrigger>
+      <DropdownMenuContent sideOffset={8}>
+        <DropdownMenuGroup>
+          <DropdownMenuRadioGroup
+            onValueChange={setLanguage}
+            value={i18n.language}
+          >
+            <DropdownMenuRadioItem value="en">
+              <span className="flex items-center gap-2">
+                <span>EN</span>
+                <span>English</span>
+              </span>
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value="tr">
+              <span className="flex items-center gap-2">
+                <span>TR</span>
+                <span>Türkçe</span>
+              </span>
+            </DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
