@@ -1,4 +1,14 @@
 {
+  "username": "Username",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
+  "signup": "Signup",
+  "logout": "Logout",
+  "profile": "Profile",
+  "myAccount": "My Account",
+  "optional": "optional",
+  "workInProgress": "Work in Progress",
   "notFound": {
     "title": "404 - Page Not Found",
     "description": "The page you are looking for does not exist."
@@ -16,11 +26,46 @@
   },
   "navbar": {
     "categories": "Categories",
-    "create": "Create",
-    "login": "Login",
-    "signup": "Signup",
-    "logout": "Logout",
-    "profile": "Profile",
-    "myAccount": "My Account"
+    "create": "Create"
+  },
+  "loginPage": {
+    "emailOrUsername": "Email or Username",
+    "error": {
+      "title": "Login Failed",
+      "description": "An error occurred during login. Please try again.",
+      "emailOrUsernameRequired": "Email or username is required",
+      "passwordRequired": "Password is required"
+    },
+    "header": {
+      "title": "Welcome back!",
+      "description": "Please enter your credentials to log in."
+    },
+    "footer": {
+      "noAccount": "Don't have an account?",
+      "signup": "Signup"
+    }
+  },
+  "registerPage": {
+    "confirmPassword": "Confirm Password",
+    "error": {
+      "title": "Registration Failed",
+      "description": "An error occurred during registration. Please try again.",
+      "usernameRequired": "Username is required",
+      "usernameMinLength": "Username must be at least 3 characters long",
+      "usernameInvalid": "Username must be alphanumeric with underscores only",
+      "emailInvalid": "Invalid email address",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters long",
+      "passwordInvalid": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordsDoNotMatch": "Passwords do not match"
+    },
+    "header": {
+      "title": "Create Your Account",
+      "description": "Enter your details below to get started."
+    },
+    "footer": {
+      "haveAccount": "Do you have an account?"
+    }
   }
 }

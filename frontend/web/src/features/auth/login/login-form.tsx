@@ -26,21 +26,26 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 
 // UTILS
 import { cn } from "@/lib/utils";
 
-// API & TYPES
+// API
 import { login } from "@/api/auth/auth-requests";
 import type { LoginRequest } from "@/api/auth/auth-types";
-import type { LoginFormFields } from "./login-types";
-import { loginFormSchema } from "./login-schemas";
 import {
   currentUserQueryKey,
   getCurrentUserQueryOptions,
 } from "@/api/auth/query-options";
-import { useUserStore } from "@/stores/user-store";
 import type { ErrorResponse } from "@/types/api/error";
+
+// TYPES
+import type { LoginFormFields } from "./login-types";
+import { loginFormSchema } from "./login-schemas";
+
+// STORES
+import { useUserStore } from "@/stores/user-store";
 
 function LoginForm({ className }: { className?: string }) {
   const queryClient = useQueryClient();
@@ -77,6 +82,8 @@ function LoginForm({ className }: { className?: string }) {
     await loginMutateAsync(data);
   };
 
+  const { t } = useTranslation();
+
   return (
     <Card className={cn("min-w-min px-3 py-4", className)}>
       <LoginHeader />
@@ -86,7 +93,7 @@ function LoginForm({ className }: { className?: string }) {
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="email-username">
-                  Email or Username
+                  {t("loginPage.emailOrUsername")}
                 </FieldLabel>
                 <Input
                   {...register("usernameOrEmail")}
@@ -95,7 +102,7 @@ function LoginForm({ className }: { className?: string }) {
                 <FieldError errors={[errors.usernameOrEmail]}></FieldError>
               </Field>
               <Field>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <FieldLabel htmlFor="password">{t("password")}</FieldLabel>
                 <Input
                   {...register("password")}
                   id="password"
@@ -108,10 +115,9 @@ function LoginForm({ className }: { className?: string }) {
               <AlertError
                 className="my-4"
                 error={{
-                  title: "Login Failed",
+                  title: t("loginPage.error.title"),
                   description:
-                    errors.root?.message ||
-                    "An error occurred during login. Please try again.",
+                    errors.root?.message || t("login.error.description"),
                 }}
               />
             )}
@@ -124,7 +130,7 @@ function LoginForm({ className }: { className?: string }) {
                 disabled={isSubmitting}
               >
                 {isSubmitting && <Spinner />}
-                Login
+                {t("login")}
               </Button>
             </Field>
           </form>
@@ -136,20 +142,24 @@ function LoginForm({ className }: { className?: string }) {
 }
 
 function LoginHeader() {
+  const { t } = useTranslation();
+
   return (
     <CardHeader className="flex flex-col items-center justify-center py-1 text-center">
-      <CardTitle>Welcome back!</CardTitle>
-      <CardDescription>Login to Quizate</CardDescription>
+      <CardTitle>{t("loginPage.header.title")}</CardTitle>
+      <CardDescription>{t("loginPage.header.description")}</CardDescription>
     </CardHeader>
   );
 }
 
 function SignupFooter() {
+  const { t } = useTranslation();
+
   return (
     <Field>
       <div className="flex flex-row items-center justify-center gap-0">
         <Label htmlFor="signup" className="text-accent-foreground/60 text-xs">
-          Don't have an account?
+          {t("loginPage.footer.noAccount")}
         </Label>
         <Link to="/register">
           <Button
@@ -158,7 +168,7 @@ function SignupFooter() {
             size="xs"
             className="text-accent-foreground/60 hover:text-foreground px-1 underline"
           >
-            Signup
+            {t("signup")}
           </Button>
         </Link>
       </div>

@@ -1,11 +1,21 @@
 {
+  "username": "Kullanıcı Adı",
+  "email": "E-posta",
+  "password": "Parola",
+  "login": "Giriş Yap",
+  "signup": "Kayıt Ol",
+  "logout": "Çıkış Yap",
+  "profile": "Profil",
+  "myAccount": "Hesabım",
+  "optional": "isteğe bağlı",
+  "workInProgress": "Geliştirme Aşamasında",
   "notFound": {
     "title": "404 - Sayfa Bulunamadı",
     "description": "Aradığınız sayfa mevcut değil."
   },
   "goneWrong": {
     "title": "Bir şeyler ters gitti",
-    "description": "Beklenmeyen bir hata oluştu. Lütfen daha sonra tekrar deneyin."
+    "description": "Beklenmedik bir hata oluştu. Lütfen daha sonra tekrar deneyin."
   },
   "alertError": {
     "title": "Hata",
@@ -16,11 +26,45 @@
   },
   "navbar": {
     "categories": "Kategoriler",
-    "create": "Oluştur",
-    "login": "Giriş Yap",
-    "signup": "Kayıt Ol",
-    "logout": "Çıkış Yap",
-    "profile": "Profil",
-    "myAccount": "Hesabım"
+    "create": "Oluştur"
+  },
+  "loginPage": {
+    "emailOrUsername": "E-posta veya Kullanıcı Adı",
+    "error": {
+      "title": "Giriş Başarısız",
+      "description": "Giriş sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+      "emailOrUsernameRequired": "E-posta veya kullanıcı adı gereklidir",
+      "passwordRequired": "Parola gereklidir"
+    },
+    "header": {
+      "title": "Tekrar Hoşgeldin!",
+      "description": "Giriş yapmak için bilgilerinizi girin."
+    },
+    "footer": {
+      "noAccount": "Hesabın yok mu?"
+    }
+  },
+  "registerPage": {
+    "confirmPassword": "Parolayı Onayla",
+    "error": {
+      "title": "Kayıt Başarısız",
+      "description": "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.",
+      "usernameRequired": "Kullanıcı adı gereklidir",
+      "usernameMinLength": "Kullanıcı adı en az 3 karakter uzunluğunda olmalıdır",
+      "usernameInvalid": "Kullanıcı adı yalnızca alfanümerik karakterler ve alt çizgi içerebilir",
+      "emailInvalid": "Geçersiz e-posta adresi",
+      "passwordRequired": "Parola gereklidir",
+      "passwordMinLength": "Parola en az 8 karakter uzunluğunda olmalıdır",
+      "passwordInvalid": "Parola en az bir büyük harf, bir küçük harf ve bir sayı içermelidir",
+      "confirmPasswordRequired": "Lütfen parolanızı onaylayın",
+      "passwordsDoNotMatch": "Parolalar eşleşmiyor"
+    },
+    "header": {
+      "title": "Hesap Oluştur",
+      "description": "Başlamak için bilgilerinizi aşağıya girin."
+    },
+    "footer": {
+      "haveAccount": "Hesabınız var mı?"
+    }
   }
 }

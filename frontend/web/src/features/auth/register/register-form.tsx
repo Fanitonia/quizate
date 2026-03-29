@@ -3,6 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 // UTILS
 import { cn } from "@/lib/utils";
@@ -78,6 +79,8 @@ function RegisterForm({ className }: { className?: string }) {
     await registerMutate(data as RegisterRequest);
   };
 
+  const { t } = useTranslation();
+
   return (
     <Card className={cn("min-w-min px-3 py-4", className)}>
       <RegisterHeader />
@@ -87,7 +90,7 @@ function RegisterForm({ className }: { className?: string }) {
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="username">Username</FieldLabel>
+                <FieldLabel htmlFor="username">{t("username")}</FieldLabel>
                 <Input
                   {...register("username")}
                   id="username"
@@ -101,8 +104,10 @@ function RegisterForm({ className }: { className?: string }) {
               {/* EMAIL */}
               <Field>
                 <FieldLabel htmlFor="email">
-                  Email{" "}
-                  <span className="text-muted-foreground">(optional)</span>
+                  {t("email")}{" "}
+                  <span className="text-muted-foreground">
+                    ({t("optional")})
+                  </span>
                 </FieldLabel>
                 <Input
                   {...register("email")}
@@ -117,7 +122,7 @@ function RegisterForm({ className }: { className?: string }) {
               </Field>
               {/* PASSWORD */}
               <Field>
-                <FieldLabel htmlFor="password">Password</FieldLabel>
+                <FieldLabel htmlFor="password">{t("password")}</FieldLabel>
                 <Input
                   {...register("password")}
                   id="password"
@@ -130,7 +135,7 @@ function RegisterForm({ className }: { className?: string }) {
               </Field>
               <Field>
                 <FieldLabel htmlFor="confirm-password">
-                  Confirm Password
+                  {t("registerPage.confirmPassword")}
                 </FieldLabel>
                 <Input
                   {...register("confirmPassword")}
@@ -147,10 +152,9 @@ function RegisterForm({ className }: { className?: string }) {
               <AlertError
                 className="my-4"
                 error={{
-                  title: "Registration Failed",
+                  title: t("registerPage.error.title"),
                   description:
-                    errors.root?.message ||
-                    "An error occurred during registration. Please try again.",
+                    errors.root?.message || t("registerPage.error.description"),
                 }}
               ></AlertError>
             )}
@@ -164,7 +168,7 @@ function RegisterForm({ className }: { className?: string }) {
                 disabled={isSubmitting}
               >
                 {isSubmitting && <Spinner />}
-                Register
+                {t("signup")}
               </Button>
             </Field>
           </form>
@@ -176,22 +180,24 @@ function RegisterForm({ className }: { className?: string }) {
 }
 
 function RegisterHeader() {
+  const { t } = useTranslation();
+
   return (
     <CardHeader className="flex flex-col items-center justify-center py-1 text-center">
-      <CardTitle>Create Your Account</CardTitle>
-      <CardDescription>
-        Enter your details below to get started.
-      </CardDescription>
+      <CardTitle>{t("registerPage.header.title")}</CardTitle>
+      <CardDescription>{t("registerPage.header.description")}</CardDescription>
     </CardHeader>
   );
 }
 
 function LoginFooter() {
+  const { t } = useTranslation();
+
   return (
     <Field>
       <div className="flex flex-row items-center justify-center gap-0">
         <Label htmlFor="signup" className="text-accent-foreground/60 text-xs">
-          Do you have an account?
+          {t("registerPage.footer.haveAccount")}
         </Label>
         <Link to="/login">
           <Button
@@ -200,7 +206,7 @@ function LoginFooter() {
             size="xs"
             className="text-accent-foreground/60 hover:text-foreground px-1 underline"
           >
-            Login
+            {t("login")}
           </Button>
         </Link>
       </div>

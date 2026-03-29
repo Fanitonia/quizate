@@ -59,7 +59,6 @@ interface AuthButtonsProps {
   onNavigate?: () => void;
 }
 
-// TODO: dil seçimini çalışır hale getir
 // TODO: search butonunu çalışır hale getir
 
 function Navbar() {
@@ -160,7 +159,7 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
             {user ? (
               <Button size="xl" variant="secondary">
                 <UserAvatar user={user as DetailedUserResponse} />
-                <p className="text-base">{t("navbar.profile")}</p>
+                <p className="text-base">{t("profile")}</p>
               </Button>
             ) : (
               <MobileAuthButtons onNavigate={closeMenu} />
@@ -175,7 +174,7 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
                   className="text-destructive flex-2"
                   onClick={handleLogout}
                 >
-                  <LogOut /> {t("navbar.logout")}
+                  <LogOut /> {t("logout")}
                 </Button>
               )}
             </div>
@@ -192,10 +191,10 @@ function AuthButtons({ onNavigate }: AuthButtonsProps) {
   return (
     <ButtonGroup className="flex w-full">
       <Button variant="secondary" className="flex-1" onClick={onNavigate}>
-        <Link to="/login">{t("navbar.login")}</Link>
+        <Link to="/login">{t("login")}</Link>
       </Button>
       <Button className="flex-1" onClick={onNavigate}>
-        <Link to="/register">{t("navbar.signup")}</Link>
+        <Link to="/register">{t("signup")}</Link>
       </Button>
     </ButtonGroup>
   );
@@ -213,12 +212,12 @@ function MobileAuthButtons({ onNavigate }: AuthButtonsProps) {
         onClick={onNavigate}
       >
         <Link to="/login">
-          <p className="text-base">{t("navbar.login")}</p>
+          <p className="text-base">{t("login")}</p>
         </Link>
       </Button>
       <Button className="flex-1" size="xl" onClick={onNavigate}>
         <Link to="/register">
-          <p className="text-base">{t("navbar.signup")}</p>
+          <p className="text-base">{t("signup")}</p>
         </Link>
       </Button>
     </ButtonGroup>
@@ -252,15 +251,15 @@ function AvatarDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent sideOffset={20} className="min-w-fit px-3 py-2">
         <DropdownMenuGroup>
-          <DropdownMenuLabel>{t("navbar.myAccount")}</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("myAccount")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <User />
-            {t("navbar.profile")}
+            {t("profile")}
           </DropdownMenuItem>
           <DropdownMenuItem variant="destructive" onClick={onLogout}>
             <LogOut />
-            {t("navbar.logout")}
+            {t("logout")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
