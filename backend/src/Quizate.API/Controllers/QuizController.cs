@@ -59,9 +59,11 @@ public class QuizController(
 
     // onur
     [HttpPost]
-    public async Task<ActionResult> CreateQuiz(CreateQuizRequest request)
+    public async Task<ActionResult<QuizResponse>> CreateQuiz(CreateQuizRequest request)
     {
-        var result = await quizCommand.CreateQuizAsync(request);
+        User.TryGetUserId(out var userId);
+
+        var result = await quizCommand.CreateQuizAsync(request, userId);
 
         if (result.IsFailure)
             return BadRequest(result.Error);

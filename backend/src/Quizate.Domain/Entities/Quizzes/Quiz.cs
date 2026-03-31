@@ -80,4 +80,10 @@ public class Quiz
         if (languageCode != null)
             UpdatedAt = DateTime.UtcNow;
     }
+
+    public void SetCreatorId(Guid creatorId)
+    {
+        CreatorId = creatorId;
+        UpdatedAt = DateTime.UtcNow;
+    }
 }

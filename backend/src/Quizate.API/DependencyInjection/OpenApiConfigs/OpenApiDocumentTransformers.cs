@@ -16,10 +16,10 @@ internal class OpenApiDocumentTransformer(IHostEnvironment environment) : IOpenA
             ["CookieAuth"] = new OpenApiSecurityScheme
             {
                 Type = SecuritySchemeType.Http,
-                Scheme = "cookie",
+                Scheme = "bearer",
                 In = ParameterLocation.Cookie,
                 Name = "ACCESS_TOKEN",
-                Description = "JWT is stored in HttpOnly cookie set by /auth/login and /auth/refreshToken."
+                Description = "JWT is stored in HttpOnly cookie set by /auth/login, /auth/register and /auth/refreshToken."
             }
         };
 

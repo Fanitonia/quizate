@@ -17,7 +17,7 @@ public class QuizCommandService(
     QuizateDbContext context,
     IMapper mapper) : IQuizCommandService
 {
-    public async Task<Result<QuizResponse?>> CreateQuizAsync(CreateQuizRequest request)
+    public async Task<Result<QuizResponse?>> CreateQuizAsync(CreateQuizRequest request, Guid? userId = null)
     {
         var normalizedRequestTopics = request.Topics
             .Select(topic => topic.Trim().ToLowerInvariant())
@@ -46,6 +46,9 @@ public class QuizCommandService(
             .ToList();
 
         quiz.Questions = questions;
+
+        if (userId.HasValue)
+            quiz.SetCreatorId(userId.Value);
 
         context.Quizzes.Add(quiz);
         await context.SaveChangesAsync();
