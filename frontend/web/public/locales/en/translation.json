@@ -22,6 +22,7 @@
     "description": "An error occurred. Please try again."
   },
   "footer": {
+    "home": "Home",
     "copyright": "© {{year}} Quizate. All rights reserved."
   },
   "navbar": {
@@ -66,6 +67,74 @@
     },
     "footer": {
       "haveAccount": "Do you have an account?"
+    }
+  },
+  "profilePage": {
+    "title": "My profile",
+    "description": "Manage your account details and review the quizzes you have created.",
+    "error": {
+      "title": "Profile unavailable",
+      "description": "We couldn't load your profile details right now."
+    },
+    "overview": {
+      "title": "Profile overview",
+      "description": "Basic account information from your Quizate profile.",
+      "memberSince": "Member since",
+      "emailStatus": "Email status",
+      "verified": "Verified",
+      "notVerified": "Not verified",
+      "noEmail": "No email added yet"
+    },
+    "settings": {
+      "title": "Account settings",
+      "description": "Update the basic details attached to your account.",
+      "usernameHelp": "This is the name other users will see on your quizzes.",
+      "emailHelp": "Adding an email helps with account recovery and notifications.",
+      "submit": "Save changes",
+      "success": "Profile updated successfully.",
+      "error": {
+        "title": "Update failed",
+        "description": "We couldn't save your profile changes."
+      }
+    },
+    "actions": {
+      "openSettings": "Edit account",
+      "openPassword": "Password"
+    },
+    "password": {
+      "title": "Change password",
+      "description": "Use a strong password to keep your account secure.",
+      "currentPassword": "Current password",
+      "currentPasswordHelp": "Enter your existing password to confirm this change.",
+      "newPassword": "New password",
+      "newPasswordHelp": "Use at least 8 characters with upper, lower, and numeric characters.",
+      "confirmPassword": "Confirm new password",
+      "submit": "Update password",
+      "success": "Password updated successfully.",
+      "error": {
+        "title": "Password update failed",
+        "description": "We couldn't change your password.",
+        "currentPasswordRequired": "Current password is required"
+      }
+    },
+    "quizzes": {
+      "title": "My quizzes",
+      "description": "A quick look at the quizzes you have created.",
+      "visibility": "Visibility",
+      "language": "Language",
+      "questions": "Questions",
+      "attempts": "Attempts",
+      "public": "Public",
+      "private": "Private",
+      "noDescription": "No description provided for this quiz.",
+      "empty": {
+        "title": "No quizzes yet",
+        "description": "Your quizzes will appear here after you create one."
+      },
+      "error": {
+        "title": "Couldn't load quizzes",
+        "description": "Please try again in a moment."
+      }
     }
   }
 }

@@ -33,12 +33,12 @@ import AlertError from "@/components/feedback/alert-error";
 // API / TYPES
 import type { RegisterFormFields } from "./register-types";
 import { registerFormSchema } from "./register-schemas";
-import type { RegisterRequest } from "@/api/auth/auth-types";
-import { register as registerRequest } from "@/api/auth/auth-requests";
+import type { RegisterRequest } from "@/api/auth/types";
+import { register as registerRequest } from "@/api/auth/requests";
 import {
   currentUserQueryKey,
   getCurrentUserQueryOptions,
-} from "@/api/auth/query-options";
+} from "@/api/user/currentUserQueryOptions";
 import type { AxiosError } from "axios";
 import type { ErrorResponse } from "@/types/api/error";
 

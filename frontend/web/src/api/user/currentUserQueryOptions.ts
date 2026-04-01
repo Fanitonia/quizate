@@ -6,7 +6,7 @@ import {
 
 import { useUserStore } from "@/stores/user-store";
 
-import { getCurrentUser } from "./auth-requests";
+import { getCurrentUser } from "./requests";
 
 const currentUserQueryKey = ["currentUser"] as const;
 

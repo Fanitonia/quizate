@@ -9,9 +9,4 @@ interface RegisterRequest {
   password: string;
 }
 
-interface PasswordChangeRequest {
-  oldPassword: string;
-  newPassword: string;
-}
-
-export type { LoginRequest, RegisterRequest, PasswordChangeRequest };
+export type { LoginRequest, RegisterRequest };

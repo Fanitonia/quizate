@@ -2,7 +2,7 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 // API & TYPES
-import { ensureCurrentUserIfLoggedIn } from "@/api/auth/query-options";
+import { ensureCurrentUserIfLoggedIn } from "@/api/user/currentUserQueryOptions";
 import type { Context } from "@/routes/__root";
 
 // COMPONENTS

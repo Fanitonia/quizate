@@ -22,6 +22,7 @@
     "description": "Bir hata oluştu. Lütfen tekrar deneyin."
   },
   "footer": {
+    "home": "Ana Sayfa",
     "copyright": "© {{year}} Quizate. Tüm hakları saklıdır."
   },
   "navbar": {
@@ -65,6 +66,74 @@
     },
     "footer": {
       "haveAccount": "Hesabınız var mı?"
+    }
+  },
+  "profilePage": {
+    "title": "Profilim",
+    "description": "Hesap bilgilerinizi yönetin ve oluşturduğunuz quizleri gözden geçirin.",
+    "error": {
+      "title": "Profil yüklenemedi",
+      "description": "Profil bilgileriniz şu anda yüklenemedi."
+    },
+    "overview": {
+      "title": "Profil özeti",
+      "description": "Quizate profilinizdeki temel hesap bilgileri.",
+      "memberSince": "Katılım tarihi",
+      "emailStatus": "E-posta durumu",
+      "verified": "Doğrulandı",
+      "notVerified": "Doğrulanmadı",
+      "noEmail": "Henüz e-posta eklenmedi"
+    },
+    "settings": {
+      "title": "Hesap ayarları",
+      "description": "Hesabınıza bağlı temel bilgileri güncelleyin.",
+      "usernameHelp": "Diğer kullanıcılar quizlerinizde bu adı görür.",
+      "emailHelp": "E-posta eklemek hesap kurtarma ve bildirimler için yardımcı olur.",
+      "submit": "Değişiklikleri kaydet",
+      "success": "Profil başarıyla güncellendi.",
+      "error": {
+        "title": "Güncelleme başarısız",
+        "description": "Profil değişiklikleri kaydedilemedi."
+      }
+    },
+    "actions": {
+      "openSettings": "Hesabı düzenle",
+      "openPassword": "Parola"
+    },
+    "password": {
+      "title": "Parolayı değiştir",
+      "description": "Hesabınızı korumak için güçlü bir parola kullanın.",
+      "currentPassword": "Mevcut parola",
+      "currentPasswordHelp": "Bu değişikliği onaylamak için mevcut parolanızı girin.",
+      "newPassword": "Yeni parola",
+      "newPasswordHelp": "En az 8 karakter, büyük harf, küçük harf ve sayı kullanın.",
+      "confirmPassword": "Yeni parolayı onayla",
+      "submit": "Parolayı güncelle",
+      "success": "Parola başarıyla güncellendi.",
+      "error": {
+        "title": "Parola güncellenemedi",
+        "description": "Parolanız değiştirilemedi.",
+        "currentPasswordRequired": "Mevcut parola gereklidir"
+      }
+    },
+    "quizzes": {
+      "title": "Quizlerim",
+      "description": "Oluşturduğunuz quizlere hızlı bir bakış.",
+      "visibility": "Görünürlük",
+      "language": "Dil",
+      "questions": "Soru",
+      "attempts": "Deneme",
+      "public": "Herkese Açık",
+      "private": "Gizli",
+      "noDescription": "Bu quiz için açıklama eklenmemiş.",
+      "empty": {
+        "title": "Henüz quiz yok",
+        "description": "Bir quiz oluşturduğunuzda burada görünecek."
+      },
+      "error": {
+        "title": "Quizler yüklenemedi",
+        "description": "Lütfen kısa süre sonra tekrar deneyin."
+      }
     }
   }
 }

@@ -5,12 +5,12 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 // INTERNAL
-import { logout } from "@/api/auth/auth-requests";
+import { logout } from "@/api/auth/requests";
 import {
   currentUserQueryKey,
   useCurrentUserQuery,
-} from "@/api/auth/query-options";
-import type { DetailedUserResponse } from "@/types/api/users";
+} from "@/api/user/currentUserQueryOptions";
+import type { DetailedUserResponse } from "@/api/user/types";
 import { useTheme } from "@/stores/theme-provider";
 import { useUserStore } from "@/stores/user-store";
 
@@ -157,7 +157,13 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
               <Plus /> <p className="text-base">{t("navbar.create")}</p>
             </Button>
             {user ? (
-              <Button size="xl" variant="secondary">
+              <Button
+                size="xl"
+                variant="secondary"
+                onClick={closeMenu}
+                nativeButton={false}
+                render={<Link to="/users/me"></Link>}
+              >
                 <UserAvatar user={user as DetailedUserResponse} />
                 <p className="text-base">{t("profile")}</p>
               </Button>
@@ -254,8 +260,10 @@ function AvatarDropdown({
           <DropdownMenuLabel>{t("myAccount")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <User />
-            {t("profile")}
+            <Link to="/users/me" className="flex items-center gap-2">
+              <User />
+              {t("profile")}
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem variant="destructive" onClick={onLogout}>
             <LogOut />

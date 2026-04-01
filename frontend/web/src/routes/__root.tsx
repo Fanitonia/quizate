@@ -8,7 +8,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 // API
-import { ensureCurrentUserIfLoggedIn } from "@/api/auth/query-options";
+import { ensureCurrentUserIfLoggedIn } from "@/api/user/currentUserQueryOptions";
 
 // COMPONENTS
 import Footer from "@/components/footer";

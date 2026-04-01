@@ -32,12 +32,12 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 // API
-import { login } from "@/api/auth/auth-requests";
-import type { LoginRequest } from "@/api/auth/auth-types";
+import { login } from "@/api/auth/requests";
+import type { LoginRequest } from "@/api/auth/types";
 import {
   currentUserQueryKey,
   getCurrentUserQueryOptions,
-} from "@/api/auth/query-options";
+} from "@/api/user/currentUserQueryOptions";
 import type { ErrorResponse } from "@/types/api/error";
 
 // TYPES
@@ -117,7 +117,7 @@ function LoginForm({ className }: { className?: string }) {
                 error={{
                   title: t("loginPage.error.title"),
                   description:
-                    errors.root?.message || t("login.error.description"),
+                    errors.root?.message || t("loginPage.error.description"),
                 }}
               />
             )}

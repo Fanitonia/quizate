@@ -21,9 +21,15 @@ interface DetailedUserInfoResponse extends UserInfoResponse {
   isEmailVerified: boolean;
 }
 
+interface PasswordChangeRequest {
+  oldPassword: string;
+  newPassword: string;
+}
+
 export type {
   UpdateUserRequest,
   UpdateUserRoleRequest,
-  UserInfoResponse as UserResponse,
-  DetailedUserInfoResponse as DetailedUserResponse,
+  UserInfoResponse,
+  DetailedUserInfoResponse,
+  PasswordChangeRequest,
 };
