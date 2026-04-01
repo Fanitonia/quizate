@@ -33,7 +33,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Spinner } from "@/components/ui/spinner";
 import type { ErrorResponse } from "@/types/api/error";
-import type { DetailedUserResponse } from "@/api/user/types";
+import type { DetailedUserInfoResponse } from "@/api/user/types";
 
 import {
   profileSettingsSchema,
@@ -44,7 +44,7 @@ function ProfileSettingsForm({
   currentUser,
   embedded = false,
 }: {
-  currentUser: DetailedUserResponse;
+  currentUser: DetailedUserInfoResponse;
   embedded?: boolean;
 }) {
   const { t } = useTranslation();

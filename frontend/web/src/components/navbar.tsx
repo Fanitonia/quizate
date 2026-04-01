@@ -10,7 +10,7 @@ import {
   currentUserQueryKey,
   useCurrentUserQuery,
 } from "@/api/user/currentUserQueryOptions";
-import type { DetailedUserResponse } from "@/api/user/types";
+import type { DetailedUserInfoResponse } from "@/api/user/types";
 import { useTheme } from "@/stores/theme-provider";
 import { useUserStore } from "@/stores/user-store";
 
@@ -48,7 +48,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-type NavbarUser = DetailedUserResponse | null | undefined;
+type NavbarUser = DetailedUserInfoResponse | null | undefined;
 
 interface NavbarActionsProps {
   user: NavbarUser;
@@ -164,7 +164,7 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
                 nativeButton={false}
                 render={<Link to="/users/me"></Link>}
               >
-                <UserAvatar user={user as DetailedUserResponse} />
+                <UserAvatar user={user as DetailedUserInfoResponse} />
                 <p className="text-base">{t("profile")}</p>
               </Button>
             ) : (
@@ -230,7 +230,7 @@ function MobileAuthButtons({ onNavigate }: AuthButtonsProps) {
   );
 }
 
-function UserAvatar({ user }: { user: DetailedUserResponse }) {
+function UserAvatar({ user }: { user: DetailedUserInfoResponse }) {
   const avatarFallback = user.username.slice(0, 2).toUpperCase();
 
   return (
@@ -245,7 +245,7 @@ function AvatarDropdown({
   user,
   onLogout,
 }: {
-  user: DetailedUserResponse;
+  user: DetailedUserInfoResponse;
   onLogout: () => void;
 }) {
   const { t } = useTranslation();

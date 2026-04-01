@@ -16,12 +16,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { DetailedUserResponse } from "@/api/user/types";
+import type { DetailedUserInfoResponse } from "@/api/user/types";
 
 function ProfileOverviewCard({
   currentUser,
 }: {
-  currentUser: DetailedUserResponse;
+  currentUser: DetailedUserInfoResponse;
 }) {
   const { t, i18n } = useTranslation();
 

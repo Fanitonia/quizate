@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import type { DetailedUserResponse } from "@/api/user/types";
+import type { DetailedUserInfoResponse } from "@/api/user/types";
 
 import ChangePasswordForm from "./change-password-form";
 import ProfileSettingsForm from "./profile-settings-form";
@@ -18,7 +18,7 @@ import ProfileSettingsForm from "./profile-settings-form";
 function ProfileActionSheets({
   currentUser,
 }: {
-  currentUser: DetailedUserResponse;
+  currentUser: DetailedUserInfoResponse;
 }) {
   const { t } = useTranslation();
 
