@@ -206,5 +206,66 @@
       "optionTextRequired": "Option text is required",
       "singleCorrect": "Select exactly one correct option"
     }
+  },
+  "quizDetailsPage": {
+    "eyebrow": "Quiz overview",
+    "noDescription": "No description provided for this quiz.",
+    "noTopics": "No topics were added for this quiz yet.",
+    "actions": {
+      "start": "Start quiz",
+      "helper": "You can take this quiz without logging in. Your score will be shown as soon as you finish."
+    },
+    "overview": {
+      "title": "About this quiz",
+      "description": "Review the quiz details before you begin answering.",
+      "creator": "Creator",
+      "language": "Language",
+      "questions": "Questions",
+      "attempts": "Attempts",
+      "topics": "Topics"
+    },
+    "ready": {
+      "title": "Before you start",
+      "description": "A quick summary of what to expect from this quiz.",
+      "questionCount": "Question count",
+      "visibility": "Visibility",
+      "attemptCount": "Attempts so far",
+      "access": "Access",
+      "public": "Public",
+      "guestAccess": "Available without login"
+    }
+  },
+  "quizTakePage": {
+    "eyebrow": "Take the quiz",
+    "description": "Choose one answer for each question and submit when you are ready.",
+    "questionTitle": "Question {{index}}",
+    "questionPoints": "Worth {{points}} point",
+    "progress": {
+      "title": "Your progress",
+      "description": "You can submit at any time. Unanswered questions will count as incorrect.",
+      "answered": "Answered"
+    },
+    "actions": {
+      "back": "Back to details",
+      "submit": "Finish quiz",
+      "retake": "Retake quiz"
+    },
+    "empty": {
+      "title": "No questions available",
+      "description": "This quiz does not have any questions to answer yet."
+    },
+    "results": {
+      "eyebrow": "Quiz results",
+      "title": "Your results",
+      "description": "Here is your score and a review of every question.",
+      "summary": "Check how many answers you got right and review the correct choices below.",
+      "correctAnswers": "Correct answers",
+      "score": "Score",
+      "percentage": "Percentage",
+      "yourAnswer": "Your answer",
+      "correctAnswer": "Correct answer",
+      "correctAnswerSelected": "Your answer was correct",
+      "unanswered": "You did not answer this question."
+    }
   }
 }

@@ -205,5 +205,66 @@
       "optionTextRequired": "Seçenek metni gereklidir",
       "singleCorrect": "Tam olarak bir doğru seçenek işaretleyin"
     }
+  },
+  "quizDetailsPage": {
+    "eyebrow": "Quiz özeti",
+    "noDescription": "Bu quiz için açıklama eklenmemiş.",
+    "noTopics": "Bu quiz için henüz konu eklenmemiş.",
+    "actions": {
+      "start": "Quiz'e başla",
+      "helper": "Bu quiz'i giriş yapmadan çözebilirsiniz. Bitirdiğinizde puanınız hemen gösterilir."
+    },
+    "overview": {
+      "title": "Quiz hakkında",
+      "description": "Cevaplamaya başlamadan önce quiz detaylarını gözden geçirin.",
+      "creator": "Oluşturan",
+      "language": "Dil",
+      "questions": "Soru",
+      "attempts": "Deneme",
+      "topics": "Konular"
+    },
+    "ready": {
+      "title": "Başlamadan önce",
+      "description": "Bu quiz için sizi bekleyenleri hızlıca görün.",
+      "questionCount": "Soru sayısı",
+      "visibility": "Görünürlük",
+      "attemptCount": "Toplam deneme",
+      "access": "Erişim",
+      "public": "Herkese açık",
+      "guestAccess": "Giriş olmadan kullanılabilir"
+    }
+  },
+  "quizTakePage": {
+    "eyebrow": "Quiz'i çöz",
+    "description": "Her soru için bir cevap seçin ve hazır olduğunuzda gönderin.",
+    "questionTitle": "Soru {{index}}",
+    "questionPoints": "{{points}} puan değerinde",
+    "progress": {
+      "title": "İlerlemeniz",
+      "description": "İstediğiniz zaman gönderebilirsiniz. Boş bırakılan sorular yanlış sayılır.",
+      "answered": "Cevaplanan"
+    },
+    "actions": {
+      "back": "Detaylara dön",
+      "submit": "Quiz'i bitir",
+      "retake": "Quiz'i tekrar çöz"
+    },
+    "empty": {
+      "title": "Cevaplanacak soru yok",
+      "description": "Bu quiz için henüz cevaplanabilir soru eklenmemiş."
+    },
+    "results": {
+      "eyebrow": "Quiz sonucu",
+      "title": "Sonucun",
+      "description": "Puanını ve tüm soruların değerlendirmesini burada görebilirsin.",
+      "summary": "Kaç doğru yaptığını kontrol et ve aşağıda doğru cevapları incele.",
+      "correctAnswers": "Doğru cevap",
+      "score": "Puan",
+      "percentage": "Yüzde",
+      "yourAnswer": "Seçiminiz",
+      "correctAnswer": "Doğru cevap",
+      "correctAnswerSelected": "Doğru cevapladınız",
+      "unanswered": "Bu soruyu cevaplamadınız."
+    }
   }
 }

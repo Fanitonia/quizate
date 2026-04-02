@@ -15,6 +15,9 @@ import { Route as UsersMeRouteImport } from './routes/users/me'
 import { Route as QuizzesCreateRouteImport } from './routes/quizzes/create'
 import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as QuizzesQuizIdRouteRouteImport } from './routes/quizzes/$quizId/route'
+import { Route as QuizzesQuizIdIndexRouteImport } from './routes/quizzes/$quizId/index'
+import { Route as QuizzesQuizIdTakeRouteImport } from './routes/quizzes/$quizId/take'
 
 const authRouteRoute = authRouteRouteImport.update({
   id: '/(auth)',
@@ -45,13 +48,31 @@ const authLoginRoute = authLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => authRouteRoute,
 } as any)
+const QuizzesQuizIdRouteRoute = QuizzesQuizIdRouteRouteImport.update({
+  id: '/quizzes/$quizId',
+  path: '/quizzes/$quizId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizzesQuizIdIndexRoute = QuizzesQuizIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => QuizzesQuizIdRouteRoute,
+} as any)
+const QuizzesQuizIdTakeRoute = QuizzesQuizIdTakeRouteImport.update({
+  id: '/take',
+  path: '/take',
+  getParentRoute: () => QuizzesQuizIdRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/quizzes/$quizId': typeof QuizzesQuizIdRouteRouteWithChildren
   '/login': typeof authLoginRoute
   '/register': typeof authRegisterRoute
   '/quizzes/create': typeof QuizzesCreateRoute
   '/users/me': typeof UsersMeRoute
+  '/quizzes/$quizId/take': typeof QuizzesQuizIdTakeRoute
+  '/quizzes/$quizId/': typeof QuizzesQuizIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -59,34 +80,58 @@ export interface FileRoutesByTo {
   '/register': typeof authRegisterRoute
   '/quizzes/create': typeof QuizzesCreateRoute
   '/users/me': typeof UsersMeRoute
+  '/quizzes/$quizId/take': typeof QuizzesQuizIdTakeRoute
+  '/quizzes/$quizId': typeof QuizzesQuizIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(auth)': typeof authRouteRouteWithChildren
+  '/quizzes/$quizId': typeof QuizzesQuizIdRouteRouteWithChildren
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/register': typeof authRegisterRoute
   '/quizzes/create': typeof QuizzesCreateRoute
   '/users/me': typeof UsersMeRoute
+  '/quizzes/$quizId/take': typeof QuizzesQuizIdTakeRoute
+  '/quizzes/$quizId/': typeof QuizzesQuizIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/quizzes/create' | '/users/me'
+  fullPaths:
+    | '/'
+    | '/quizzes/$quizId'
+    | '/login'
+    | '/register'
+    | '/quizzes/create'
+    | '/users/me'
+    | '/quizzes/$quizId/take'
+    | '/quizzes/$quizId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/quizzes/create' | '/users/me'
+  to:
+    | '/'
+    | '/login'
+    | '/register'
+    | '/quizzes/create'
+    | '/users/me'
+    | '/quizzes/$quizId/take'
+    | '/quizzes/$quizId'
   id:
     | '__root__'
     | '/'
     | '/(auth)'
+    | '/quizzes/$quizId'
     | '/(auth)/login'
     | '/(auth)/register'
     | '/quizzes/create'
     | '/users/me'
+    | '/quizzes/$quizId/take'
+    | '/quizzes/$quizId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authRouteRoute: typeof authRouteRouteWithChildren
+  QuizzesQuizIdRouteRoute: typeof QuizzesQuizIdRouteRouteWithChildren
   QuizzesCreateRoute: typeof QuizzesCreateRoute
   UsersMeRoute: typeof UsersMeRoute
 }
@@ -135,6 +180,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLoginRouteImport
       parentRoute: typeof authRouteRoute
     }
+    '/quizzes/$quizId': {
+      id: '/quizzes/$quizId'
+      path: '/quizzes/$quizId'
+      fullPath: '/quizzes/$quizId'
+      preLoaderRoute: typeof QuizzesQuizIdRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quizzes/$quizId/': {
+      id: '/quizzes/$quizId/'
+      path: '/'
+      fullPath: '/quizzes/$quizId/'
+      preLoaderRoute: typeof QuizzesQuizIdIndexRouteImport
+      parentRoute: typeof QuizzesQuizIdRouteRoute
+    }
+    '/quizzes/$quizId/take': {
+      id: '/quizzes/$quizId/take'
+      path: '/take'
+      fullPath: '/quizzes/$quizId/take'
+      preLoaderRoute: typeof QuizzesQuizIdTakeRouteImport
+      parentRoute: typeof QuizzesQuizIdRouteRoute
+    }
   }
 }
 
@@ -152,9 +218,23 @@ const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
   authRouteRouteChildren,
 )
 
+interface QuizzesQuizIdRouteRouteChildren {
+  QuizzesQuizIdTakeRoute: typeof QuizzesQuizIdTakeRoute
+  QuizzesQuizIdIndexRoute: typeof QuizzesQuizIdIndexRoute
+}
+
+const QuizzesQuizIdRouteRouteChildren: QuizzesQuizIdRouteRouteChildren = {
+  QuizzesQuizIdTakeRoute: QuizzesQuizIdTakeRoute,
+  QuizzesQuizIdIndexRoute: QuizzesQuizIdIndexRoute,
+}
+
+const QuizzesQuizIdRouteRouteWithChildren =
+  QuizzesQuizIdRouteRoute._addFileChildren(QuizzesQuizIdRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authRouteRoute: authRouteRouteWithChildren,
+  QuizzesQuizIdRouteRoute: QuizzesQuizIdRouteRouteWithChildren,
   QuizzesCreateRoute: QuizzesCreateRoute,
   UsersMeRoute: UsersMeRoute,
 }

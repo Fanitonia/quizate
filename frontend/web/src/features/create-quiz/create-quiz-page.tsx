@@ -7,7 +7,7 @@ function CreateQuizPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 md:p-6">
-      <header className="border-border/70 from-background via-muted/40 to-background rounded-2xl border bg-gradient-to-br p-6 shadow-sm">
+      <header className="border-border/70 from-background via-muted/40 to-background rounded-2xl border bg-linear-to-br p-6 shadow-sm">
         <div className="max-w-3xl space-y-2">
           <p className="text-primary text-sm font-medium tracking-[0.2em] uppercase">
             {t("createQuizPage.eyebrow")}
