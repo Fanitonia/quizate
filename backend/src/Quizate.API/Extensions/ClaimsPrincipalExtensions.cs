@@ -9,7 +9,9 @@ public static class ClaimsPrincipalExtensions
         var userIdClaim = user.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (!Guid.TryParse(userIdClaim, out userId))
+        {
             return false;
+        }
 
         return true;
     }
