@@ -75,7 +75,7 @@ function Navbar() {
   });
 
   return (
-    <nav className="bg-background/80 sticky top-0 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 border-b px-4 py-3 md:flex md:flex-row md:justify-around md:gap-4">
+    <nav className="bg-background/80 sticky top-0 z-10 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 border-b px-4 py-3 md:flex md:flex-row md:justify-around md:gap-4">
       {/* Mobile search button */}
       <Button
         className="justify-self-start md:hidden"
@@ -106,9 +106,11 @@ function DesktopActions({ user, onLogout }: NavbarActionsProps) {
       <Button className="justify-self-start" variant="ghost" size="icon">
         <Search className="size-5" />
       </Button>
-      <Button variant="secondary">
-        <Plus /> {t("navbar.create")}
-      </Button>
+      <Link to="/quizzes/create">
+        <Button variant="secondary">
+          <Plus /> {t("navbar.create")}
+        </Button>
+      </Link>
 
       {user ? (
         <AvatarDropdown user={user} onLogout={onLogout} />
@@ -153,7 +155,11 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
             </Button>
           </div>
           <SheetFooter>
-            <Button size="xl">
+            <Button
+              size="xl"
+              onClick={closeMenu}
+              render={<Link to="/quizzes/create"></Link>}
+            >
               <Plus /> <p className="text-base">{t("navbar.create")}</p>
             </Button>
             {user ? (

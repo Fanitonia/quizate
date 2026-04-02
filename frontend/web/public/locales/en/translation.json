@@ -136,5 +136,75 @@
         "description": "Please try again in a moment."
       }
     }
+  },
+  "createQuizPage": {
+    "eyebrow": "Build a quiz",
+    "title": "Create a quiz",
+    "description": "Put together a multiple-choice quiz, arrange the questions with drag and drop, and send it live when it is ready.",
+    "metadata": {
+      "title": "Quiz details",
+      "description": "Set the core information people will see before they start answering.",
+      "quizTitleLabel": "Quiz title",
+      "descriptionLabel": "Description",
+      "descriptionHelp": "Keep it short and useful so players know what they are about to answer.",
+      "languageCodeLabel": "Language code",
+      "topicsLabel": "Topics",
+      "topicsHelp": "Separate topics with commas. You can also tap an existing topic below.",
+      "visibilityLabel": "Visibility",
+      "public": "Public",
+      "private": "Private",
+      "availableTopicsLabel": "Suggested topics",
+      "loadingTopics": "Loading topics...",
+      "noTopics": "No topics found yet."
+    },
+    "questions": {
+      "title": "Questions",
+      "description": "Add as many multiple-choice questions as you want and reorder them with the mouse.",
+      "addQuestion": "Add question",
+      "questionLabel": "Question {{index}}",
+      "questionDescription": "Each question must have exactly one correct answer.",
+      "promptLabel": "Question prompt",
+      "pointsLabel": "Points"
+    },
+    "options": {
+      "title": "Answer options",
+      "description": "Reorder options with the mouse and mark exactly one as correct.",
+      "addOption": "Add option",
+      "textLabel": "Option {{index}}",
+      "markCorrect": "Mark correct",
+      "correct": "Correct"
+    },
+    "summary": {
+      "title": "Quiz summary",
+      "description": "A quick check before you create the quiz.",
+      "questionCount": "Question count",
+      "totalPoints": "Total points",
+      "optionCount": "Option count",
+      "readyQuestions": "Ready questions",
+      "visibility": "Visibility",
+      "language": "Language"
+    },
+    "actions": {
+      "title": "Publish",
+      "description": "Create the quiz now or reset the draft and start over.",
+      "submit": "Create quiz",
+      "reset": "Reset draft",
+      "cancel": "Back to home"
+    },
+    "error": {
+      "title": "Quiz creation failed",
+      "description": "We couldn't create your quiz right now."
+    },
+    "validation": {
+      "titleRequired": "Quiz title is required",
+      "languageRequired": "Language code is required",
+      "questionMin": "Add at least one question",
+      "questionTitleRequired": "Question prompt is required",
+      "pointsRequired": "Points are required",
+      "pointsMin": "Points must be at least 1",
+      "optionMin": "Each question needs at least two options",
+      "optionTextRequired": "Option text is required",
+      "singleCorrect": "Select exactly one correct option"
+    }
   }
 }

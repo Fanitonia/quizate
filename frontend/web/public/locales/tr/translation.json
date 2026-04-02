@@ -135,5 +135,75 @@
         "description": "Lütfen kısa süre sonra tekrar deneyin."
       }
     }
+  },
+  "createQuizPage": {
+    "eyebrow": "Quiz hazırla",
+    "title": "Quiz oluştur",
+    "description": "Çoktan seçmeli bir quiz oluşturun, soruları sürükleyip bırakın ve hazır olduğunda hemen yayınlayın.",
+    "metadata": {
+      "title": "Quiz detayları",
+      "description": "Oyuncuların başlamadan önce göreceği temel bilgileri ayarlayın.",
+      "quizTitleLabel": "Quiz başlığı",
+      "descriptionLabel": "Açıklama",
+      "descriptionHelp": "Oyuncuların ne çözeceğini anlaması için kısa ve net tutun.",
+      "languageCodeLabel": "Dil kodu",
+      "topicsLabel": "Konular",
+      "topicsHelp": "Konuları virgülle ayırın. Aşağıdaki mevcut konulara da dokunabilirsiniz.",
+      "visibilityLabel": "Görünürlük",
+      "public": "Herkese açık",
+      "private": "Gizli",
+      "availableTopicsLabel": "Önerilen konular",
+      "loadingTopics": "Konular yükleniyor...",
+      "noTopics": "Henüz kayıtlı konu yok."
+    },
+    "questions": {
+      "title": "Sorular",
+      "description": "İstediğiniz kadar çoktan seçmeli soru ekleyin ve fareyle sıralarını değiştirin.",
+      "addQuestion": "Soru ekle",
+      "questionLabel": "Soru {{index}}",
+      "questionDescription": "Her soru tam olarak bir doğru cevaba sahip olmalıdır.",
+      "promptLabel": "Soru metni",
+      "pointsLabel": "Puan"
+    },
+    "options": {
+      "title": "Cevap seçenekleri",
+      "description": "Seçenekleri fareyle sıralayın ve yalnızca birini doğru olarak işaretleyin.",
+      "addOption": "Seçenek ekle",
+      "textLabel": "Seçenek {{index}}",
+      "markCorrect": "Doğru yap",
+      "correct": "Doğru"
+    },
+    "summary": {
+      "title": "Quiz özeti",
+      "description": "Quiz oluşturulmadan önce hızlı bir kontrol.",
+      "questionCount": "Soru sayısı",
+      "totalPoints": "Toplam puan",
+      "optionCount": "Seçenek sayısı",
+      "readyQuestions": "Hazır sorular",
+      "visibility": "Görünürlük",
+      "language": "Dil"
+    },
+    "actions": {
+      "title": "Yayınla",
+      "description": "Quiz'i şimdi oluşturun veya taslağı sıfırlayıp baştan başlayın.",
+      "submit": "Quiz oluştur",
+      "reset": "Taslağı sıfırla",
+      "cancel": "Ana sayfaya dön"
+    },
+    "error": {
+      "title": "Quiz oluşturulamadı",
+      "description": "Quiz şu anda oluşturulamadı."
+    },
+    "validation": {
+      "titleRequired": "Quiz başlığı gereklidir",
+      "languageRequired": "Dil kodu gereklidir",
+      "questionMin": "En az bir soru ekleyin",
+      "questionTitleRequired": "Soru metni gereklidir",
+      "pointsRequired": "Puan gereklidir",
+      "pointsMin": "Puan en az 1 olmalıdır",
+      "optionMin": "Her soru için en az iki seçenek gerekir",
+      "optionTextRequired": "Seçenek metni gereklidir",
+      "singleCorrect": "Tam olarak bir doğru seçenek işaretleyin"
+    }
   }
 }
