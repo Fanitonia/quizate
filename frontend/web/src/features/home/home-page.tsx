@@ -17,7 +17,7 @@ function HomePage({
   defaultPage: number;
   defaultPageSize: number;
 }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [page, setPage] = useState(defaultPage);
 
   function handlePageChange(nextPage: number) {
