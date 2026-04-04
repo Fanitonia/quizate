@@ -115,7 +115,7 @@ function OverviewStat({
         <Icon className="size-3.5" />
         {label}
       </dt>
-      <dd className="text-sm font-medium break-words">{value}</dd>
+      <dd className="text-sm font-medium wrap-break-word">{value}</dd>
     </div>
   );
 }

@@ -51,6 +51,7 @@ function QuizDetailPage() {
             <Button
               size="xl"
               className="w-full lg:w-auto"
+              nativeButton={false}
               render={
                 <Link
                   to="/quizzes/$quizId/take"

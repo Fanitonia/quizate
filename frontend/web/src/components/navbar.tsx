@@ -158,6 +158,7 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
             <Button
               size="xl"
               onClick={closeMenu}
+              nativeButton={false}
               render={<Link to="/quizzes/create"></Link>}
             >
               <Plus /> <p className="text-base">{t("navbar.create")}</p>

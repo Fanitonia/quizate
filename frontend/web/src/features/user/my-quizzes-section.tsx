@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import {
   BookOpenText,
@@ -8,6 +9,7 @@ import {
 } from "lucide-react";
 
 import AlertError from "@/components/feedback/alert-error";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -88,31 +90,47 @@ function MyQuizzesSection({
                         t("profilePage.quizzes.noDescription")}
                     </p>
                   </div>
-                  <div className="text-muted-foreground grid gap-2 text-sm sm:grid-cols-2 lg:min-w-72 lg:justify-items-end">
-                    <QuizMeta
-                      icon={quiz.isPublic ? Globe : LockKeyhole}
-                      label={t("profilePage.quizzes.visibility")}
-                      value={
-                        quiz.isPublic
-                          ? t("profilePage.quizzes.public")
-                          : t("profilePage.quizzes.private")
+                  <div className="flex flex-col gap-3 lg:items-end">
+                    <div className="text-muted-foreground grid gap-2 text-sm sm:grid-cols-2 lg:min-w-72 lg:justify-items-end">
+                      <QuizMeta
+                        icon={quiz.isPublic ? Globe : LockKeyhole}
+                        label={t("profilePage.quizzes.visibility")}
+                        value={
+                          quiz.isPublic
+                            ? t("profilePage.quizzes.public")
+                            : t("profilePage.quizzes.private")
+                        }
+                      />
+                      <QuizMeta
+                        icon={Sparkles}
+                        label={t("profilePage.quizzes.language")}
+                        value={quiz.languageCode.toUpperCase()}
+                      />
+                      <QuizMeta
+                        icon={ListChecks}
+                        label={t("profilePage.quizzes.questions")}
+                        value={String(quiz.questionCount)}
+                      />
+                      <QuizMeta
+                        icon={BookOpenText}
+                        label={t("profilePage.quizzes.attempts")}
+                        value={String(quiz.attemptCount)}
+                      />
+                    </div>
+                    <Button
+                      variant="outline"
+                      nativeButton={false}
+                      render={
+                        <Link
+                          to="/quizzes/$quizId"
+                          params={{
+                            quizId: quiz.id,
+                          }}
+                        ></Link>
                       }
-                    />
-                    <QuizMeta
-                      icon={Sparkles}
-                      label={t("profilePage.quizzes.language")}
-                      value={quiz.languageCode.toUpperCase()}
-                    />
-                    <QuizMeta
-                      icon={ListChecks}
-                      label={t("profilePage.quizzes.questions")}
-                      value={String(quiz.questionCount)}
-                    />
-                    <QuizMeta
-                      icon={BookOpenText}
-                      label={t("profilePage.quizzes.attempts")}
-                      value={String(quiz.attemptCount)}
-                    />
+                    >
+                      {t("profilePage.quizzes.viewQuiz")}
+                    </Button>
                   </div>
                 </article>
                 {index < quizzes.length - 1 && <Separator />}

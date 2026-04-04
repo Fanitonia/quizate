@@ -1,21 +1,37 @@
-// EXTERNAL LIBRARIES
 import { createFileRoute } from "@tanstack/react-router";
 
-// COMPONENTS
-import { Construction } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { getQuizzesQueryOptions } from "@/api/quiz/quizQueryOptions";
+import SomethingGoneWrong from "@/components/feedback/gone-wrong";
+import { ComponentLoader } from "@/components/feedback/component-loader";
+import HomePage from "@/features/home/home-page";
+import type { Context } from "@/routes/__root";
+
+const DEFAULT_HOME_PAGE = 1;
+const DEFAULT_HOME_PAGE_SIZE = 12;
 
 export const Route = createFileRoute("/")({
+  loader,
+  pendingMs: 100,
+  pendingComponent: () => (
+    <div className="flex flex-1 items-center justify-center p-4">
+      <ComponentLoader />
+    </div>
+  ),
+  errorComponent: () => <SomethingGoneWrong />,
   component: Index,
 });
 
 function Index() {
-  const { t } = useTranslation();
-
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-2 p-4">
-      <Construction size="48" />
-      <h3 className="text-foreground text-2xl">{t("workInProgress")}</h3>
-    </div>
+    <HomePage
+      defaultPage={DEFAULT_HOME_PAGE}
+      defaultPageSize={DEFAULT_HOME_PAGE_SIZE}
+    />
+  );
+}
+
+async function loader({ context }: { context: Context }) {
+  await context.queryClient.ensureQueryData(
+    getQuizzesQueryOptions(DEFAULT_HOME_PAGE, DEFAULT_HOME_PAGE_SIZE)
   );
 }

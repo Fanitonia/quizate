@@ -119,6 +119,7 @@
     "quizzes": {
       "title": "Quizlerim",
       "description": "Oluşturduğunuz quizlere hızlı bir bakış.",
+      "viewQuiz": "Quiz'i görüntüle",
       "visibility": "Görünürlük",
       "language": "Dil",
       "questions": "Soru",
@@ -133,6 +134,44 @@
       "error": {
         "title": "Quizler yüklenemedi",
         "description": "Lütfen kısa süre sonra tekrar deneyin."
+      }
+    }
+  },
+  "homePage": {
+    "hero": {
+      "eyebrow": "Herkese açık quizler",
+      "title": "Bir quiz seç ve saniyeler içinde çözmeye başla.",
+      "description": "Topluluktaki herkese açık quizleri inceleyin, detay sayfasını açın ve sorulara hemen geçin.",
+      "browseAction": "Quizleri incele",
+      "createAction": "Quiz oluştur",
+      "stats": {
+        "totalQuizzes": "Toplam quiz",
+        "currentPage": "Geçerli sayfa",
+        "pageSize": "Sayfa başına"
+      }
+    },
+    "list": {
+      "title": "Quiz kütüphanesi",
+      "description": "Quizate üreticilerinden herkese açık quizler.",
+      "pageSummary": "Sayfa {{currentPage}} / {{totalPages}}",
+      "totalResults": "{{count}} quiz mevcut",
+      "creator": "Oluşturan",
+      "unknownCreator": "Bilinmiyor",
+      "language": "Dil",
+      "questions": "Soru",
+      "attempts": "Deneme",
+      "topics": "Konular",
+      "noTopics": "Henüz konu eklenmemiş.",
+      "noDescription": "Bu quiz için açıklama eklenmemiş.",
+      "viewQuiz": "Quiz'i görüntüle",
+      "empty": {
+        "title": "Henüz herkese açık quiz yok",
+        "description": "Kısa süre sonra tekrar bakın. Yayınlanan quizler burada görünecek."
+      },
+      "pagination": {
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "goToPage": "{{page}}. sayfaya git"
       }
     }
   },

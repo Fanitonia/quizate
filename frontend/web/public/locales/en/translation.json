@@ -120,6 +120,7 @@
     "quizzes": {
       "title": "My quizzes",
       "description": "A quick look at the quizzes you have created.",
+      "viewQuiz": "View quiz",
       "visibility": "Visibility",
       "language": "Language",
       "questions": "Questions",
@@ -134,6 +135,44 @@
       "error": {
         "title": "Couldn't load quizzes",
         "description": "Please try again in a moment."
+      }
+    }
+  },
+  "homePage": {
+    "hero": {
+      "eyebrow": "Public quizzes",
+      "title": "Pick a quiz and start playing in seconds.",
+      "description": "Browse public quizzes from the community, open the details page, and jump straight into the questions.",
+      "browseAction": "Browse quizzes",
+      "createAction": "Create a quiz",
+      "stats": {
+        "totalQuizzes": "Public quizzes",
+        "currentPage": "Current page",
+        "pageSize": "Per page"
+      }
+    },
+    "list": {
+      "title": "Quiz library",
+      "description": "Public quizzes from Quizate creators.",
+      "pageSummary": "Page {{currentPage}} of {{totalPages}}",
+      "totalResults": "{{count}} quizzes available",
+      "creator": "Creator",
+      "unknownCreator": "Unknown",
+      "language": "Language",
+      "questions": "Questions",
+      "attempts": "Attempts",
+      "topics": "Topics",
+      "noTopics": "No topics added yet.",
+      "noDescription": "No description provided for this quiz.",
+      "viewQuiz": "View quiz",
+      "empty": {
+        "title": "No public quizzes yet",
+        "description": "Check back soon. Public quizzes will appear here as soon as people publish them."
+      },
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "goToPage": "Go to page {{page}}"
       }
     }
   },

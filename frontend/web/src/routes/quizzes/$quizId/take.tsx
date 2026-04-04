@@ -187,6 +187,7 @@ function QuizTakePage() {
             <Button
               type="button"
               variant="outline"
+              nativeButton={false}
               render={
                 <Link
                   to="/quizzes/$quizId"

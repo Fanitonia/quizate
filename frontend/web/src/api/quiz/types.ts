@@ -15,6 +15,25 @@ interface QuizResponse {
   topics: string[];
 }
 
+interface QuizPagination {
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  totalCount: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+}
+
+interface GetQuizzesRequest {
+  page: number;
+  pageSize: number;
+}
+
+interface GetQuizzesResponse {
+  quizzes: QuizResponse[];
+  pagination: QuizPagination;
+}
+
 interface UpdateQuizRequest {
   title: string | null;
   description: string | null;
@@ -69,7 +88,10 @@ interface QuizQuestionsResponse {
 export { QUESTION_TYPES };
 
 export type {
+  QuizPagination,
   QuizResponse,
+  GetQuizzesRequest,
+  GetQuizzesResponse,
   UpdateQuizRequest,
   CreateQuizRequest,
   QuestionType,
