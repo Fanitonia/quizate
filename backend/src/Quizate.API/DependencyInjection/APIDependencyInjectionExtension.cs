@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Quizate.API.DependencyInjection.OpenApiConfigs;
+using Quizate.API.Extensions;
 using Serilog;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 using System.Text;
@@ -40,6 +41,7 @@ internal static class APIDependencyInjectionExtension
             {
                 policy.AllowAnyMethod()
                       .AllowAnyHeader()
+                      .WithExposedHeaders(Headers.XPagination)
                       .AllowCredentials()
                       .WithOrigins(new[] { "https://api.quizate.com", "https://quizate.com", "http://localhost:5173" });
             });
