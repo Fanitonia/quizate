@@ -10,14 +10,10 @@
    - **API Metodu:** `DELETE /users/me`
    - **Açıklama:** Kullanıcı hesabını kalıcı olarak siler.  
 
-1. **Quiz Çözüldükten Sonra Kaydını Tutma**
-   - **API Metodu:** `POST /quizzes/{quizId}/attempts`
-   - **Açıklama:** Kullanıcının yaptığı çözüm girişimi sonucu kaydedilir. Bu sonuçlar quizlerle ilgili istatististk hazırlamakta ve bunları kullanıcıya göstermekte kullanılacak. 
-
-1. **Bir Quiz'in Çözüm Girişimlerini Alma**
-   - **API Metodu:** `GET /quizzes/{quizId}/attempts`
-   - **Açıklama:** Quiz için yapılan tüm çözüm girişimleri listelenir.
-
+1. **Bir Kullanıcının Quizlerini Listeleme** (Hüseyin Kahraman)
+   - **API Metodu:** `GET /users/{userId}/quizzes`
+   - **Açıklama:** Belirli bir kullanıcının oluşturduğu quizler listelenir.
+   
 1. **Quiz Konu Başlıklarını (Topic) Alma**
    - **API Metodu:** `GET /topics`
    - **Açıklama:** Kullanılabilir tüm konu başlıkları listelenir.
