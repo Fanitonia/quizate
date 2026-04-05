@@ -1,0 +1,983 @@
+{
+  "info": {
+    "_postman_id": "eb90047d-0abd-4713-998b-52d3f344d8b5",
+    "name": "Quizate.API | v1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "40121342"
+  },
+  "item": [
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "/auth/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"email\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"username\": \"string\",\n  \"password\": \"string\",\n  \"email\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "/auth/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"usernameOrEmail\": \"string\",\n  \"password\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"usernameOrEmail\": \"string\",\n  \"password\": \"string\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "/auth/logout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/logout",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "/auth/refresh-token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/refresh-token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh-token"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "quizzes",
+      "item": [
+        {
+          "name": "/quizzes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/quizzes?page=-0&pageSize=-0&userId=5bc17adc-958c-41c3-5593-66ab6f6df3fd",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "quizzes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "-0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "-0"
+                },
+                {
+                  "key": "userId",
+                  "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/quizzes?page=-0&pageSize=-0&userId=5bc17adc-958c-41c3-5593-66ab6f6df3fd",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "quizzes"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "-0"
+                    },
+                    {
+                      "key": "userId",
+                      "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"title\": \"string\",\n    \"languageCode\": \"string\",\n    \"id\": \"891ec1a7-ff04-e5eb-2eb5-3272c1d8e8d7\",\n    \"createdAt\": \"1996-01-29T06:57:37.742Z\",\n    \"updatedAt\": \"1953-11-05T18:24:23.006Z\",\n    \"creatorId\": null,\n    \"creatorName\": null,\n    \"description\": null,\n    \"thumbnailUrl\": null,\n    \"isPublic\": false,\n    \"topics\": [\n      \"string\",\n      \"string\"\n    ],\n    \"questionCount\": \"-9978987051\",\n    \"attemptCount\": \"-43473\"\n  },\n  {\n    \"title\": \"string\",\n    \"languageCode\": \"string\",\n    \"id\": \"cb5425b1-03fb-cdc6-8066-b1371a58b17b\",\n    \"createdAt\": \"2012-08-23T11:04:16.492Z\",\n    \"updatedAt\": \"1987-12-12T15:43:55.431Z\",\n    \"creatorId\": \"e18f82a2-4bea-ad0f-8fc5-47fe62231de6\",\n    \"creatorName\": null,\n    \"description\": null,\n    \"thumbnailUrl\": \"string\",\n    \"isPublic\": false,\n    \"topics\": [\n      \"string\",\n      \"string\"\n    ],\n    \"questionCount\": \"0\",\n    \"attemptCount\": \"38296\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "/quizzes",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"string\",\n  \"languageCode\": \"string\",\n  \"topics\": [\n    \"string\",\n    \"string\"\n  ],\n  \"questions\": [\n    {\n      \"title\": \"string\",\n      \"options\": [\n        {\n          \"text\": \"string\",\n          \"imageUrl\": null,\n          \"displayOrder\": \"0\",\n          \"isCorrect\": true\n        },\n        {\n          \"text\": \"string\",\n          \"imageUrl\": null,\n          \"displayOrder\": \"0\",\n          \"isCorrect\": true\n        }\n      ],\n      \"type\": \"multiple_choice\",\n      \"imageUrl\": \"string\",\n      \"points\": \"0\"\n    },\n    {\n      \"title\": \"string\",\n      \"options\": [\n        {\n          \"text\": \"string\",\n          \"imageUrl\": \"string\",\n          \"displayOrder\": \"0\",\n          \"isCorrect\": true\n        },\n        {\n          \"text\": \"string\",\n          \"imageUrl\": null,\n          \"displayOrder\": \"50868487\",\n          \"isCorrect\": true\n        }\n      ],\n      \"type\": \"multiple_choice\",\n      \"imageUrl\": \"string\",\n      \"points\": \"-72459060\"\n    }\n  ],\n  \"description\": \"string\",\n  \"thumbnailUrl\": \"string\",\n  \"isPublic\": true\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/quizzes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "quizzes"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"string\",\n  \"languageCode\": \"string\",\n  \"topics\": [\n    \"string\",\n    \"string\"\n  ],\n  \"questions\": [\n    {\n      \"title\": \"string\",\n      \"options\": [\n        {\n          \"text\": \"string\",\n          \"imageUrl\": null,\n          \"displayOrder\": \"0\",\n          \"isCorrect\": true\n        },\n        {\n          \"text\": \"string\",\n          \"imageUrl\": null,\n          \"displayOrder\": \"0\",\n          \"isCorrect\": true\n        }\n      ],\n      \"type\": \"multiple_choice\",\n      \"imageUrl\": \"string\",\n      \"points\": \"0\"\n    },\n    {\n      \"title\": \"string\",\n      \"options\": [\n        {\n          \"text\": \"string\",\n          \"imageUrl\": \"string\",\n          \"displayOrder\": \"0\",\n          \"isCorrect\": true\n        },\n        {\n          \"text\": \"string\",\n          \"imageUrl\": null,\n          \"displayOrder\": \"50868487\",\n          \"isCorrect\": true\n        }\n      ],\n      \"type\": \"multiple_choice\",\n      \"imageUrl\": \"string\",\n      \"points\": \"-72459060\"\n    }\n  ],\n  \"description\": \"string\",\n  \"thumbnailUrl\": \"string\",\n  \"isPublic\": true\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/quizzes",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "quizzes"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"title\": \"string\",\n  \"languageCode\": \"string\",\n  \"id\": \"e721a01f-6226-2c6e-8288-68b9e3fb93a1\",\n  \"createdAt\": \"2019-07-04T03:39:45.622Z\",\n  \"updatedAt\": \"1989-02-19T01:04:23.304Z\",\n  \"creatorId\": null,\n  \"creatorName\": \"string\",\n  \"description\": null,\n  \"thumbnailUrl\": \"string\",\n  \"isPublic\": true,\n  \"topics\": [\n    \"string\",\n    \"string\"\n  ],\n  \"questionCount\": \"3045608\",\n  \"attemptCount\": \"-0\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "/quizzes/:quizId",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/quizzes/:quizId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "quizzes",
+                ":quizId"
+              ],
+              "variable": [
+                {
+                  "key": "quizId",
+                  "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/quizzes/:quizId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "quizzes",
+                    ":quizId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "quizId",
+                      "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"title\": \"string\",\n  \"languageCode\": \"string\",\n  \"id\": \"e721a01f-6226-2c6e-8288-68b9e3fb93a1\",\n  \"createdAt\": \"2019-07-04T03:39:45.622Z\",\n  \"updatedAt\": \"1989-02-19T01:04:23.304Z\",\n  \"creatorId\": null,\n  \"creatorName\": \"string\",\n  \"description\": null,\n  \"thumbnailUrl\": \"string\",\n  \"isPublic\": true,\n  \"topics\": [\n    \"string\",\n    \"string\"\n  ],\n  \"questionCount\": \"3045608\",\n  \"attemptCount\": \"-0\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "/quizzes/:quizId",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": null,\n  \"description\": null,\n  \"thumbnailUrl\": \"string\",\n  \"isPublic\": null,\n  \"languageCode\": null\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/quizzes/:quizId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "quizzes",
+                ":quizId"
+              ],
+              "variable": [
+                {
+                  "key": "quizId",
+                  "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": null,\n  \"description\": null,\n  \"thumbnailUrl\": \"string\",\n  \"isPublic\": null,\n  \"languageCode\": null\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/quizzes/:quizId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "quizzes",
+                    ":quizId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "quizId",
+                      "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "/quizzes/:quizId",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/quizzes/:quizId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "quizzes",
+                ":quizId"
+              ],
+              "variable": [
+                {
+                  "key": "quizId",
+                  "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/quizzes/:quizId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "quizzes",
+                    ":quizId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "quizId",
+                      "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        },
+        {
+          "name": "/quizzes/:quizId/questions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/quizzes/:quizId/questions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "quizzes",
+                ":quizId",
+                "questions"
+              ],
+              "variable": [
+                {
+                  "key": "quizId",
+                  "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/quizzes/:quizId/questions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "quizzes",
+                    ":quizId",
+                    "questions"
+                  ],
+                  "variable": [
+                    {
+                      "key": "quizId",
+                      "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"quizId\": \"b3ccdff9-05e1-45c8-a123-44cdda2b16e5\",\n  \"questions\": [\n    {\n      \"title\": \"string\",\n      \"options\": [\n        {\n          \"text\": \"string\",\n          \"imageUrl\": \"string\",\n          \"displayOrder\": \"-0\",\n          \"isCorrect\": false\n        },\n        {\n          \"text\": \"string\",\n          \"imageUrl\": null,\n          \"displayOrder\": \"-9194170095\",\n          \"isCorrect\": true\n        }\n      ],\n      \"type\": \"multiple_choice\",\n      \"imageUrl\": \"string\",\n      \"points\": \"14224178106\"\n    },\n    {\n      \"title\": \"string\",\n      \"options\": [\n        {\n          \"text\": \"string\",\n          \"imageUrl\": null,\n          \"displayOrder\": \"-676141413\",\n          \"isCorrect\": false\n        },\n        {\n          \"text\": \"string\",\n          \"imageUrl\": \"string\",\n          \"displayOrder\": \"4685314\",\n          \"isCorrect\": true\n        }\n      ],\n      \"type\": \"multiple_choice\",\n      \"imageUrl\": null,\n      \"points\": \"0\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "item": [
+        {
+          "name": "/users/me/quizzes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/me/quizzes?page=-0&pageSize=-0",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "quizzes"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "-0"
+                },
+                {
+                  "key": "pageSize",
+                  "value": "-0"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/users/me/quizzes?page=-0&pageSize=-0",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    "me",
+                    "quizzes"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "-0"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "-0"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "[\n  {\n    \"title\": \"string\",\n    \"languageCode\": \"string\",\n    \"id\": \"891ec1a7-ff04-e5eb-2eb5-3272c1d8e8d7\",\n    \"createdAt\": \"1996-01-29T06:57:37.742Z\",\n    \"updatedAt\": \"1953-11-05T18:24:23.006Z\",\n    \"creatorId\": null,\n    \"creatorName\": null,\n    \"description\": null,\n    \"thumbnailUrl\": null,\n    \"isPublic\": false,\n    \"topics\": [\n      \"string\",\n      \"string\"\n    ],\n    \"questionCount\": \"-9978987051\",\n    \"attemptCount\": \"-43473\"\n  },\n  {\n    \"title\": \"string\",\n    \"languageCode\": \"string\",\n    \"id\": \"cb5425b1-03fb-cdc6-8066-b1371a58b17b\",\n    \"createdAt\": \"2012-08-23T11:04:16.492Z\",\n    \"updatedAt\": \"1987-12-12T15:43:55.431Z\",\n    \"creatorId\": \"e18f82a2-4bea-ad0f-8fc5-47fe62231de6\",\n    \"creatorName\": null,\n    \"description\": null,\n    \"thumbnailUrl\": \"string\",\n    \"isPublic\": false,\n    \"topics\": [\n      \"string\",\n      \"string\"\n    ],\n    \"questionCount\": \"0\",\n    \"attemptCount\": \"38296\"\n  }\n]"
+            }
+          ]
+        },
+        {
+          "name": "/users/:userId",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/users/:userId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":userId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "userId",
+                      "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"username\": \"string\",\n  \"normalizedUsername\": \"string\",\n  \"role\": \"string\",\n  \"id\": \"ac90cf80-1fd7-ee48-bf53-17b9cae340b2\",\n  \"createdAt\": \"2016-10-11T08:17:16.636Z\",\n  \"profilePictureUrl\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "/users/:userId",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:userId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "OK",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/users/:userId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":userId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "userId",
+                      "value": "5bc17adc-958c-41c3-5593-66ab6f6df3fd"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "body": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:7151/"
+    }
+  ]
+}

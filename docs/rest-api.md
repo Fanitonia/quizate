@@ -1,6 +1,6 @@
 # REST API Görev Dağılımı
 
-**REST API Adresi:**
+**REST API Adresi:** [api.quizate.com](https://api.quizate.com)
 
 Bu dokümanda, proje ekibindeki her üyenin geliştirmekten sorumlu olduğu REST API metotları listelenmektedir.
 

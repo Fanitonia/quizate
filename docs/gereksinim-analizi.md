@@ -20,6 +20,8 @@
 
 1. **Bir Kullanıcıyı Silme (Sadece Admin)** (Onur Güdeloğlu)
 
+1. **Bir Kullanıcının Quizlerini Listeleme** (Hüseyin Kahraman)
+
 1. **Quiz Oluşturma** (Onur Güdeloğlu)
 
 1. **Quizleri Listeleme** (Onur Güdeloğlu)
@@ -31,10 +33,6 @@
 1. **Bir Quiz'in Sorularını Alma** (Onur Güdeloğlu)
 
 1. **Bir Quiz'in Detaylarını Güncelleme** (Onur Güdeloğlu)
-
-1. **Quiz Çözüldükten Sonra Kaydını Tutma** (Hüseyin Kahraman)
-
-1. **Bir Quiz'in Çözüm Girişimlerini Alma** (Hüseyin Kahraman)
 
 1. **Quiz Konu Başlıklarını (Topic) Alma** (Hüseyin Kahraman)
 
