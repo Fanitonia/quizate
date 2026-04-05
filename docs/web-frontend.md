@@ -1,6 +1,6 @@
 # Web Frontend Görev Dağılımı
 
-**Web Frontend Adresi:**
+**Web Frontend Adresi:** [quizate.com](https://quizate.com/)
 
 ## Grup Üyelerinin Web Frontend Görevleri
 
