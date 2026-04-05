@@ -17,6 +17,7 @@ public class QuizCommandService(
     QuizateDbContext context,
     IMapper mapper) : IQuizCommandService
 {
+    // TODO: dilleri kontrol et
     public async Task<Result<QuizResponse?>> CreateQuizAsync(CreateQuizRequest request, Guid userId = default)
     {
         var normalizedRequestTopics = request.Topics

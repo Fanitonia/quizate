@@ -76,12 +76,12 @@ public class QuizController(
     [HttpPatch("{quizId:guid}")]
     public async Task<ActionResult> UpdateQuiz(Guid quizId, [FromBody] UpdateQuizRequest request)
     {
-        // topic updateleme ekle
+        // TODO: topic updateleme ekle
         var isAdmin = User.IsInRole(UserRole.Admin.ToString());
         var canUpdate = isAdmin;
 
         if (!canUpdate && User.TryGetUserId(out var userId))
-            canUpdate = await quizAuth.IsUserQuizOwner(quizId, userId);
+            canUpdate = await quizAuth.IsUserQuizOwner(userId, quizId);
 
         if (!canUpdate)
             return Forbid();
@@ -108,7 +108,7 @@ public class QuizController(
         var canDelete = isAdmin;
 
         if (!canDelete && User.TryGetUserId(out var userId))
-            canDelete = await quizAuth.IsUserQuizOwner(quizId, userId);
+            canDelete = await quizAuth.IsUserQuizOwner(userId, quizId);
 
         if (!canDelete)
             return Forbid();
