@@ -10,6 +10,7 @@ using Quizate.Application.Features.Quizzes.Interfaces;
 using Quizate.Application.Features.Users.DTOs.Requests;
 using Quizate.Application.Features.Users.DTOs.Responses;
 using Quizate.Application.Features.Users.Interfaces;
+using Quizate.Domain.Enums;
 
 namespace Quizate.API.Controllers;
 
@@ -60,6 +61,7 @@ public class UserController(
     }
 
     // onur
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpDelete("{userId:guid}")]
     public async Task<ActionResult> DeleteUser(Guid userId)
     {
@@ -73,7 +75,7 @@ public class UserController(
             return BadRequest(result.Error);
         }
 
-        return Ok();
+        return NoContent();
     }
 
     // huseyin
@@ -103,9 +105,9 @@ public class UserController(
         var result = await userCommand.UpdateUserInfoAsync(request, userId);
 
         if (result.IsFailure)
-            return NotFound();
+            return BadRequest();
 
-        return Ok();
+        return NoContent();
     }
 
     [Authorize]
@@ -143,9 +145,9 @@ public class UserController(
         var result = await userCommand.DeleteUserAsync(userId);
 
         if (result.IsFailure)
-            return NotFound();
+            return BadRequest();
 
-        return Ok();
+        return NoContent();
     }
 
     // onur
