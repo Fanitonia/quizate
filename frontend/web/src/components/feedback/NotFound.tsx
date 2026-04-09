@@ -1,4 +1,7 @@
-// COMPONENTS & ICONS
+import { useTranslation } from "react-i18next";
+
+import { OctagonAlert } from "lucide-react";
+
 import {
   Empty,
   EmptyContent,
@@ -6,11 +9,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { OctagonAlert } from "lucide-react";
-
-// EXTERNAL
-import { useTranslation } from "react-i18next";
+} from "@components/ui/empty";
 
 function NotFound() {
   const { t } = useTranslation();
@@ -32,4 +31,4 @@ function NotFound() {
   );
 }
 
-export default NotFound;
+export { NotFound };

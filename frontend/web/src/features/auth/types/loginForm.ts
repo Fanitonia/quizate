@@ -1,5 +1,6 @@
 import { z } from "zod";
-import i18next from "@/utils/i18n";
+
+import i18next from "@/lib/i18n";
 
 const loginFormSchema = z.object({
   usernameOrEmail: z
@@ -8,4 +9,6 @@ const loginFormSchema = z.object({
   password: z.string().min(1, i18next.t("loginPage.error.passwordRequired")),
 });
 
-export { loginFormSchema };
+type LoginForm = z.infer<typeof loginFormSchema>;
+
+export { type LoginForm, loginFormSchema };

@@ -1,7 +1,6 @@
-// AI generated
-
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
+// Extend the Axios request config to include a _retry flag for tracking retry attempts
 type RetryableRequestConfig = InternalAxiosRequestConfig & {
   _retry?: boolean;
 };
@@ -11,11 +10,26 @@ const apiConfig = {
   withCredentials: true,
 };
 
-const api = axios.create(apiConfig);
+const apiClient = axios.create(apiConfig);
 const refreshClient = axios.create(apiConfig);
 
+// Variable to track ongoing refresh token request to prevent multiple simultaneous refreshes
 let refreshRequest: Promise<void> | null = null;
 
+async function refreshAccessToken() {
+  if (!refreshRequest) {
+    refreshRequest = refreshClient
+      .post("/auth/refresh-token")
+      .then(() => {})
+      .finally(() => {
+        refreshRequest = null;
+      });
+  }
+
+  return refreshRequest;
+}
+
+// Helper function to determine if the request should trigger a token refresh
 function shouldRefresh(
   error: AxiosError,
   request?: RetryableRequestConfig
@@ -41,20 +55,8 @@ function shouldRefresh(
   );
 }
 
-async function refreshAccessToken() {
-  if (!refreshRequest) {
-    refreshRequest = refreshClient
-      .post("/auth/refresh-token")
-      .then(() => {})
-      .finally(() => {
-        refreshRequest = null;
-      });
-  }
-
-  return refreshRequest;
-}
-
-api.interceptors.response.use(
+// Response interceptor to handle token refresh on 401 errors
+apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const request = error.config as RetryableRequestConfig | undefined;
@@ -67,11 +69,11 @@ api.interceptors.response.use(
 
     try {
       await refreshAccessToken();
-      return api(request);
+      return apiClient(request);
     } catch (refreshError) {
       return Promise.reject(refreshError);
     }
   }
 );
 
-export default api;
+export { apiClient };

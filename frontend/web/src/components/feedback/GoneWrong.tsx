@@ -1,17 +1,16 @@
-// COMPONENTS & ICONS
+import { useTranslation } from "react-i18next";
+
+import { CircleAlert } from "lucide-react";
+
 import {
   Empty,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
-import { CircleAlert } from "lucide-react";
+} from "@components/ui/empty";
 
-// EXTERNAL
-import { useTranslation } from "react-i18next";
-
-export default function SomethingGoneWrong() {
+function SomethingGoneWrong() {
   const { t } = useTranslation();
 
   return (
@@ -28,3 +27,5 @@ export default function SomethingGoneWrong() {
     </Empty>
   );
 }
+
+export { SomethingGoneWrong };

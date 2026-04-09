@@ -1,13 +1,12 @@
-// EXTERNAL LIBRARIES
+/* eslint-disable react-refresh/only-export-components */
 import { createFileRoute } from "@tanstack/react-router";
 
-// COMPONENTS
-import LoginForm from "@/features/auth/login/login-form";
+import { LoginCard } from "@/features/auth/components";
 
 export const Route = createFileRoute("/(auth)/login")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <LoginForm className="w-90"></LoginForm>;
+  return <LoginCard></LoginCard>;
 }

@@ -1,13 +1,12 @@
-// EXTERNAL LIBRARIES
+/* eslint-disable react-refresh/only-export-components */
 import { createFileRoute } from "@tanstack/react-router";
 
-// COMPONENTS
-import RegisterForm from "@/features/auth/register/register-form";
+import { RegisterCard } from "@/features/auth/components";
 
 export const Route = createFileRoute("/(auth)/register")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <RegisterForm className="w-90"></RegisterForm>;
+  return <RegisterCard></RegisterCard>;
 }

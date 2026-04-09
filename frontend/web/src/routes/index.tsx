@@ -1,9 +1,8 @@
-// EXTERNAL LIBRARIES
+/* eslint-disable react-refresh/only-export-components */
 import { createFileRoute } from "@tanstack/react-router";
-
-// COMPONENTS
-import { Construction } from "lucide-react";
 import { useTranslation } from "react-i18next";
+
+import { Construction } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Index,

@@ -1,5 +1,6 @@
 import { z } from "zod";
-import i18next from "@/utils/i18n";
+
+import i18next from "@/lib/i18n";
 
 const registerFormSchema = z
   .object({
@@ -39,4 +40,6 @@ const registerFormSchema = z
     path: ["confirmPassword"],
   });
 
-export { registerFormSchema };
+type RegisterForm = z.infer<typeof registerFormSchema>;
+
+export { type RegisterForm, registerFormSchema };

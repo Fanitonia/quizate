@@ -1,6 +1,6 @@
 import type { QuestionObject } from "./questions";
 
-interface QuizResponse {
+interface Quiz {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -34,4 +34,4 @@ interface CreateQuizRequest {
   questions: QuestionObject[];
 }
 
-export type { QuizResponse, UpdateQuizRequest, CreateQuizRequest };
+export type { Quiz, UpdateQuizRequest, CreateQuizRequest };

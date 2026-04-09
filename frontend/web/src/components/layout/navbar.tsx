@@ -1,54 +1,49 @@
-// EXTERNAL
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
 import { useState } from "react";
+
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-// INTERNAL
-import { logout } from "@/api/auth/auth-requests";
-import {
-  currentUserQueryKey,
-  useCurrentUserQuery,
-} from "@/api/auth/query-options";
-import type { DetailedUserResponse } from "@/types/api/users";
-import { useTheme } from "@/stores/theme-provider";
-import { useUserStore } from "@/stores/user-store";
+import { useTheme } from "@stores/theme-provider";
 
-// COMPONENTS & ICONS
+import type { DetailedUserInfo } from "@type/api/users";
+
+import { useCurrentUserQuery, useLogout } from "@api/current-user";
+
 import {
+  Globe,
+  List,
   LogOut,
   Menu,
   Moon,
   Plus,
+  Search,
   Sun,
   User,
-  Globe,
-  Search,
-  List,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
+
+import { Avatar, AvatarFallback, AvatarImage } from "@components/ui/avatar";
+import { Button } from "@components/ui/button";
+import { ButtonGroup } from "@components/ui/button-group";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
   SheetFooter,
   SheetHeader,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@components/ui/sheet";
 
-type NavbarUser = DetailedUserResponse | null | undefined;
+type NavbarUser = DetailedUserInfo | null | undefined;
 
 interface NavbarActionsProps {
   user: NavbarUser;
@@ -63,16 +58,7 @@ interface AuthButtonsProps {
 
 function Navbar() {
   const { data: currentUser } = useCurrentUserQuery();
-  const queryClient = useQueryClient();
-
-  const { mutate: logoutMutate } = useMutation({
-    mutationFn: logout,
-    onSuccess: async () => {
-      useUserStore.getState().logout();
-      await queryClient.cancelQueries({ queryKey: currentUserQueryKey });
-      queryClient.setQueryData(currentUserQueryKey, null);
-    },
-  });
+  const { mutateAsync: logoutMutate } = useLogout();
 
   return (
     <nav className="bg-background/80 sticky top-0 grid w-full grid-cols-[1fr_auto_1fr] items-center gap-2 border-b px-4 py-3 md:flex md:flex-row md:justify-around md:gap-4">
@@ -158,7 +144,7 @@ function MobileActions({ user, onLogout }: NavbarActionsProps) {
             </Button>
             {user ? (
               <Button size="xl" variant="secondary">
-                <UserAvatar user={user as DetailedUserResponse} />
+                <UserAvatar user={user as DetailedUserInfo} />
                 <p className="text-base">{t("profile")}</p>
               </Button>
             ) : (
@@ -224,7 +210,7 @@ function MobileAuthButtons({ onNavigate }: AuthButtonsProps) {
   );
 }
 
-function UserAvatar({ user }: { user: DetailedUserResponse }) {
+function UserAvatar({ user }: { user: DetailedUserInfo }) {
   const avatarFallback = user.username.slice(0, 2).toUpperCase();
 
   return (
@@ -239,7 +225,7 @@ function AvatarDropdown({
   user,
   onLogout,
 }: {
-  user: DetailedUserResponse;
+  user: DetailedUserInfo;
   onLogout: () => void;
 }) {
   const { t } = useTranslation();
@@ -249,7 +235,7 @@ function AvatarDropdown({
       <DropdownMenuTrigger aria-label="Open account menu">
         <UserAvatar user={user} />
       </DropdownMenuTrigger>
-      <DropdownMenuContent sideOffset={20} className="min-w-fit px-3 py-2">
+      <DropdownMenuContent sideOffset={20} className="min-w-fit px-2 py-2">
         <DropdownMenuGroup>
           <DropdownMenuLabel>{t("myAccount")}</DropdownMenuLabel>
           <DropdownMenuSeparator />

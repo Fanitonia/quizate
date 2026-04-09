@@ -31,10 +31,11 @@ interface QuizQuestionsResponse {
 }
 
 export type {
-  QUESTION_TYPES,
   QuestionType,
   MultipleChoiceQuestionObject,
   MultipleChoiceQuestionOption,
   QuestionObject,
   QuizQuestionsResponse,
 };
+
+export { QUESTION_TYPES };

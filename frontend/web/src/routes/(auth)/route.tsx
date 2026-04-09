@@ -1,23 +1,30 @@
-// EXTERNAL LIBRARIES
+/* eslint-disable react-refresh/only-export-components */
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
-// API & TYPES
-import { ensureCurrentUserIfLoggedIn } from "@/api/auth/query-options";
 import type { Context } from "@/routes/__root";
 
-// COMPONENTS
-import { ComponentLoader } from "@/components/feedback/component-loader";
+import { ensureCurrentUser } from "@api/current-user";
+
+import { ComponentLoader } from "@components/feedback";
 
 export const Route = createFileRoute("/(auth)")({
   component: RouteComponent,
   loader,
   pendingMs: 100,
-  pendingComponent: () => <ComponentLoader />,
+  pendingComponent: ComponentLoader,
 });
+
+function RouteComponent() {
+  return (
+    <div className="flex flex-1 items-center justify-center p-4">
+      <Outlet />
+    </div>
+  );
+}
 
 async function loader({ context }: { context: Context }) {
   try {
-    const currentUser = await ensureCurrentUserIfLoggedIn(context.queryClient);
+    const currentUser = await ensureCurrentUser(context.queryClient);
 
     if (currentUser) {
       throw redirect({
@@ -27,12 +34,4 @@ async function loader({ context }: { context: Context }) {
   } catch {
     console.log("Server error during auth route loader.");
   }
-}
-
-function RouteComponent() {
-  return (
-    <div className="flex flex-1 items-center justify-center p-4">
-      <Outlet />
-    </div>
-  );
 }

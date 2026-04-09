@@ -1,4 +1,4 @@
-interface TopicResponse {
+interface Topic {
   name: string;
   displayName: string;
   description: string | null;
@@ -16,4 +16,4 @@ interface UpdateTopicRequest {
   description: string | null;
 }
 
-export type { TopicResponse, CreateTopicRequest, UpdateTopicRequest };
+export type { Topic, CreateTopicRequest, UpdateTopicRequest };

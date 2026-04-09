@@ -1,20 +1,17 @@
-// EXTERNAL LIBRARIES
 import { type QueryClient } from "@tanstack/react-query";
 import {
-  createRootRouteWithContext,
   Outlet,
+  createRootRouteWithContext,
   useMatches,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-// API
-import { ensureCurrentUserIfLoggedIn } from "@/api/auth/query-options";
+import { ensureCurrentUser } from "@api/current-user";
 
-// COMPONENTS
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
-import { ComponentLoader } from "@/components/feedback/component-loader";
-import NotFound from "@/components/feedback/not-found";
+import { NotFound } from "@components/feedback";
+import Footer from "@components/layout/footer";
+import Navbar from "@components/layout/navbar";
+import { Spinner } from "@components/ui/spinner";
 
 declare module "@tanstack/react-router" {
   interface StaticDataRouteOption {
@@ -46,22 +43,24 @@ type Context = {
 
 const Route = createRootRouteWithContext<Context>()({
   component: RootLayout,
-  loader: async ({ context }) => {
-    try {
-      await ensureCurrentUserIfLoggedIn(context.queryClient);
-    } catch (error) {
-      console.error("Server error during root loader.");
-    }
-  },
+  loader,
   pendingMs: 0,
   pendingComponent: () => <FullScreenLoader />,
   notFoundComponent: () => <NotFound />,
 });
 
+async function loader({ context }: { context: Context }) {
+  try {
+    await ensureCurrentUser(context.queryClient);
+  } catch (error) {
+    console.error("Server error during root loader.", error);
+  }
+}
+
 function FullScreenLoader() {
   return (
     <div className="flex min-h-dvh flex-1 items-center justify-center p-4">
-      <ComponentLoader />
+      <Spinner className="size-10" />
     </div>
   );
 }

@@ -1,9 +1,8 @@
-// COMPONENTS & ICONS
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useTranslation } from "react-i18next";
+
 import { CircleAlert } from "lucide-react";
 
-// EXTERNAL
-import { useTranslation } from "react-i18next";
+import { Alert, AlertDescription, AlertTitle } from "@components/ui/alert";
 
 interface AlertErrorProps {
   className?: string;
@@ -27,4 +26,4 @@ function AlertError({ className, error }: AlertErrorProps) {
   );
 }
 
-export default AlertError;
+export { AlertError };
