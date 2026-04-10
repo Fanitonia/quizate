@@ -2,11 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Quizate.Application.Common.Errors;
 using Quizate.Application.Common.Result;
+using Quizate.Application.Features.Languages.Errors;
 using Quizate.Application.Features.Quizzes.DTOs.Requests;
 using Quizate.Application.Features.Quizzes.DTOs.Responses;
-using Quizate.Application.Features.Quizzes.Errors;
 using Quizate.Application.Features.Quizzes.Helpers;
 using Quizate.Application.Features.Quizzes.Interfaces;
+using Quizate.Application.Features.Topics.Errors;
 using Quizate.Domain.Entities.Questions;
 using Quizate.Domain.Entities.Quizzes;
 using Quizate.Persistence;
@@ -17,9 +18,10 @@ public class QuizCommandService(
     QuizateDbContext context,
     IMapper mapper) : IQuizCommandService
 {
-    // TODO: dilleri kontrol et
+    // TODO: quiz validation with FluentValidation
     public async Task<Result<QuizResponse?>> CreateQuizAsync(CreateQuizRequest request, Guid userId = default)
     {
+        // topic validation
         var normalizedRequestTopics = request.Topics
             .Select(topic => topic.Trim().ToLowerInvariant())
             .Distinct()
@@ -34,17 +36,23 @@ public class QuizCommandService(
             .ToArray();
 
         if (missingTopics.Length > 0)
-            return QuizErrors.InvalidTopics(missingTopics);
+            return TopicErrors.TopicsNotFound(missingTopics);
+
+        // language validation
+        var language = await context.QuizLanguages
+            .FirstOrDefaultAsync(lang => lang.Code == request.LanguageCode);
+        if (language == null)
+            return LanguageErrors.LanguageNotFound(request.LanguageCode);
 
         var quiz = mapper.Map<Quiz>(request);
         quiz.Topics = topics;
 
         List<Question> questions = request.Questions
-            .Select(question => new Question(
-                quiz.Id,
-                question.QuestionType,
-                QuestionPayloadSerializer.SerializeQuestionObject(question.QuestionType, question)))
-            .ToList();
+        .Select(question => new Question(
+            quiz.Id,
+            question.QuestionType,
+            QuestionPayloadSerializer.SerializeQuestionObject(question.QuestionType, question)))
+        .ToList();
 
         quiz.Questions = questions;
 
@@ -81,7 +89,6 @@ public class QuizCommandService(
 
         quiz.UpdateTitle(request.Title);
         quiz.UpdateDescription(request.Description);
-        quiz.UpdateThumbnailUrl(request.ThumbnailUrl);
         quiz.UpdateVisibiltity(request.IsPublic);
         quiz.UpdateLanguage(request.LanguageCode);
 

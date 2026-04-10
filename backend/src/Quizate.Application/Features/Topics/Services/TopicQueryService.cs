@@ -8,6 +8,7 @@ namespace Quizate.Application.Features.Topics.Services;
 public class TopicQueryService(
     QuizateDbContext context) : ITopicQueryService
 {
+    // TODO: quiz count should be optional. also learn caching.
     public async Task<ICollection<TopicResponse>> GetTopicsAsync(CancellationToken ct)
     {
         var topics = await context.QuizTopics

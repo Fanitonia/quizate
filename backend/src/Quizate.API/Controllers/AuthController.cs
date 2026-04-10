@@ -7,13 +7,13 @@ using Quizate.Domain.Enums;
 
 namespace Quizate.API.Controllers;
 
+// TODO: mobil için cookie yerine başka yöntem bul
 [Route("auth")]
 [ApiController]
 public class AuthController(
     IAuthService authService,
     IConfiguration configuration) : ControllerBase
 {
-    // onur
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] RegisterRequest request)
     {
@@ -28,7 +28,6 @@ public class AuthController(
         return Created();
     }
 
-    // onur
     [HttpPost("login")]
     public async Task<ActionResult> Login([FromBody] LoginRequest request)
     {
@@ -43,7 +42,6 @@ public class AuthController(
         return Ok();
     }
 
-    // onur
     [Authorize]
     [HttpPost("logout")]
     public async Task<ActionResult> Logout()

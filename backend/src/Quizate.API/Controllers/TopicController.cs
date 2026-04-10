@@ -4,6 +4,7 @@ using Quizate.Application.Common.Errors;
 using Quizate.Application.Features.Topics.DTOs.Requests;
 using Quizate.Application.Features.Topics.DTOs.Responses;
 using Quizate.Application.Features.Topics.Interfaces;
+using Quizate.Domain.Enums;
 
 namespace Quizate.API.Controllers;
 
@@ -21,7 +22,7 @@ public class TopicController(
         return Ok(result);
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPatch("{topicName}")]
     public async Task<ActionResult> UpdateTopic([FromRoute] string topicName, [FromBody] UpdateTopicRequest request)
     {
@@ -38,7 +39,7 @@ public class TopicController(
         return NoContent();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPost]
     public async Task<ActionResult<TopicResponse>> CreateTopic(CreateTopicRequest request)
     {
@@ -50,7 +51,7 @@ public class TopicController(
         return Created();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpDelete("{topicName}")]
     public async Task<ActionResult> DeleteTopic([FromRoute] string topicName)
     {

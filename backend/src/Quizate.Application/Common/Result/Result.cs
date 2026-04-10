@@ -51,6 +51,7 @@ public class Result<TValue> : Result
 }
 
 // TODO: opsiyonel http status code ekle. controller'da buna göre response döndürür.
+// TODO: ekledikten sonra controller'larda bunu handle'layan bir method yaz.
 public record class Error(string Code, string Description)
 {
     public static Error None => new(String.Empty, String.Empty);

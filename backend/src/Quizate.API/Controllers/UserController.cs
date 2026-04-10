@@ -21,7 +21,7 @@ public class UserController(
     IUserQueryService userQuery,
     IQuizQueryService quizService) : ControllerBase
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet]
     public async Task<ActionResult<ICollection<DetailedUserInfoResponse>>> GetAllUsers(
         [FromQuery] PaginationParameters pagination,
@@ -117,7 +117,7 @@ public class UserController(
         throw new NotImplementedException();
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPatch("{userId:guid}/role")]
     public async Task<ActionResult> UpdateUserRole(Guid userId, [FromBody] UpdateUserRoleRequest request)
     {

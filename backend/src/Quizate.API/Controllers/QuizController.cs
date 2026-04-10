@@ -19,7 +19,6 @@ public class QuizController(
     IQuizCommandService quizCommand,
     IQuizAuthorizationService quizAuth) : ControllerBase
 {
-    // onur
     [HttpGet]
     public async Task<ActionResult<List<QuizResponse>>> GetQuizzes(
         [FromQuery] PaginationParameters pagination,
@@ -33,7 +32,6 @@ public class QuizController(
         return Ok(result.Records);
     }
 
-    // onur
     [HttpGet("{quizId:guid}")]
     public async Task<ActionResult<QuizResponse>> GetQuiz(Guid quizId, CancellationToken ct)
     {
@@ -45,7 +43,6 @@ public class QuizController(
         return Ok(quiz);
     }
 
-    // onur
     [HttpGet("{quizId:guid}/questions")]
     public async Task<ActionResult<QuizQuestionsResponse>> GetQuestions(Guid quizId, CancellationToken ct)
     {
@@ -57,7 +54,6 @@ public class QuizController(
         return Ok(questions);
     }
 
-    // onur
     [HttpPost]
     public async Task<ActionResult<QuizResponse>> CreateQuiz(CreateQuizRequest request)
     {
@@ -71,7 +67,6 @@ public class QuizController(
         return CreatedAtAction(nameof(GetQuiz), new { quizId = result.Value!.Id }, result.Value);
     }
 
-    // onur
     [Authorize]
     [HttpPatch("{quizId:guid}")]
     public async Task<ActionResult> UpdateQuiz(Guid quizId, [FromBody] UpdateQuizRequest request)
@@ -99,7 +94,6 @@ public class QuizController(
         return NoContent();
     }
 
-    // onur
     [Authorize]
     [HttpDelete("{quizId:guid}")]
     public async Task<ActionResult> DeleteQuiz(Guid quizId)

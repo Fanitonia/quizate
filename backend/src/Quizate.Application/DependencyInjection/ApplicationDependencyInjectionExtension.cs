@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quizate.Application.Features.Auth.DependencyInjection;
+using Quizate.Application.Features.Languages.DependencyInjection;
 using Quizate.Application.Features.Quizzes.DependencyInjection;
 using Quizate.Application.Features.Topics.DependencyInjection;
 using Quizate.Application.Features.Users.DependencyInjection;
@@ -15,6 +16,7 @@ public static class ApplicationDependencyInjectionExtension
         services.AddUserServices();
         services.AddQuizServices();
         services.AddTopicServices();
+        services.AddLanguagesServices();
 
         services.AddAutoMapper(cfg =>
         {
