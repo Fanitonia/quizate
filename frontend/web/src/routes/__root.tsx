@@ -6,7 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import { ensureCurrentUser } from "@api/current-user";
+import { prefetchCurrentUser } from "@api/current-user";
 
 import { NotFound } from "@components/feedback";
 import Footer from "@components/layout/footer";
@@ -50,11 +50,7 @@ const Route = createRootRouteWithContext<Context>()({
 });
 
 async function loader({ context }: { context: Context }) {
-  try {
-    await ensureCurrentUser(context.queryClient);
-  } catch (error) {
-    console.error("Server error during root loader.", error);
-  }
+  await prefetchCurrentUser(context.queryClient);
 }
 
 function FullScreenLoader() {
