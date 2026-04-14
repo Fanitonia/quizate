@@ -8,7 +8,7 @@ public interface IQuizQueryService
     public Task<PaginatedList<QuizResponse>> GetAllQuizzesAsync(
         PaginationParameters pagination,
         CancellationToken ct,
-        Guid? userId = null);
+        string? username = null);
 
     public Task<QuizResponse?> GetQuizAsync(Guid quizId, CancellationToken ct);
 

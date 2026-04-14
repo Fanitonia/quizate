@@ -23,62 +23,39 @@ public class UserController(
 {
     [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpGet]
-    public async Task<ActionResult<ICollection<DetailedUserInfoResponse>>> GetAllUsers(
+    public async Task<ActionResult<ICollection<DetailedUserInfoResponse>>> GetUsers(
+        [FromQuery] string? username,
         [FromQuery] PaginationParameters pagination,
         CancellationToken ct)
     {
-        var result = await userQuery.GetAllUsersAsync(pagination, ct);
+        var result = await userQuery.GetAllUsersAsync(pagination, username, ct);
 
         Response.Headers.Append(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
 
         return Ok(result.Records);
     }
 
-    // onur
     [HttpGet("{userId:guid}")]
     public async Task<ActionResult<UserInfoResponse>> GetUser(
         Guid userId, CancellationToken ct)
     {
-        var user = await userQuery.GetUserAsync(userId, ct);
-
+        var user = await userQuery.GetUserByIdAsync(userId, ct);
         if (user == null)
             return NotFound();
 
         return Ok(user);
     }
 
-    [HttpGet("{userId:guid}/quizzes")]
-    public async Task<ActionResult<ICollection<QuizResponse>>> GetUserQuizzes(
-        [FromRoute] Guid userId,
-        [FromQuery] PaginationParameters pagination,
-        CancellationToken ct)
+    [HttpGet("username/{username}")]
+    public async Task<ActionResult<UserInfoResponse>> GetUserByUsername(
+        [FromRoute] string username, CancellationToken ct)
     {
-        var result = await quizService.GetAllQuizzesAsync(pagination, ct, userId);
-
-        Response.Headers.Append(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
-
-        return Ok(result.Records);
+        var user = await userQuery.GetUserByUsernameAsync(username, ct);
+        if (user == null)
+            return NotFound();
+        return Ok(user);
     }
 
-    // onur
-    [Authorize(Roles = nameof(UserRole.Admin))]
-    [HttpDelete("{userId:guid}")]
-    public async Task<ActionResult> DeleteUser(Guid userId)
-    {
-        var result = await userCommand.DeleteUserAsync(userId);
-
-        if (result.IsFailure)
-        {
-            if (result.Error == CommonErrors.NotFound)
-                return NotFound(result.Error);
-
-            return BadRequest(result.Error);
-        }
-
-        return NoContent();
-    }
-
-    // huseyin
     [Authorize]
     [HttpGet("me")]
     public async Task<ActionResult<DetailedUserInfoResponse>> GetMe(CancellationToken ct)
@@ -94,7 +71,21 @@ public class UserController(
         return Ok(user);
     }
 
-    // huseyin
+    [Authorize]
+    [HttpGet("me/quizzes")]
+    public async Task<ActionResult<List<QuizResponse>>> GetMyQuizzes(
+        [FromQuery] PaginationParameters pagination, CancellationToken ct)
+    {
+        if (!User.TryGetUserName(out var username))
+            return Unauthorized();
+
+        var result = await quizService.GetAllQuizzesAsync(pagination, ct, username);
+
+        Response.Headers.Append("X-Pagination", result.PaginationMetadata.SerializeWithCamelCasing());
+
+        return Ok(result.Records);
+    }
+
     [Authorize]
     [HttpPatch("me")]
     public async Task<ActionResult> UpdateMe([FromBody] UpdateUserRequest request)
@@ -117,56 +108,6 @@ public class UserController(
         throw new NotImplementedException();
     }
 
-    [Authorize(Roles = nameof(UserRole.Admin))]
-    [HttpPatch("{userId:guid}/role")]
-    public async Task<ActionResult> UpdateUserRole(Guid userId, [FromBody] UpdateUserRoleRequest request)
-    {
-        var result = await userCommand.UpdateUserRoleAsync(request, userId);
-
-        if (result.IsFailure)
-        {
-            if (result.Error == CommonErrors.NotFound)
-                return NotFound(result.Error);
-
-            return BadRequest(result.Error);
-        }
-
-        return Ok();
-    }
-
-    // huseyin
-    [Authorize]
-    [HttpDelete("me")]
-    public async Task<ActionResult> DeleteMe()
-    {
-        if (!User.TryGetUserId(out var userId))
-            return Unauthorized();
-
-        var result = await userCommand.DeleteUserAsync(userId);
-
-        if (result.IsFailure)
-            return BadRequest();
-
-        return NoContent();
-    }
-
-    // onur
-    [Authorize]
-    [HttpGet("me/quizzes")]
-    public async Task<ActionResult<List<QuizResponse>>> GetMyQuizzes(
-        [FromQuery] PaginationParameters pagination, CancellationToken ct)
-    {
-        if (!User.TryGetUserId(out var userId))
-            return Unauthorized();
-
-        var result = await quizService.GetAllQuizzesAsync(pagination, ct, userId);
-
-        Response.Headers.Append("X-Pagination", result.PaginationMetadata.SerializeWithCamelCasing());
-
-        return Ok(result.Records);
-
-    }
-
     [Authorize]
     [HttpPost("me/change-password")]
     public async Task<ActionResult> ChangePassword([FromBody] PasswordChangeRequest request)
@@ -187,5 +128,56 @@ public class UserController(
     public async Task<ActionResult> ResetPassword()
     {
         throw new NotImplementedException();
+    }
+
+    [Authorize]
+    [HttpDelete("me")]
+    public async Task<ActionResult> DeleteMe()
+    {
+        if (!User.TryGetUserId(out var userId))
+            return Unauthorized();
+
+        var result = await userCommand.DeleteUserAsync(userId);
+
+        if (result.IsFailure)
+            return BadRequest();
+
+        return NoContent();
+    }
+
+
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpPatch("{userId:guid}/role")]
+    public async Task<ActionResult> UpdateUserRole([FromRoute] Guid userId, [FromBody] UpdateUserRoleRequest request)
+    {
+        var result = await userCommand.UpdateUserRoleAsync(request, userId);
+
+        if (result.IsFailure)
+        {
+            if (result.Error == CommonErrors.NotFound)
+                return NotFound(result.Error);
+
+            return BadRequest(result.Error);
+        }
+
+        return Ok();
+    }
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpDelete("{userId:guid}")]
+    public async Task<ActionResult> DeleteUser([FromRoute] Guid userId)
+    {
+        var result = await userCommand.DeleteUserAsync(userId);
+
+        if (result.IsFailure)
+        {
+            if (result.Error == CommonErrors.NotFound)
+                return NotFound(result.Error);
+
+            return BadRequest(result.Error);
+        }
+
+        return NoContent();
     }
 }

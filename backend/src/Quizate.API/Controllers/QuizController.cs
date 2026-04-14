@@ -22,10 +22,10 @@ public class QuizController(
     [HttpGet]
     public async Task<ActionResult<List<QuizResponse>>> GetQuizzes(
         [FromQuery] PaginationParameters pagination,
-        [FromQuery] Guid? userId,
+        [FromQuery] string? username,
         CancellationToken ct)
     {
-        var result = await quizQuery.GetAllQuizzesAsync(pagination, ct, userId);
+        var result = await quizQuery.GetAllQuizzesAsync(pagination, ct, username);
 
         Response.Headers.Append(Headers.XPagination, result.PaginationMetadata.SerializeWithCamelCasing());
 

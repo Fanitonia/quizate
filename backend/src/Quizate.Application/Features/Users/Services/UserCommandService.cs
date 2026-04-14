@@ -16,10 +16,11 @@ public class UserCommandService(
     QuizateDbContext context,
     IPasswordHasher<User> passwordHasher) : IUserCommandService
 {
+
     public async Task<Result> DeleteUserAsync(Guid userId)
     {
         var user = await context.Users
-            .FindAsync(userId);
+            .FirstOrDefaultAsync(u => u.Id == userId); ;
 
         if (user == null)
             return CommonErrors.NotFound;
@@ -67,7 +68,8 @@ public class UserCommandService(
 
     public async Task<Result> UpdateUserRoleAsync(UpdateUserRoleRequest request, Guid userId)
     {
-        var user = await context.Users.FindAsync(userId);
+        var user = await context.Users
+            .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (user == null)
             return CommonErrors.NotFound;

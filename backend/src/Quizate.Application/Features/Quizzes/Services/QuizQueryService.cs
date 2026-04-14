@@ -17,27 +17,29 @@ public class QuizQueryService(
     public async Task<PaginatedList<QuizResponse>> GetAllQuizzesAsync(
         PaginationParameters pagination,
         CancellationToken ct,
-        Guid? userId = null)
+        string? username = null)
     {
         var baseQuery = context.Quizzes
-            .AsNoTracking()
-            .Skip((pagination.Page - 1) * pagination.PageSize)
-            .Take(pagination.PageSize);
+            .AsNoTracking();
 
-        if (userId.HasValue)
-            baseQuery = baseQuery.Where(q => q.CreatorId == userId.Value);
+        if (username != null)
+        {
+            var normalizedUsername = username.ToUpperInvariant();
+            baseQuery = baseQuery.Where
+                (q => q.Creator != null &&
+                (q.Creator.NormalizedUsername == normalizedUsername
+                || q.Creator.Username == username));
+        }
 
-        // order seçenekleri eklenebilir
         baseQuery = baseQuery.OrderByDescending(q => q.CreatedAt);
 
+        var totalCount = await baseQuery.CountAsync(ct);
+
         var result = await baseQuery
+            .Skip((pagination.Page - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
             .ProjectTo<QuizResponse>(mapper.ConfigurationProvider)
             .ToListAsync(ct);
-
-        var totalCount = await context.Quizzes
-            .AsNoTracking()
-            .Where(q => !userId.HasValue || q.CreatorId == userId.Value)
-            .CountAsync(ct);
 
         var paginationMetaData = new PaginationMetadata(
             pagination, totalCount);

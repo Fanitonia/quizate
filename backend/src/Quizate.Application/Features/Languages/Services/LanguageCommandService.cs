@@ -6,6 +6,7 @@ using Quizate.Application.Features.Languages.Errors;
 using Quizate.Application.Features.Languages.Interfaces;
 using Quizate.Domain.Entities.Quizzes;
 using Quizate.Persistence;
+using System.Globalization;
 
 namespace Quizate.Application.Features.Languages.Services;
 
@@ -13,6 +14,15 @@ public class LanguageCommandService(QuizateDbContext context) : ILanguageCommand
 {
     public async Task<Result> CreateAsync(CreateLanguageRequest request)
     {
+        try
+        {
+            CultureInfo.GetCultureInfo(request.Code);
+        }
+        catch (CultureNotFoundException)
+        {
+            return Result.Failure(LanguageErrors.InvalidLanguage);
+        }
+
         if (await context.QuizLanguages.AnyAsync(l => l.Code == request.Code))
         {
             return Result.Failure(LanguageErrors.LanguageExist);

@@ -12,10 +12,22 @@ public class UserQueryService(
     QuizateDbContext context,
     IMapper mapper) : IUserQueryService
 {
-    public async Task<UserInfoResponse?> GetUserAsync(Guid userId, CancellationToken ct)
+    public async Task<UserInfoResponse?> GetUserByUsernameAsync(string username, CancellationToken ct)
     {
         var user = await context.Users
-            .FindAsync([userId], ct);
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Username == username, ct);
+
+        if (user == null)
+            return null;
+
+        return mapper.Map<UserInfoResponse>(user);
+    }
+    public async Task<UserInfoResponse?> GetUserByIdAsync(Guid userId, CancellationToken ct)
+    {
+        var user = await context.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == userId, ct);
 
         if (user == null)
             return null;
@@ -34,16 +46,24 @@ public class UserQueryService(
         return mapper.Map<DetailedUserInfoResponse>(user);
     }
 
-    public async Task<PaginatedList<DetailedUserInfoResponse>> GetAllUsersAsync(PaginationParameters pagination, CancellationToken ct)
+    public async Task<PaginatedList<DetailedUserInfoResponse>> GetAllUsersAsync(PaginationParameters pagination, string? username, CancellationToken ct)
     {
-        var users = await context.Users
-            .AsNoTracking()
-            .Skip((pagination.Page - 1) * pagination.Page)
+        var baseQuery = context.Users
+            .AsNoTracking();
+
+        if (username != null)
+        {
+            var normalizedUsername = username.ToLowerInvariant();
+            baseQuery = baseQuery.Where(u => u.NormalizedUsername == normalizedUsername || u.Username == username);
+        }
+
+        var users = await baseQuery
+            .Skip((pagination.Page - 1) * pagination.PageSize)
             .Take(pagination.PageSize)
             .ProjectTo<DetailedUserInfoResponse>(mapper.ConfigurationProvider)
             .ToListAsync(ct);
 
-        var totalCount = await context.Users.CountAsync();
+        var totalCount = await baseQuery.CountAsync(ct);
 
         var paginationMetadata = new PaginationMetadata(
             pagination, totalCount);

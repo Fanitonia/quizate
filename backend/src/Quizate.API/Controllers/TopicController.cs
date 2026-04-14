@@ -23,6 +23,18 @@ public class TopicController(
     }
 
     [Authorize(Roles = nameof(UserRole.Admin))]
+    [HttpPost]
+    public async Task<ActionResult<TopicResponse>> CreateTopic(CreateTopicRequest request)
+    {
+        var result = await topicCommand.CreateTopicAsync(request);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Created();
+    }
+
+    [Authorize(Roles = nameof(UserRole.Admin))]
     [HttpPatch("{topicName}")]
     public async Task<ActionResult> UpdateTopic([FromRoute] string topicName, [FromBody] UpdateTopicRequest request)
     {
@@ -37,18 +49,6 @@ public class TopicController(
         }
 
         return NoContent();
-    }
-
-    [Authorize(Roles = nameof(UserRole.Admin))]
-    [HttpPost]
-    public async Task<ActionResult<TopicResponse>> CreateTopic(CreateTopicRequest request)
-    {
-        var result = await topicCommand.CreateTopicAsync(request);
-
-        if (result.IsFailure)
-            return BadRequest(result.Error);
-
-        return Created();
     }
 
     [Authorize(Roles = nameof(UserRole.Admin))]

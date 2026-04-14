@@ -15,4 +15,18 @@ public static class ClaimsPrincipalExtensions
 
         return true;
     }
+
+    public static bool TryGetUserName(this ClaimsPrincipal user, out string? userName)
+    {
+        var usernameClaim = user.FindFirstValue(ClaimTypes.Name);
+
+        if (string.IsNullOrEmpty(usernameClaim))
+        {
+            userName = null;
+            return false;
+        }
+
+        userName = usernameClaim;
+        return true;
+    }
 }

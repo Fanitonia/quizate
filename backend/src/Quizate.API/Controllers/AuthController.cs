@@ -62,7 +62,6 @@ public class AuthController(
         return NoContent();
     }
 
-
     [HttpPost("refresh-token")]
     public async Task<ActionResult> RefreshToken()
     {
