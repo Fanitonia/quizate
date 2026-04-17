@@ -16,7 +16,7 @@ public class UserQueryService(
     {
         var user = await context.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Username == username, ct);
+            .FirstOrDefaultAsync(u => u.Username == username || u.NormalizedUsername == username.ToLowerInvariant(), ct);
 
         if (user == null)
             return null;
