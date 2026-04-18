@@ -24,11 +24,10 @@ public class QuizQueryService(
 
         if (username != null)
         {
-            var normalizedUsername = username.ToUpperInvariant();
+            var normalizedUsername = username.ToLowerInvariant();
             baseQuery = baseQuery.Where
                 (q => q.Creator != null &&
-                (q.Creator.NormalizedUsername == normalizedUsername
-                || q.Creator.Username == username));
+                (q.Creator.Username == normalizedUsername));
         }
 
         baseQuery = baseQuery.OrderByDescending(q => q.CreatedAt);

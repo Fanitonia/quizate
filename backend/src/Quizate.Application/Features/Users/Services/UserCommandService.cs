@@ -50,15 +50,21 @@ public class UserCommandService(
             user.UpdateUsername(request.Username);
         }
 
+        if (request.DisplayName != null)
+        {
+            user.UpdateDisplayName(request.DisplayName.Trim());
+        }
+
         if (request.Email != null)
         {
+            var normalizedEmail = request.Email.ToLowerInvariant().Trim();
             var isEmailTaken = await context.Users
-                .AnyAsync(u => u.Email == request.Email && u.Id != userId);
+                .AnyAsync(u => u.Email == normalizedEmail && u.Id != userId);
 
             if (isEmailTaken)
-                return UserErrors.EmailTaken(request.Email);
+                return UserErrors.EmailTaken(normalizedEmail);
 
-            user.UpdateEmail(request.Email);
+            user.UpdateEmail(normalizedEmail);
         }
 
         await context.SaveChangesAsync();

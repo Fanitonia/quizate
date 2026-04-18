@@ -32,7 +32,7 @@ public class AuthService(
         string? normalizedEmail = request.Email?.ToLowerInvariant();
 
         var isUserExist = await dbContext.Users.AnyAsync(u =>
-            u.NormalizedUsername == normalizedUsername
+            u.Username == normalizedUsername
             || (normalizedEmail != null && u.Email != null && u.Email == normalizedEmail));
 
         if (isUserExist)
@@ -66,7 +66,7 @@ public class AuthService(
 
         var user = await dbContext.Users
             .FirstOrDefaultAsync(u =>
-                u.NormalizedUsername == normalizedInput
+                u.Username == normalizedInput
                 || (u.Email != null && u.Email == normalizedInput));
 
         if (user == null)

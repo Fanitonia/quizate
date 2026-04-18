@@ -14,9 +14,11 @@ public class UserQueryService(
 {
     public async Task<UserInfoResponse?> GetUserByUsernameAsync(string username, CancellationToken ct)
     {
+        var normalizedUsername = username.ToLowerInvariant();
+
         var user = await context.Users
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Username == username || u.NormalizedUsername == username.ToLowerInvariant(), ct);
+            .FirstOrDefaultAsync(u => u.Username == normalizedUsername, ct);
 
         if (user == null)
             return null;
@@ -54,7 +56,7 @@ public class UserQueryService(
         if (username != null)
         {
             var normalizedUsername = username.ToLowerInvariant();
-            baseQuery = baseQuery.Where(u => u.NormalizedUsername == normalizedUsername || u.Username == username);
+            baseQuery = baseQuery.Where(u => u.Username == normalizedUsername);
         }
 
         var users = await baseQuery

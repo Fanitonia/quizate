@@ -10,7 +10,7 @@ public class User
     public DateTime UpdatedAt { get; private set; }
 
     public string Username { get; private set; }
-    public string NormalizedUsername { get; private set; } = null!;
+    public string DisplayName { get; private set; }
     public string? Email { get; private set; }
     public DateTime? EmailVerifiedAt { get; private set; }
     public string PasswordHash { get; private set; }
@@ -33,6 +33,7 @@ public class User
         DateTime updatedAt = default)
     {
         Username = username;
+        DisplayName = username;
         Email = email;
         PasswordHash = passwordHash;
         ProfilePictureUrl = profilePictureUrl;
@@ -46,6 +47,12 @@ public class User
     public void UpdateUsername(string username)
     {
         Username = username;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateDisplayName(string displayName)
+    {
+        DisplayName = displayName;
         UpdatedAt = DateTime.UtcNow;
     }
 

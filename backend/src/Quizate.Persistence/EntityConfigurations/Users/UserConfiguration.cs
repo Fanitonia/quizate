@@ -15,12 +15,9 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         entity.HasIndex(u => u.Username)
             .IsUnique();
 
-        entity.Property(u => u.NormalizedUsername)
+        entity.Property(u => u.DisplayName)
             .HasMaxLength(25)
-            .HasComputedColumnSql("lower(username)", stored: true);
-
-        entity.HasIndex(u => u.NormalizedUsername)
-            .IsUnique();
+            .IsRequired();
 
         entity.Property(u => u.Email)
             .HasMaxLength(255);
@@ -40,8 +37,9 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         entity.ToTable(t =>
         {
             t.HasCheckConstraint("ck_users_username_not_empty", "char_length(trim(username)) > 0");
+            t.HasCheckConstraint("ck_users_username_format", "username ~ '^[a-z0-9_]+$'");
+            t.HasCheckConstraint("ck_users_displayname_format", "display_name ~ '^[a-zA-Z0-9_ ]+$'");
             t.HasCheckConstraint("ck_users_password_hash_not_empty", "char_length(trim(password_hash)) > 0");
-            t.HasCheckConstraint("ck_users_username_format", "username ~ '^[A-Za-z0-9_]+$'");
         });
 
         entity.HasQueryFilter(u => u.IsDeleted == false);

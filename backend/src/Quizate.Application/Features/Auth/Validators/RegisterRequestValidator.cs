@@ -11,10 +11,10 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
         RuleFor(x => x.Username)
             .NotEmpty()
                 .WithMessage("Username is required.")
-            .MaximumLength(25)
-                .WithMessage("Username must not exceed 25 characters.")
-            .Matches("^[A-Za-z0-9_]+$")
-                .WithMessage("Username can only contain letters, numbers, and underscores.");
+            .MaximumLength(20)
+                .WithMessage("Username must not exceed 20 characters.")
+            .Matches("^[a-z0-9_]+$")
+                .WithMessage("Username can only contain lowercase letters, numbers, and underscores.");
 
         RuleFor(x => x.Email)
             .EmailAddress()
