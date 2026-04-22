@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
 
-import { ThemeProvider } from "@stores/theme-provider";
+import { ThemeProvider } from "@/stores/ThemeProvider";
 
 import "./index.css";
 import "./lib/i18n";

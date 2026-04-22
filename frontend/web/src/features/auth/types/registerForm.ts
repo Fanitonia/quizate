@@ -7,10 +7,7 @@ const registerFormSchema = z
     username: z
       .string(i18next.t("registerPage.error.usernameRequired"))
       .min(3, i18next.t("registerPage.error.usernameMinLength"))
-      .regex(
-        /^[A-Za-z0-9_]+$/,
-        i18next.t("registerPage.error.usernameInvalid")
-      ),
+      .regex(/^[a-z0-9_]+$/, i18next.t("registerPage.error.usernameInvalid")),
 
     email: z.preprocess(
       (value) => {

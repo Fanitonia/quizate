@@ -1,8 +1,5 @@
-import { QueryClient, queryOptions } from "@tanstack/react-query";
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, queryOptions, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
-import { useUserStore } from "@stores/user-store";
 
 import { type DetailedUserInfo } from "@type/api/users";
 
@@ -23,51 +20,38 @@ async function getCurrentUser(): Promise<DetailedUserInfo | null> {
   }
 }
 
-async function getCurrentUserQueryFn() {
-  const currentUser = await getCurrentUser();
-  const { login, logout } = useUserStore.getState();
-
-  if (currentUser) {
-    login();
-  } else {
-    logout();
-  }
-
-  return currentUser;
-}
-
 // hook
 function useCurrentUserQuery() {
   return useQuery(getCurrentUserQueryOptions());
 }
 
 // functions for fetching in route loaders
-function prefetchCurrentUser(queryClient: QueryClient) {
-  if (!shouldFetchCurrentUser()) return Promise.resolve();
-
+function prefetchCurrentUser(queryClient: QueryClient): Promise<void> {
   return queryClient.prefetchQuery(getCurrentUserQueryOptions());
 }
 
-function fetchCurrentUser(queryClient: QueryClient) {
-  if (!shouldFetchCurrentUser()) return Promise.resolve();
-
+function fetchCurrentUser(
+  queryClient: QueryClient
+): Promise<DetailedUserInfo | null> {
   return queryClient.fetchQuery(getCurrentUserQueryOptions());
+}
+
+function invalidateAndFetchCurrentUser(
+  queryClient: QueryClient
+): Promise<DetailedUserInfo | null> {
+  queryClient.invalidateQueries({ queryKey: currentUserQueryKeys.info });
+  return fetchCurrentUser(queryClient);
 }
 
 function getCurrentUserQueryOptions() {
   return queryOptions({
     queryKey: currentUserQueryKeys.info,
-    queryFn: getCurrentUserQueryFn,
-    staleTime: 3 * 60 * 1000, // 3 minutes
+    queryFn: getCurrentUser,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 20 * 60 * 1000,
     retry: false,
-    enabled: shouldFetchCurrentUser(),
+    refetchOnWindowFocus: false,
   });
-}
-
-function shouldFetchCurrentUser() {
-  const { hasHydrated, isLoggedIn } = useUserStore.getState();
-
-  return hasHydrated && isLoggedIn;
 }
 
 export {
@@ -75,4 +59,5 @@ export {
   getCurrentUserQueryOptions,
   prefetchCurrentUser,
   fetchCurrentUser,
+  invalidateAndFetchCurrentUser,
 };

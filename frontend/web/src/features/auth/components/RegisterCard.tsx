@@ -144,16 +144,14 @@ function RegisterCard() {
               >
                 {t("registerPage.footer.haveAccount")}
               </Label>
-              <Link to="/login">
-                <Button
-                  className="text-accent-foreground/60 hover:text-foreground px-1 underline"
-                  id="signup"
-                  size="xs"
-                  variant="link"
-                >
-                  {t("login")}
-                </Button>
-              </Link>
+              <Button
+                className="text-accent-foreground/60 hover:text-foreground px-1 underline"
+                id="signup"
+                size="xs"
+                variant="link"
+                render={<Link to="/login">{t("login")}</Link>}
+                nativeButton={false}
+              ></Button>
             </div>
           </FieldSet>
         </form>

@@ -104,16 +104,14 @@ function LoginCard() {
             >
               {t("loginPage.footer.noAccount")}
             </Label>
-            <Link to="/register">
-              <Button
-                className="text-accent-foreground/60 hover:text-foreground px-1 underline"
-                id="signup"
-                size="xs"
-                variant="link"
-              >
-                {t("signup")}
-              </Button>
-            </Link>
+            <Button
+              className="text-accent-foreground/60 hover:text-foreground px-1 underline"
+              id="signup"
+              size="xs"
+              variant="link"
+              render={<Link to="/register">{t("signup")}</Link>}
+              nativeButton={false}
+            ></Button>
           </div>
         </FieldSet>
       </form>

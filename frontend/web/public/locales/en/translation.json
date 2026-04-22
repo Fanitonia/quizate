@@ -9,9 +9,16 @@
   "myAccount": "My Account",
   "optional": "optional",
   "workInProgress": "Work in Progress",
+  "quizzes": "Quizzes",
   "notFound": {
-    "title": "404 - Page Not Found",
-    "description": "The page you are looking for does not exist."
+    "page": {
+      "title": "404 - Page Not Found",
+      "description": "The page you are looking for does not exist."
+    },
+    "user": {
+      "title": "404 - User Not Found",
+      "description": "The user you are looking for does not exist."
+    }
   },
   "goneWrong": {
     "title": "Something went wrong",
@@ -51,7 +58,7 @@
       "description": "An error occurred during registration. Please try again.",
       "usernameRequired": "Username is required",
       "usernameMinLength": "Username must be at least 3 characters long",
-      "usernameInvalid": "Username must be alphanumeric with underscores only",
+      "usernameInvalid": "Username can only contain lowercase letters, numbers, and underscores",
       "emailInvalid": "Invalid email address",
       "passwordRequired": "Password is required",
       "passwordMinLength": "Password must be at least 8 characters long",
@@ -65,6 +72,30 @@
     },
     "footer": {
       "haveAccount": "Do you have an account?"
+    }
+  },
+  "profilePage": {
+    "memberSince": "Member since {{date}}",
+    "actions": {
+      "editProfile": "Edit profile",
+      "changePassword": "Change password",
+      "accountDetails": "Account details"
+    },
+    "verification": {
+      "verified": "Verified",
+      "notVerified": "Not verified"
+    },
+    "fallbacks": {
+      "noEmail": "No email added yet."
+    },
+    "stats": {
+      "created": "Created",
+      "solved": "Solved"
+    },
+    "quizzes": {
+      "createdQuizzes": "{{username}}'s created quizzes",
+      "emptyTitle": "Result not found",
+      "emptyDescription": "User has not created any quizzes yet."
     }
   }
 }

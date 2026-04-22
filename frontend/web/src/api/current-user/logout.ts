@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
-
-import { useUserStore } from "@stores/user-store";
+import { useNavigate } from "@tanstack/react-router";
 
 import { apiClient } from "@api/client";
 
@@ -13,13 +12,14 @@ async function logout() {
 
 function useLogout() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      useUserStore.getState().logout();
       queryClient.cancelQueries({ queryKey: currentUserQueryKeys.info });
-      queryClient.setQueriesData({ queryKey: currentUserQueryKeys.info }, null);
+      queryClient.setQueryData(currentUserQueryKeys.info, null);
+      navigate({ to: "/" });
     },
   });
 }

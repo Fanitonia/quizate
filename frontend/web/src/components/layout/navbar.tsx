@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { useTheme } from "@stores/theme-provider";
+import { useTheme } from "@stores/ThemeProvider";
 
 import type { DetailedUserInfo } from "@type/api/users";
 
@@ -21,7 +21,6 @@ import {
   User,
 } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@components/ui/avatar";
 import { Button } from "@components/ui/button";
 import { ButtonGroup } from "@components/ui/button-group";
 import {
@@ -42,6 +41,7 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "@components/ui/sheet";
+import { UserAvatar } from "@components/user/UserAvatar";
 
 type NavbarUser = DetailedUserInfo | null | undefined;
 
@@ -176,12 +176,19 @@ function AuthButtons({ onNavigate }: AuthButtonsProps) {
 
   return (
     <ButtonGroup className="flex w-full">
-      <Button variant="secondary" className="flex-1" onClick={onNavigate}>
-        <Link to="/login">{t("login")}</Link>
-      </Button>
-      <Button className="flex-1" onClick={onNavigate}>
-        <Link to="/register">{t("signup")}</Link>
-      </Button>
+      <Button
+        variant="secondary"
+        className="flex-1"
+        onClick={onNavigate}
+        render={<Link to="/login">{t("login")}</Link>}
+        nativeButton={false}
+      />
+      <Button
+        className="flex-1"
+        onClick={onNavigate}
+        render={<Link to="/register">{t("signup")}</Link>}
+        nativeButton={false}
+      />
     </ButtonGroup>
   );
 }
@@ -196,28 +203,17 @@ function MobileAuthButtons({ onNavigate }: AuthButtonsProps) {
         size="xl"
         className="flex-1"
         onClick={onNavigate}
-      >
-        <Link to="/login">
-          <p className="text-base">{t("login")}</p>
-        </Link>
-      </Button>
-      <Button className="flex-1" size="xl" onClick={onNavigate}>
-        <Link to="/register">
-          <p className="text-base">{t("signup")}</p>
-        </Link>
-      </Button>
+        render={<Link to="/login">{t("login")}</Link>}
+        nativeButton={false}
+      />
+      <Button
+        className="flex-1"
+        size="xl"
+        onClick={onNavigate}
+        render={<Link to="/register">{t("signup")}</Link>}
+        nativeButton={false}
+      />
     </ButtonGroup>
-  );
-}
-
-function UserAvatar({ user }: { user: DetailedUserInfo }) {
-  const avatarFallback = user.username.slice(0, 2).toUpperCase();
-
-  return (
-    <Avatar>
-      <AvatarImage src={user.profilePictureUrl ?? ""} />
-      <AvatarFallback>{avatarFallback}</AvatarFallback>
-    </Avatar>
   );
 }
 
@@ -239,7 +235,7 @@ function AvatarDropdown({
         <DropdownMenuGroup>
           <DropdownMenuLabel>{t("myAccount")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem render={<Link to="/profile"></Link>}>
             <User />
             {t("profile")}
           </DropdownMenuItem>

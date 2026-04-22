@@ -6,6 +6,8 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
+import i18n from "@lib/i18n";
+
 import { prefetchCurrentUser } from "@api/current-user";
 
 import { NotFound } from "@components/feedback";
@@ -46,7 +48,12 @@ const Route = createRootRouteWithContext<Context>()({
   loader,
   pendingMs: 0,
   pendingComponent: () => <FullScreenLoader />,
-  notFoundComponent: () => <NotFound />,
+  notFoundComponent: () => (
+    <NotFound
+      title={i18n.t("notFound.page.title")}
+      description={i18n.t("notFound.page.description")}
+    />
+  ),
 });
 
 async function loader({ context }: { context: Context }) {

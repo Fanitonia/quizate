@@ -1,5 +1,3 @@
-import { useTranslation } from "react-i18next";
-
 import { OctagonAlert } from "lucide-react";
 
 import {
@@ -11,21 +9,29 @@ import {
   EmptyTitle,
 } from "@components/ui/empty";
 
-function NotFound() {
-  const { t } = useTranslation();
-
+function NotFound({
+  title,
+  description,
+  icon,
+}: {
+  title: string;
+  description: string;
+  icon?: React.ReactNode;
+}) {
   return (
     <Empty className="p-8 text-center">
       <EmptyContent>
         <EmptyMedia>
-          <OctagonAlert size={40} className="text-destructive" />
+          {icon ? (
+            icon
+          ) : (
+            <OctagonAlert size={40} className="text-destructive" />
+          )}
         </EmptyMedia>
         <EmptyHeader>
-          <EmptyTitle className="text-xl">{t("notFound.title")}</EmptyTitle>
+          <EmptyTitle className="text-xl">{title}</EmptyTitle>
         </EmptyHeader>
-        <EmptyDescription className="text-base">
-          {t("notFound.description")}
-        </EmptyDescription>
+        <EmptyDescription className="text-base">{description}</EmptyDescription>
       </EmptyContent>
     </Empty>
   );

@@ -2,7 +2,7 @@ interface UserInfo {
   id: string;
   createdAt: string;
   username: string;
-  normalizedUsername: string;
+  displayName: string;
   profilePictureUrl: string | null;
   role: string;
 }

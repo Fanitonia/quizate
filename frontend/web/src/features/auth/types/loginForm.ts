@@ -2,6 +2,8 @@ import { z } from "zod";
 
 import i18next from "@/lib/i18n";
 
+// TODO: login ve register form ilk başta dili neyse o kalıyor. sonra updatelenmiyor.
+
 const loginFormSchema = z.object({
   usernameOrEmail: z
     .string()

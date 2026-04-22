@@ -2,15 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import type { AxiosError } from "axios";
 
-import { useUserStore } from "@stores/user-store";
-
 import type { ErrorResponse } from "@type/api/error";
 
 import { apiClient } from "@api/client";
-import {
-  currentUserQueryKeys,
-  getCurrentUserQueryOptions,
-} from "@api/current-user";
+import { invalidateAndFetchCurrentUser } from "@api/current-user";
 
 interface RegisterRequest {
   username: string;
@@ -30,11 +25,7 @@ function useRegister(onError?: (error: AxiosError<ErrorResponse>) => void) {
     mutationFn: async (data: RegisterRequest) => register(data),
     onError: (error: AxiosError<ErrorResponse>) => onError?.(error),
     onSuccess: async () => {
-      useUserStore.getState().login();
-      await queryClient.invalidateQueries({
-        queryKey: currentUserQueryKeys.info,
-      });
-      await queryClient.prefetchQuery(getCurrentUserQueryOptions());
+      await invalidateAndFetchCurrentUser(queryClient);
       navigate({ to: "/", from: "/register" });
     },
   });

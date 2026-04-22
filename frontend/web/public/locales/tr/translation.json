@@ -9,9 +9,16 @@
   "myAccount": "Hesabım",
   "optional": "isteğe bağlı",
   "workInProgress": "Geliştirme Aşamasında",
+  "quizzes": "Quizler",
   "notFound": {
-    "title": "404 - Sayfa Bulunamadı",
-    "description": "Aradığınız sayfa mevcut değil."
+    "page": {
+      "title": "404 - Sayfa Bulunamadı",
+      "description": "Aradığınız sayfa mevcut değil."
+    },
+    "user": {
+      "title": "404 - Kullanıcı Bulunamadı",
+      "description": "Aradığınız kullanıcı mevcut değil."
+    }
   },
   "goneWrong": {
     "title": "Bir şeyler ters gitti",
@@ -51,7 +58,7 @@
       "description": "Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.",
       "usernameRequired": "Kullanıcı adı gereklidir",
       "usernameMinLength": "Kullanıcı adı en az 3 karakter uzunluğunda olmalıdır",
-      "usernameInvalid": "Kullanıcı adı yalnızca alfanümerik karakterler ve alt çizgi içerebilir",
+      "usernameInvalid": "Kullanıcı adı yalnızca küçük harfler, sayılar ve alt çizgi içerebilir",
       "emailInvalid": "Geçersiz e-posta adresi",
       "passwordRequired": "Parola gereklidir",
       "passwordMinLength": "Parola en az 8 karakter uzunluğunda olmalıdır",
@@ -65,6 +72,30 @@
     },
     "footer": {
       "haveAccount": "Hesabınız var mı?"
+    }
+  },
+  "profilePage": {
+    "memberSince": "{{date}} tarihinden beri üye",
+    "actions": {
+      "editProfile": "Profili düzenle",
+      "changePassword": "Şifreni değiştir",
+      "accountDetails": "Hesap detayları"
+    },
+    "verification": {
+      "verified": "Doğrulandı",
+      "notVerified": "Doğrulanmadı"
+    },
+    "fallbacks": {
+      "noEmail": "Henüz bir e-posta eklenmedi."
+    },
+    "stats": {
+      "created": "Oluşturulan",
+      "solved": "Çözülen"
+    },
+    "quizzes": {
+      "createdQuizzes": "{{username}}'ın oluşturduğu quizler",
+      "emptyTitle": "Sonuç bulunamadı",
+      "emptyDescription": "Kullanıcı henüz herhangi bir quiz oluşturmadı."
     }
   }
 }
