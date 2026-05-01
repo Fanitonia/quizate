@@ -43,7 +43,7 @@
   --font-mono:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     "Courier New", monospace;
-  --radius: 0.1rem;
+  --radius: 0.5rem;
   --shadow-x: 0;
   --shadow-y: 1px;
   --shadow-blur: 3px;
@@ -73,7 +73,7 @@
   --card-foreground: hsl(0 0% 90.9804%);
   --popover: hsl(180 1.9608% 10%);
   --popover-foreground: hsl(0 0% 90.9804%);
-  --primary: hsl(44.3478 13.6095% 66.8627%);
+  --primary: hsl(43.7143 65.4206% 58.0392%);
   --primary-foreground: hsl(0 0% 5.098%);
   --secondary: hsl(0 0% 9.0196%);
   --secondary-foreground: hsl(0 0% 90.9804%);
@@ -85,7 +85,7 @@
   --destructive-foreground: hsl(0 0% 65.098%);
   --border: hsl(60 3.0303% 12.9412%);
   --input: hsl(180 2.6316% 14.902%);
-  --ring: hsl(42.3529 7.7626% 57.0588%);
+  --ring: hsl(43.5294 24.878% 40.1961%);
   --chart-1: hsl(211.788 101.9718% 78.6759%);
   --chart-2: hsl(217.4076 91.3672% 59.5787%);
   --chart-3: hsl(221.4336 86.3731% 54.0624%);
@@ -93,12 +93,12 @@
   --chart-5: hsl(226.5426 70.0108% 39.9224%);
   --sidebar: hsl(0 0% 6.6667%);
   --sidebar-foreground: hsl(0 0% 90.9804%);
-  --sidebar-primary: hsl(44.3478 13.6095% 66.8627%);
+  --sidebar-primary: hsl(43.7143 65.4206% 58.0392%);
   --sidebar-primary-foreground: hsl(0 0% 5.098%);
   --sidebar-accent: hsl(0 0% 12.1569%);
   --sidebar-accent-foreground: hsl(0 0% 90.9804%);
   --sidebar-border: hsl(60 3.0303% 12.9412%);
-  --sidebar-ring: hsl(42.3529 7.7626% 57.0588%);
+  --sidebar-ring: hsl(43.5294 24.878% 40.1961%);
   --font-sans: "Inter Variable", ui-sans-serif, sans-serif, system-ui;
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono:

@@ -1,7 +1,7 @@
 import type { DetailedUserInfo } from "@type/api/users";
 
-import { ProfileOverviewCard } from "../shared/ProfileOverviewCard";
-import { ProfileQuizzesSection } from "../shared/ProfileQuizzesSection";
+import { ProfileOverviewCard } from "./shared/ProfileOverviewCard";
+import { ProfileQuizzesSection } from "./shared/ProfileQuizzesSection";
 
 function DetailedUserProfile({ userData }: { userData: DetailedUserInfo }) {
   return (

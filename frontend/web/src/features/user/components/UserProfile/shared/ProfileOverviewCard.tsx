@@ -1,12 +1,11 @@
 import { useTranslation } from "react-i18next";
 
-import { Card, CardContent } from "@/components/ui/card";
-
 import type { UserInfo } from "@type/api/users";
 
 import { Lock, PencilLine, User } from "lucide-react";
 
 import { Button } from "@components/ui/button";
+import { Card, CardContent } from "@components/ui/card";
 import { UserAvatar } from "@components/user/UserAvatar";
 
 interface ProfileOverviewCardProps {
