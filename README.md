@@ -1,36 +1,13 @@
 # Quizate
 
-## Proje Hakkında
+## About The Project
 
-**Proje Tanımı:** 
-Quizate kullanıcıların quizler yaratabileceği ve paylaşabileceği bir platformdur.  
+A quiz creation and sharing platform.
 
-**Proje Kategorisi:** Eğitim/Eğlence
+### Built With
 
+Frontend: [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#) [![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-%2338B2AC.svg?logo=tailwind-css&logoColor=white)](#)
 
-## Proje Linkleri
-
-- **REST API Adresi:** [api.quizate.com](https://api.quizate.com)
-- **Web Frontend Adresi:** [quizate.com](https://quizate.com/)
-
-
-## Proje Ekibi
-
-**Grup Adı:** İsim Düşünemeyenler
-
-**Ekip Üyeleri:** 
-- Onur Güdeloğlu
-- Hüseyin Kahraman
-
-
-## Dokümantasyon
-
-Proje dokümantasyonuna aşağıdaki linklerden erişebilirsiniz:
-
-1. [Gereksinim Analizi](docs/gereksinim-analizi.md)
-2. [REST API Tasarımı](docs/api-tasarimi.md)
-3. [REST API](docs/rest-api.md)
-4. [Web Front-End](docs/web-frontend.md)
-5. [Mobil Front-End](docs/mobil-frontend.md) (yapılmadı)
-6. [Mobil Backend](docs/mobil-backend.md) (yapılmadı)
-7. [Video Sunum](docs/sunum.md) (yapılmadı)
+Backend: ![ASP.NET](https://img.shields.io/badge/ASP.NET-purple?logo=dotnet)
+[![Postgres](https://img.shields.io/badge/PostgresSQL-%23316192.svg?logo=postgresql&logoColor=white)](#)
